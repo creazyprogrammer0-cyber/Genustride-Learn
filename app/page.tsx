@@ -39,9 +39,15 @@ import {
 } from '@/components/design-system';
 
 const IMAGES = {
+  mathematicsGeometry:
+    '/src/assets/images/subject_mathematics_geometry_1795308498594.jpg',
   physicsOptics: '/src/assets/images/subject_physics_optics_1795307344643.jpg',
+  chemistryElectro:
+    '/src/assets/images/subject_chemistry_electrochemistry_1795308502114.jpg',
   biologyMicroscopy:
     '/src/assets/images/subject_biology_microscopy_1795307346120.jpg',
+  computingMicrocontroller:
+    '/src/assets/images/subject_computing_microcontroller_1795308500861.jpg',
   solarWaterProject:
     '/src/assets/images/project_solar_water_sensor_1795307346390.jpg',
   fluidDynamicsLab:
@@ -190,6 +196,9 @@ export default function DesignSystemPreviewPage() {
         'Geometric Ratios in Structural Design',
         'Probability Decision Trees',
       ],
+      imageSrc: IMAGES.mathematicsGeometry,
+      imageAlt:
+        'Mathematical modeling desk with precision drafting compass, steel ruler, and hand-drawn calculus rate-of-change graphs',
       accentColor: 'blue' as const,
       conceptDetail: {
         title: 'Mathematics — Rates of Change & Optimization',
@@ -218,6 +227,9 @@ export default function DesignSystemPreviewPage() {
         'Natural Water Buffer Equilibrium',
         'Activation Energy & Catalysis',
       ],
+      imageSrc: IMAGES.chemistryElectro,
+      imageAlt:
+        'Chemistry laboratory workbench showing a galvanic electrochemical cell experiment with copper and zinc electrodes connected to a multimeter',
       accentColor: 'teal' as const,
       conceptDetail: {
         title: 'Chemistry — Electrochemistry & Water Quality',
@@ -246,6 +258,9 @@ export default function DesignSystemPreviewPage() {
         'Analog-to-Digital Sensor Sampling',
         'Graph Routing Algorithms',
       ],
+      imageSrc: IMAGES.computingMicrocontroller,
+      imageAlt:
+        'Computer engineering desk with an embedded microcontroller board wired to sensors and an oscilloscope display',
       accentColor: 'blue' as const,
       conceptDetail: {
         title: 'Technology & Computing — Sensor Data Acquisition',
@@ -1214,6 +1229,8 @@ export default function DesignSystemPreviewPage() {
                   format="Microscopy Field Guide"
                   subject="Biology & Life Science"
                   readTime="9 min read"
+                  imageSrc={IMAGES.biologyMicroscopy}
+                  imageAlt="Compound microscope with botanical leaf specimens and field sketches in a bright science lab"
                   summary="Observe how guard cells use turgor pressure and potassium ion transport to balance carbon dioxide intake against water loss under sunlight."
                   conceptQuestions={[
                     'How does osmotic pressure bend guard cell walls to open a stomatal pore?',

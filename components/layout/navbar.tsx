@@ -1,6 +1,8 @@
 'use client';
 
 import React, {useState} from 'react';
+import Link from 'next/link';
+import {useRouter} from 'next/navigation';
 import {Menu, X, ChevronDown, ArrowRight} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {Button} from '@/components/ui/button';
@@ -16,12 +18,13 @@ export interface NavbarProps {
 }
 
 export function Navbar({
-  activeSection = 'tokens',
+  activeSection,
   onNavigate,
   primaryCtaLabel = 'Explore Learning',
   onPrimaryCta,
   className,
 }: NavbarProps) {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubjectsExpanded, setMobileSubjectsExpanded] = useState(false);
 
@@ -32,14 +35,23 @@ export function Navbar({
       meta: subject.shortName,
       description: subject.tagline,
       onSelect: () => {
-        onNavigate?.(`subject-${subject.slug}`, subject.name);
+        router.push(`/subjects/${subject.slug}`);
       },
     })
   );
 
-  const handleNavClick = (id: string, label: string) => {
-    onNavigate?.(id, label);
+  const handleSectionNavigation = (sectionId: string, label?: string) => {
     setMobileMenuOpen(false);
+    if (onNavigate) {
+      onNavigate(sectionId, label);
+      return;
+    }
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({behavior: 'smooth'});
+    } else {
+      router.push(`/#${sectionId}`);
+    }
   };
 
   return (
@@ -52,94 +64,90 @@ export function Navbar({
       {/* Strict 3-Zone Top Bar Contract on Desktop */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
         {/* Zone 1: Single text element Brand Wordmark */}
-        <a
-          href="#top"
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavClick('top', 'Genustride Learn');
-          }}
+        <Link
+          href="/"
           className="text-lg sm:text-xl font-extrabold tracking-tight text-[#17243B] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
         >
           Genustride Learn
-        </a>
+        </Link>
 
-        {/* Zone 2: 5 concise single-line navigation links (with accessible Subject Dropdown) */}
+        {/* Zone 2: 5 concise single-line navigation links */}
         <nav
           aria-label="Primary Navigation"
           className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#64748B]"
         >
-          <a
-            href="#tokens"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('tokens', 'Foundation Tokens');
-            }}
+          <button
+            type="button"
+            onClick={() =>
+              handleSectionNavigation('learning-philosophy', 'Our Philosophy')
+            }
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
-              activeSection === 'tokens'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
+              activeSection === 'learning-philosophy'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Foundation
-          </a>
+            Philosophy
+          </button>
 
           <DropdownMenu
             triggerLabel="Subjects"
             items={subjectDropdownItems}
             footerAction={{
-              label: 'View All 6 Subject Categories',
-              onClick: () => handleNavClick('cards', 'All Subjects'),
+              label: 'Explore All 6 Fields of Knowledge',
+              onClick: () =>
+                handleSectionNavigation('explore-areas', 'Explore Learning Areas'),
             }}
           />
 
-          <a
-            href="#controls"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('controls', 'Interactive Controls');
-            }}
+          <button
+            type="button"
+            onClick={() =>
+              handleSectionNavigation(
+                'how-learning-happens',
+                'How Learning Happens'
+              )
+            }
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
-              activeSection === 'controls'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
+              activeSection === 'how-learning-happens'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Controls
-          </a>
+            How It Works
+          </button>
 
-          <a
-            href="#cards"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('cards', 'Learning Cards');
-            }}
+          <button
+            type="button"
+            onClick={() =>
+              handleSectionNavigation('real-world-learning', 'Real-World Learning')
+            }
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
-              activeSection === 'cards'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
+              activeSection === 'real-world-learning'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Experiments
-          </a>
+            Practical Learning
+          </button>
 
-          <a
-            href="#resources"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('resources', 'Learning Resources');
-            }}
+          <button
+            type="button"
+            onClick={() =>
+              handleSectionNavigation('bangladesh-vision', 'Our Vision')
+            }
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
-              activeSection === 'resources'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
+              activeSection === 'bangladesh-vision'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Resources
-          </a>
+            Our Vision
+          </button>
         </nav>
 
         {/* Zone 3: 1 Primary Action + Mobile Drawer Toggle on <1024px */}
@@ -152,7 +160,7 @@ export function Navbar({
                 if (onPrimaryCta) {
                   onPrimaryCta();
                 } else {
-                  handleNavClick('cards', primaryCtaLabel);
+                  handleSectionNavigation('explore-areas', primaryCtaLabel);
                 }
               }}
             >
@@ -165,7 +173,9 @@ export function Navbar({
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation-drawer"
-            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={
+              mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'
+            }
             className="lg:hidden min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-[#17243B] hover:bg-[#F6F9FF] border border-[#E6EBF2] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
           >
             {mobileMenuOpen ? (
@@ -189,10 +199,25 @@ export function Navbar({
           >
             <button
               type="button"
-              onClick={() => handleNavClick('tokens', 'Foundation Tokens')}
+              onClick={() =>
+                handleSectionNavigation('our-approach', 'Why Concept-Driven Learning')
+              }
               className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
             >
-              Foundation & Tokens
+              Why Concept-Driven Learning
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                handleSectionNavigation(
+                  'learning-philosophy',
+                  'Our Learning Philosophy'
+                )
+              }
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            >
+              Our Learning Philosophy
             </button>
 
             {/* Mobile Accordion for Subjects */}
@@ -203,7 +228,7 @@ export function Navbar({
                 aria-expanded={mobileSubjectsExpanded}
                 className="w-full min-h-[44px] px-3 py-2.5 flex items-center justify-between text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] rounded-lg transition-colors"
               >
-                <span>Subjects (6 Disciplines)</span>
+                <span>Explore Subjects (6 Fields)</span>
                 <ChevronDown
                   className={cn(
                     'w-4 h-4 text-[#64748B] transition-transform duration-150',
@@ -215,17 +240,15 @@ export function Navbar({
               {mobileSubjectsExpanded && (
                 <div className="mt-1 ml-3 pl-3 border-l border-[#E6EBF2] space-y-1">
                   {SUBJECT_CATEGORIES.map((subject) => (
-                    <button
+                    <Link
                       key={subject.slug}
-                      type="button"
-                      onClick={() =>
-                        handleNavClick(`subject-${subject.slug}`, subject.name)
-                      }
+                      href={`/subjects/${subject.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="w-full min-h-[40px] px-3 py-2 text-left text-xs font-medium text-[#64748B] hover:text-[#315BE8] hover:bg-[#F6F9FF] rounded-md transition-colors flex items-center justify-between"
                     >
                       <span>{subject.name}</span>
                       <ArrowRight className="w-3 h-3" aria-hidden="true" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -233,26 +256,38 @@ export function Navbar({
 
             <button
               type="button"
-              onClick={() => handleNavClick('controls', 'Interactive Controls')}
+              onClick={() =>
+                handleSectionNavigation(
+                  'how-learning-happens',
+                  'How Learning Happens'
+                )
+              }
               className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
             >
-              Buttons, Navigation & Controls
+              How Learning Happens
             </button>
 
             <button
               type="button"
-              onClick={() => handleNavClick('cards', 'Experiments & Cards')}
+              onClick={() =>
+                handleSectionNavigation(
+                  'real-world-learning',
+                  'Real-World Learning'
+                )
+              }
               className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
             >
-              Experiments & Projects
+              Real-World Learning Methods
             </button>
 
             <button
               type="button"
-              onClick={() => handleNavClick('resources', 'Learning Resources')}
+              onClick={() =>
+                handleSectionNavigation('bangladesh-vision', 'Our Vision')
+              }
               className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
             >
-              Learning Resources
+              Our Vision for Bangladesh
             </button>
           </nav>
 
@@ -262,10 +297,11 @@ export function Navbar({
               size="md"
               fullWidth
               onClick={() => {
+                setMobileMenuOpen(false);
                 if (onPrimaryCta) {
                   onPrimaryCta();
                 } else {
-                  handleNavClick('cards', primaryCtaLabel);
+                  handleSectionNavigation('explore-areas', primaryCtaLabel);
                 }
               }}
             >
