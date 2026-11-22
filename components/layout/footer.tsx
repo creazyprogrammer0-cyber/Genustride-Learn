@@ -111,18 +111,12 @@ export function Footer({onSelectSection}: FooterProps) {
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo(
-                        'traditional-vs-concept',
-                        'Why Concept-Driven Learning'
-                      )
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/how-it-works"
+                    className="hover:text-[#315BE8] transition-colors block"
                   >
-                    Our Approach
-                  </button>
+                    How It Works
+                  </Link>
                 </li>
                 <li>
                   <button
@@ -157,18 +151,12 @@ export function Footer({onSelectSection}: FooterProps) {
               </h3>
               <ul className="space-y-2.5 text-sm text-[#64748B]">
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo(
-                        'how-learning-happens',
-                        'How Learning Happens'
-                      )
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/how-it-works"
+                    className="hover:text-[#315BE8] transition-colors block"
                   >
-                    How Learning Happens
-                  </button>
+                    4-Step Learning Framework
+                  </Link>
                 </li>
                 <li>
                   <button

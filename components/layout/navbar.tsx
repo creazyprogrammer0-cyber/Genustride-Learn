@@ -93,20 +93,17 @@ export function Navbar({
             }}
           />
 
-          <button
-            type="button"
-            onClick={() =>
-              handleSectionNavigation('how-learning-happens', 'How It Works')
-            }
+          <Link
+            href="/how-it-works"
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
               activeSection === 'how-learning-happens'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
             How It Works
-          </button>
+          </Link>
 
           <button
             type="button"
@@ -196,6 +193,15 @@ export function Navbar({
             >
               <span>Explore Learning Hub (/learn)</span>
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+
+            <Link
+              href="/how-it-works"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
+            >
+              <span>How It Works (/how-it-works)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
             </Link>
 
             {/* Mobile Accordion for Subjects */}

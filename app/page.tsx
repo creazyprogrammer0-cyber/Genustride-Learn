@@ -121,7 +121,7 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    onClick={() => scrollToSection('traditional-vs-concept')}
+                    onClick={() => router.push('/how-it-works')}
                   >
                     Discover Our Approach
                   </Button>
@@ -362,14 +362,13 @@ export default function HomePage() {
                     Result: Durable understanding that empowers learners to solve
                     unfamiliar problems.
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => scrollToSection('our-philosophy')}
+                  <Link
+                    href="/how-it-works"
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors"
                   >
-                    <span>See the 4-Step Framework</span>
+                    <span>See the 4-Step Framework (/how-it-works)</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -958,8 +957,8 @@ export default function HomePage() {
               description="Start asking better questions, understanding deeper concepts, and discovering what you can do with what you learn."
               primaryActionLabel="Start Exploring"
               onPrimaryAction={() => router.push('/learn')}
-              secondaryActionLabel="Review Our 4-Step Philosophy"
-              onSecondaryAction={() => scrollToSection('our-philosophy')}
+              secondaryActionLabel="How Our Methodology Works"
+              onSecondaryAction={() => router.push('/how-it-works')}
               surface="soft-blue"
             />
           </div>
