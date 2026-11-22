@@ -36,7 +36,7 @@ export function Navbar({
       description: subject.tagline,
       onSelect: () => {
         setMobileMenuOpen(false);
-        router.push(`/subjects/${subject.slug}`);
+        router.push(subject.route);
       },
     })
   );
@@ -72,28 +72,24 @@ export function Navbar({
           aria-label="Primary Navigation"
           className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#64748B]"
         >
-          <button
-            type="button"
-            onClick={() =>
-              handleSectionNavigation('our-philosophy', 'Our Philosophy')
-            }
+          <Link
+            href="/learn"
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
-              activeSection === 'our-philosophy'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
+              activeSection === 'learn'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Philosophy
-          </button>
+            Explore Learning
+          </Link>
 
           <DropdownMenu
             triggerLabel="Subjects"
             items={subjectDropdownItems}
             footerAction={{
-              label: 'Explore All 6 Learning Areas',
-              onClick: () =>
-                handleSectionNavigation('learning-areas', 'Learning Areas'),
+              label: 'Open Explore Learning Hub (/learn)',
+              onClick: () => router.push('/learn'),
             }}
           />
 
@@ -156,7 +152,7 @@ export function Navbar({
                 if (onPrimaryCta) {
                   onPrimaryCta();
                 } else {
-                  handleSectionNavigation('learning-areas', primaryCtaLabel);
+                  router.push('/learn');
                 }
               }}
             >
@@ -193,15 +189,14 @@ export function Navbar({
             aria-label="Mobile Navigation"
             className="flex flex-col space-y-1"
           >
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation('our-philosophy', 'Our Philosophy')
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            <Link
+              href="/learn"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-semibold text-[#315BE8] hover:bg-[#F6F9FF] rounded-lg transition-colors flex items-center justify-between"
             >
-              Our Learning Philosophy
-            </button>
+              <span>Explore Learning Hub (/learn)</span>
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
 
             {/* Mobile Accordion for Subjects */}
             <div>
@@ -211,7 +206,7 @@ export function Navbar({
                 aria-expanded={mobileSubjectsExpanded}
                 className="w-full min-h-[44px] px-3 py-2.5 flex items-center justify-between text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] rounded-lg transition-colors"
               >
-                <span>Explore Subjects (6 Fields)</span>
+                <span>Subjects (6 Learning Areas)</span>
                 <ChevronDown
                   className={cn(
                     'w-4 h-4 text-[#64748B] transition-transform duration-150',
@@ -225,7 +220,7 @@ export function Navbar({
                   {SUBJECT_CATEGORIES.map((subject) => (
                     <Link
                       key={subject.slug}
-                      href={`/subjects/${subject.slug}`}
+                      href={subject.route}
                       onClick={() => setMobileMenuOpen(false)}
                       className="w-full min-h-[40px] px-3 py-2 text-left text-xs font-medium text-[#64748B] hover:text-[#315BE8] hover:bg-[#F6F9FF] rounded-md transition-colors flex items-center justify-between"
                     >
@@ -236,6 +231,16 @@ export function Navbar({
                 </div>
               )}
             </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                handleSectionNavigation('our-philosophy', 'Our Philosophy')
+              }
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            >
+              Our Learning Philosophy
+            </button>
 
             <button
               type="button"
@@ -260,17 +265,7 @@ export function Navbar({
               }
               className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
             >
-              Real-World Learning & Experiments
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation('skills-beyond', 'Skills Beyond')
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
-            >
-              Skills Beyond the Classroom
+              Experiments & Real-World Learning
             </button>
 
             <button
@@ -297,7 +292,7 @@ export function Navbar({
                 if (onPrimaryCta) {
                   onPrimaryCta();
                 } else {
-                  handleSectionNavigation('learning-areas', primaryCtaLabel);
+                  router.push('/learn');
                 }
               }}
             >

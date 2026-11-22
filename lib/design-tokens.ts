@@ -94,12 +94,13 @@ export type SubjectCategorySlug =
   | 'mathematics'
   | 'physics'
   | 'chemistry'
-  | 'biology-life-science'
-  | 'technology-computing'
-  | 'engineering-innovation';
+  | 'biology'
+  | 'technology'
+  | 'engineering';
 
 export interface SubjectCategoryToken {
   slug: SubjectCategorySlug;
+  route: string;
   name: string;
   shortName: string;
   tagline: string;
@@ -111,57 +112,63 @@ export interface SubjectCategoryToken {
 export const SUBJECT_CATEGORIES: SubjectCategoryToken[] = [
   {
     slug: 'mathematics',
+    route: '/learn/mathematics',
     name: 'Mathematics',
     shortName: 'Mathematics',
     tagline: 'Patterns, quantitative reasoning, and structural logic behind the physical and digital world.',
-    coreFocus: 'Rate of change, geometric optimization, probability models, and algorithmic thinking.',
+    coreFocus: 'Arithmetic, Algebra, Geometry, Trigonometry, Statistics, Probability, and Calculus.',
     accentHex: '#315BE8',
-    exemplarTopics: ['Calculus & Rates of Change', 'Geometric Proportions & Architecture', 'Probability in Decision Systems'],
+    exemplarTopics: ['Geometry & Architecture', 'Probability & Data Analysis', 'Calculus & Rates of Change'],
   },
   {
     slug: 'physics',
+    route: '/learn/physics',
     name: 'Physics',
     shortName: 'Physics',
-    tagline: 'Matter, energy, forces, waves, and the fundamental laws governing natural phenomena.',
-    coreFocus: 'Optics & refraction, electromagnetism, fluid mechanics, and energy conversion.',
+    tagline: 'Understand the forces, energy, waves, and laws that shape our physical universe.',
+    coreFocus: 'Motion, Force, Energy, Electricity, Magnetism, Optics, and Thermodynamics.',
     accentHex: '#315BE8',
-    exemplarTopics: ['Wave Optics & Prism Refraction', 'Electromagnetic Induction', 'Fluid Dynamics & Laminar Flow'],
+    exemplarTopics: ['Motion, Force & Energy', 'Electricity & Magnetism', 'Optics & Thermodynamics'],
   },
   {
     slug: 'chemistry',
+    route: '/learn/chemistry',
     name: 'Chemistry',
     shortName: 'Chemistry',
-    tagline: 'Molecular structure, transformations of matter, reaction kinetics, and material science.',
-    coreFocus: 'Electrochemistry, water purification chemistry, polymers, and reaction equilibrium.',
+    tagline: 'Atomic structure, chemical bonding, reactions, and materials that compose everyday life.',
+    coreFocus: 'Atomic structure, Chemical bonding, Chemical reactions, Acids and bases, Materials, and Organic chemistry.',
     accentHex: '#16A6A0',
-    exemplarTopics: ['Electrochemical Cells & Batteries', 'Acid-Base Buffering in Nature', 'Catalysis & Reaction Rates'],
+    exemplarTopics: ['Chemical Bonding & Reactions', 'Acids, Bases & Water Treatment', 'Electrochemistry & Batteries'],
   },
   {
-    slug: 'biology-life-science',
+    slug: 'biology',
+    route: '/learn/biology',
     name: 'Biology & Life Science',
     shortName: 'Biology',
-    tagline: 'Living systems, cellular processes, genetics, ecosystems, and physiological adaptation.',
-    coreFocus: 'Plant vascular transport, cellular respiration, enzyme kinetics, and ecological resilience.',
+    tagline: 'Living cells, human physiology, genetics, microorganisms, and resilient ecosystems.',
+    coreFocus: 'Cells, Human body, Genetics, Microorganisms, Ecology, and Evolution.',
     accentHex: '#16A6A0',
-    exemplarTopics: ['Cellular Microscopy & Osmosis', 'Xylem & Phloem Transport Systems', 'Hemoglobin & Oxygen Affinity'],
+    exemplarTopics: ['Cells & Microorganisms', 'Human Body & Nutrition', 'Ecology & Agriculture'],
   },
   {
-    slug: 'technology-computing',
+    slug: 'technology',
+    route: '/learn/technology',
     name: 'Technology & Computing',
-    shortName: 'Computing',
-    tagline: 'Computational systems, digital logic, algorithms, networks, and software architecture.',
-    coreFocus: 'Sensor data acquisition, binary logic gates, embedded programming, and data structures.',
+    shortName: 'Technology',
+    tagline: 'Programming, computer systems, algorithms, networks, AI, and digital security.',
+    coreFocus: 'Programming, Computer systems, Algorithms, Networking, Artificial Intelligence, and Cybersecurity.',
     accentHex: '#315BE8',
-    exemplarTopics: ['Digital Logic & Microcontrollers', 'Network Packet Routing', 'Algorithmic Complexity in Practice'],
+    exemplarTopics: ['Algorithms & Programming', 'Computer Systems & Networking', 'AI & Cybersecurity'],
   },
   {
-    slug: 'engineering-innovation',
+    slug: 'engineering',
+    route: '/learn/engineering',
     name: 'Engineering & Innovation',
     shortName: 'Engineering',
-    tagline: 'Applying scientific and mathematical laws to design resilient systems, instruments, and solutions.',
-    coreFocus: 'Renewable micro-grids, environmental sensors, structural truss design, and control loops.',
+    tagline: 'Designing mechanical, electrical, civil, and robotic systems that solve human challenges.',
+    coreFocus: 'Mechanical systems, Electrical systems, Civil engineering, Electronics, Robotics, and Design and manufacturing.',
     accentHex: '#F3A644',
-    exemplarTopics: ['Solar-Powered Water Quality Probes', 'Structural Load Distribution', 'Feedback Control Systems'],
+    exemplarTopics: ['Bridges & Civil Structures', 'Electrical Systems & Renewables', 'Electronics, Robotics & Smart Devices'],
   },
 ];
 
@@ -188,7 +195,7 @@ export const TYPOGRAPHY_SCALE = [
     sizeClass: 'text-lg sm:text-xl',
     lineHeight: '1.3',
     tracking: '-0.015em',
-    usage: 'Subject cards, project titles, and 8-stage concept question headers.',
+    usage: 'Subject cards, project titles, and concept question headers.',
   },
   {
     role: 'Editorial Body Lead',

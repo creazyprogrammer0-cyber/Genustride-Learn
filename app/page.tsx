@@ -60,7 +60,7 @@ export default function HomePage() {
         activeSection={activeNavSection}
         onNavigate={(sectionId) => scrollToSection(sectionId)}
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => scrollToSection('learning-areas')}
+        onPrimaryCta={() => router.push('/learn')}
       />
 
       <main className="flex-1">
@@ -112,7 +112,7 @@ export default function HomePage() {
                   <Button
                     variant="primary"
                     size="lg"
-                    onClick={() => scrollToSection('learning-areas')}
+                    onClick={() => router.push('/learn')}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
                     Explore Learning
@@ -525,7 +525,7 @@ export default function HomePage() {
                   imageSrc={subject.imageSrc}
                   imageAlt={subject.imageAlt}
                   accentColor={subject.accentColor}
-                  href={`/subjects/${subject.slug}`}
+                  href={subject.route}
                 />
               ))}
             </div>
@@ -694,7 +694,7 @@ export default function HomePage() {
                       Explore Chemistry & Physics connections
                     </span>
                     <Link
-                      href="/subjects/chemistry"
+                      href="/learn/chemistry"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9]"
                     >
                       <span>Open Chemistry</span>
@@ -795,7 +795,7 @@ export default function HomePage() {
                   <Button
                     variant="subtle"
                     size="sm"
-                    onClick={() => router.push('/subjects/engineering-innovation')}
+                    onClick={() => router.push('/learn/engineering')}
                     rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                   >
                     Explore Practical Projects
@@ -957,7 +957,7 @@ export default function HomePage() {
               title="Your Learning Journey Should Go Beyond the Classroom."
               description="Start asking better questions, understanding deeper concepts, and discovering what you can do with what you learn."
               primaryActionLabel="Start Exploring"
-              onPrimaryAction={() => scrollToSection('learning-areas')}
+              onPrimaryAction={() => router.push('/learn')}
               secondaryActionLabel="Review Our 4-Step Philosophy"
               onSecondaryAction={() => scrollToSection('our-philosophy')}
               surface="soft-blue"

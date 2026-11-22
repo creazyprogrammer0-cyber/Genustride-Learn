@@ -72,10 +72,18 @@ export function Footer({onSelectSection}: FooterProps) {
                 Explore
               </h3>
               <ul className="space-y-2.5 text-sm text-[#64748B]">
+                <li>
+                  <Link
+                    href="/learn"
+                    className="hover:text-[#315BE8] transition-colors block font-medium text-[#17243B]"
+                  >
+                    Explore Learning Hub
+                  </Link>
+                </li>
                 {SUBJECT_CATEGORIES.map((subject) => (
                   <li key={subject.slug}>
                     <Link
-                      href={`/subjects/${subject.slug}`}
+                      href={subject.route}
                       className="hover:text-[#315BE8] transition-colors block"
                     >
                       {subject.name}
