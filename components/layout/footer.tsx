@@ -3,47 +3,34 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {X, CheckCircle2, Send} from 'lucide-react';
+import {X, Mail, ShieldCheck, FileText, Compass} from 'lucide-react';
 import {SUBJECT_CATEGORIES, LEARNING_STAGES} from '@/lib/design-tokens';
 import {Button} from '@/components/ui/button';
 import {KickerLabel} from '@/components/ui/badge-label';
 
 export interface FooterProps {
-  onSelectLink?: (id: string, label: string) => void;
+  onSelectSection?: (sectionId: string, label?: string) => void;
 }
 
-type InfoModalType = 'about' | 'privacy' | 'terms' | 'contact' | null;
+type InfoModalType = 'privacy' | 'terms' | 'contact' | 'about' | null;
 
-export function Footer({onSelectLink}: FooterProps) {
+export function Footer({onSelectSection}: FooterProps) {
   const router = useRouter();
-  const [activeModal, setActiveModal] = useState<InfoModalType>(null);
-  const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactRole, setContactRole] = useState('Student / Independent Learner');
-  const [contactMessage, setContactMessage] = useState('');
+  const [activeInfoModal, setActiveInfoModal] = useState<InfoModalType>(null);
   const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    role: 'Student / Learner',
+    email: '',
+    message: '',
+  });
 
-  const navigateToSection = (sectionId: string, label: string) => {
-    onSelectLink?.(sectionId, label);
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({behavior: 'smooth'});
+  const handleSectionGo = (sectionId: string, label: string) => {
+    if (onSelectSection) {
+      onSelectSection(sectionId, label);
     } else {
       router.push(`/#${sectionId}`);
     }
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) {
-      return;
-    }
-    setContactSubmitted(true);
-  };
-
-  const resetAndOpenContact = () => {
-    setContactSubmitted(false);
-    setActiveModal('contact');
   };
 
   return (
@@ -51,11 +38,11 @@ export function Footer({onSelectLink}: FooterProps) {
       <footer className="bg-white border-t border-[#E6EBF2] text-[#17243B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
-            {/* Brand Identity & Philosophy Column */}
+            {/* Brand Identity & Philosophy */}
             <div className="lg:col-span-4 space-y-4">
               <Link
                 href="/"
-                className="inline-block text-xl font-extrabold tracking-tight text-[#17243B] hover:text-[#315BE8] transition-colors"
+                className="inline-block text-xl font-extrabold tracking-tight text-[#17243B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
               >
                 Genustride Learn
               </Link>
@@ -80,7 +67,7 @@ export function Footer({onSelectLink}: FooterProps) {
             </div>
 
             {/* Column 1: Explore */}
-            <div className="lg:col-span-3 space-y-3">
+            <div className="lg:col-span-2 space-y-3">
               <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
                 Explore
               </h3>
@@ -98,105 +85,123 @@ export function Footer({onSelectLink}: FooterProps) {
               </ul>
             </div>
 
-            {/* Column 2: About & Column 3: For Learners */}
-            <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8">
-              <div className="space-y-3">
-                <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
-                  About
-                </h3>
-                <ul className="space-y-2.5 text-sm text-[#64748B]">
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setActiveModal('about')}
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      About Genustride Learn
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigateToSection(
-                          'learning-philosophy',
-                          'Our Learning Philosophy'
-                        )
-                      }
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      Our Learning Philosophy
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigateToSection(
-                          'bangladesh-vision',
-                          'Our Vision for Bangladesh'
-                        )
-                      }
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      Our Vision for Bangladesh
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
-                  For Learners
-                </h3>
-                <ul className="space-y-2.5 text-sm text-[#64748B]">
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigateToSection(
-                          'how-learning-happens',
-                          'How Learning Happens'
-                        )
-                      }
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      How Learning Actually Happens
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigateToSection(
-                          'real-world-learning',
-                          'Real-World Learning'
-                        )
-                      }
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      Experiments & Practical Projects
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigateToSection(
-                          'skills-beyond-classroom',
-                          'Skills Beyond the Classroom'
-                        )
-                      }
-                      className="hover:text-[#315BE8] transition-colors text-left"
-                    >
-                      Skills Beyond Academic Knowledge
-                    </button>
-                  </li>
-                </ul>
-              </div>
+            {/* Column 2: About */}
+            <div className="lg:col-span-2 space-y-3">
+              <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
+                About
+              </h3>
+              <ul className="space-y-2.5 text-sm text-[#64748B]">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo('our-philosophy', 'Our Learning Philosophy')
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Learning Philosophy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo(
+                        'traditional-vs-concept',
+                        'Why Concept-Driven Learning'
+                      )
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Our Approach
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo(
+                        'vision-bangladesh',
+                        'Our Vision for Bangladesh'
+                      )
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Vision for Bangladesh
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setActiveInfoModal('about')}
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    About Genustride Learn
+                  </button>
+                </li>
+              </ul>
             </div>
 
-            {/* Column 4: Information */}
+            {/* Column 3: For Learners */}
+            <div className="lg:col-span-2 space-y-3">
+              <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
+                For Learners
+              </h3>
+              <ul className="space-y-2.5 text-sm text-[#64748B]">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo(
+                        'how-learning-happens',
+                        'How Learning Happens'
+                      )
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    How Learning Happens
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo(
+                        'real-world-learning',
+                        'Experiments & Projects'
+                      )
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Experiments & Projects
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo('skills-beyond', 'Skills Beyond Academics')
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Practical Skills
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSectionGo('learning-areas', 'Explore Learning Areas')
+                    }
+                    className="hover:text-[#315BE8] transition-colors text-left"
+                  >
+                    Subject Guides
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Information (Privacy Policy, Terms of Use, Contact) */}
             <div className="lg:col-span-2 space-y-3">
               <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
                 Information
@@ -205,7 +210,7 @@ export function Footer({onSelectLink}: FooterProps) {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setActiveModal('privacy')}
+                    onClick={() => setActiveInfoModal('privacy')}
                     className="hover:text-[#315BE8] transition-colors text-left"
                   >
                     Privacy Policy
@@ -214,7 +219,7 @@ export function Footer({onSelectLink}: FooterProps) {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setActiveModal('terms')}
+                    onClick={() => setActiveInfoModal('terms')}
                     className="hover:text-[#315BE8] transition-colors text-left"
                   >
                     Terms of Use
@@ -223,8 +228,11 @@ export function Footer({onSelectLink}: FooterProps) {
                 <li>
                   <button
                     type="button"
-                    onClick={resetAndOpenContact}
-                    className="hover:text-[#315BE8] transition-colors text-left font-medium text-[#17243B]"
+                    onClick={() => {
+                      setContactSubmitted(false);
+                      setActiveInfoModal('contact');
+                    }}
+                    className="hover:text-[#315BE8] transition-colors text-left"
                   >
                     Contact
                   </button>
@@ -237,12 +245,12 @@ export function Footer({onSelectLink}: FooterProps) {
           <div className="mt-12 pt-6 border-t border-[#E6EBF2] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#64748B]">
             <p>
               © {new Date().getFullYear()} Genustride Learn. Concept-driven
-              practical learning platform.
+              practical education.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-4">
               <button
                 type="button"
-                onClick={() => setActiveModal('privacy')}
+                onClick={() => setActiveInfoModal('privacy')}
                 className="hover:text-[#315BE8] transition-colors"
               >
                 Privacy Policy
@@ -250,7 +258,7 @@ export function Footer({onSelectLink}: FooterProps) {
               <span aria-hidden="true">·</span>
               <button
                 type="button"
-                onClick={() => setActiveModal('terms')}
+                onClick={() => setActiveInfoModal('terms')}
                 className="hover:text-[#315BE8] transition-colors"
               >
                 Terms of Use
@@ -258,7 +266,10 @@ export function Footer({onSelectLink}: FooterProps) {
               <span aria-hidden="true">·</span>
               <button
                 type="button"
-                onClick={resetAndOpenContact}
+                onClick={() => {
+                  setContactSubmitted(false);
+                  setActiveInfoModal('contact');
+                }}
                 className="hover:text-[#315BE8] transition-colors"
               >
                 Contact
@@ -268,253 +279,253 @@ export function Footer({onSelectLink}: FooterProps) {
         </div>
       </footer>
 
-      {/* Information & Contact Modal Dialogs */}
-      {activeModal && (
+      {/* Accessible Modal for Privacy Policy, Terms of Use, About & Contact */}
+      {activeInfoModal && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-labelledby="footer-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#17243B]/45 backdrop-blur-xs"
-          onClick={() => setActiveModal(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#17243B]/40 backdrop-blur-xs"
+          onClick={() => setActiveInfoModal(null)}
         >
           <div
-            className="w-full max-w-xl rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-xl rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4 border-b border-[#E6EBF2] pb-4">
-              <div>
+              <div className="space-y-1">
                 <KickerLabel
                   label={
-                    activeModal === 'about'
-                      ? 'ABOUT GENUSTRIDE LEARN'
-                      : activeModal === 'privacy'
-                        ? 'PRIVACY POLICY'
-                        : activeModal === 'terms'
-                          ? 'TERMS OF USE'
-                          : 'CONTACT GENUSTRIDE LEARN'
+                    activeInfoModal === 'privacy'
+                      ? 'PRIVACY POLICY'
+                      : activeInfoModal === 'terms'
+                        ? 'TERMS OF USE'
+                        : activeInfoModal === 'about'
+                          ? 'ABOUT GENUSTRIDE LEARN'
+                          : 'CONTACT US'
                   }
                   tone="primary"
                 />
-                <h2
-                  id="footer-modal-title"
-                  className="mt-1 text-xl sm:text-2xl font-bold text-[#17243B]"
-                >
-                  {activeModal === 'about' &&
-                    'Connecting Academic Knowledge with Real-World Understanding'}
-                  {activeModal === 'privacy' && 'Privacy & Data Stewardship'}
-                  {activeModal === 'terms' &&
-                    'Educational Content & Platform Terms'}
-                  {activeModal === 'contact' &&
-                    'Get in Touch with Genustride Learn'}
+                <h2 className="text-xl font-bold text-[#17243B] flex items-center gap-2">
+                  {activeInfoModal === 'privacy' && (
+                    <>
+                      <ShieldCheck className="w-5 h-5 text-[#315BE8]" />
+                      <span>Privacy Policy</span>
+                    </>
+                  )}
+                  {activeInfoModal === 'terms' && (
+                    <>
+                      <FileText className="w-5 h-5 text-[#315BE8]" />
+                      <span>Terms of Use</span>
+                    </>
+                  )}
+                  {activeInfoModal === 'about' && (
+                    <>
+                      <Compass className="w-5 h-5 text-[#315BE8]" />
+                      <span>About Genustride Learn</span>
+                    </>
+                  )}
+                  {activeInfoModal === 'contact' && (
+                    <>
+                      <Mail className="w-5 h-5 text-[#315BE8]" />
+                      <span>Contact Genustride Learn</span>
+                    </>
+                  )}
                 </h2>
               </div>
+
               <button
                 type="button"
-                onClick={() => setActiveModal(null)}
-                aria-label="Close dialog"
+                onClick={() => setActiveInfoModal(null)}
+                aria-label="Close modal"
                 className="min-h-[40px] min-w-[40px] rounded-lg border border-[#E6EBF2] flex items-center justify-center text-[#64748B] hover:text-[#17243B] hover:bg-[#F6F9FF] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {activeModal === 'about' && (
-              <div className="space-y-4 text-sm text-[#64748B] leading-relaxed">
+            {activeInfoModal === 'privacy' && (
+              <div className="space-y-3 text-sm text-[#64748B] leading-relaxed">
+                <p className="text-[#17243B] font-medium">
+                  Genustride Learn respects learner privacy and is committed to
+                  transparent, minimal data practices.
+                </p>
+                <p>
+                  <strong className="text-[#17243B]">
+                    Public Learning Access:
+                  </strong>{' '}
+                  Our public concept guides, subject exploration pages, and
+                  experiment frameworks can be browsed freely without mandatory
+                  account registration.
+                </p>
+                <p>
+                  <strong className="text-[#17243B]">
+                    Contact Inquiries:
+                  </strong>{' '}
+                  When you reach out via our contact form, we use your name,
+                  email, and message strictly to respond to your educational or
+                  partnership inquiry. We never sell learner data to third
+                  parties.
+                </p>
+              </div>
+            )}
+
+            {activeInfoModal === 'terms' && (
+              <div className="space-y-3 text-sm text-[#64748B] leading-relaxed">
+                <p className="text-[#17243B] font-medium">
+                  By using Genustride Learn, you agree to engage with our
+                  educational materials responsibly and safely.
+                </p>
+                <p>
+                  <strong className="text-[#17243B]">
+                    Educational Purpose & Safety:
+                  </strong>{' '}
+                  All hands-on observations, experiments, and practical project
+                  guides are designed for educational understanding. Learners
+                  conducting physical or chemical experiments should follow
+                  standard laboratory safety precautions and appropriate
+                  supervision.
+                </p>
+                <p>
+                  <strong className="text-[#17243B]">
+                    Intellectual Property:
+                  </strong>{' '}
+                  Learners and educators are encouraged to use our conceptual
+                  frameworks (Understand → Explore → Apply → Create) in
+                  classrooms and personal study with attribution to Genustride
+                  Learn.
+                </p>
+              </div>
+            )}
+
+            {activeInfoModal === 'about' && (
+              <div className="space-y-3 text-sm text-[#64748B] leading-relaxed">
                 <p className="text-[#17243B] font-medium">
                   Genustride Learn is a concept-driven online learning platform
-                  designed to help school, college, university, and independent
-                  learners move beyond rote memorization.
+                  created to connect academic subjects with real-world
+                  understanding and application.
                 </p>
                 <p>
-                  We organize knowledge around four core stages:{' '}
-                  <strong className="text-[#17243B]">
-                    Understand → Explore → Apply → Create
-                  </strong>
-                  . Every topic explains what a concept is, why it matters, how
-                  the underlying mechanism works, where it appears in real life,
-                  and how learners can experiment with it.
-                </p>
-                <p>
-                  With an initial focus on learners in Bangladesh and an
-                  international-standard English-first curriculum architecture,
-                  our mission is to cultivate scientific curiosity, practical
-                  problem-solving, and independent thinking.
+                  With an initial focus on learners in Bangladesh and
+                  international-grade English-first educational content, we aim
+                  to help school, college, university, and independent learners
+                  move beyond rote memorization toward genuine scientific
+                  reasoning and practical creation.
                 </p>
               </div>
             )}
 
-            {activeModal === 'privacy' && (
-              <div className="space-y-4 text-sm text-[#64748B] leading-relaxed">
-                <p className="text-[#17243B] font-medium">
-                  Genustride Learn respects the privacy of students, educators,
-                  parents, and independent learners.
-                </p>
-                <ul className="space-y-2 list-disc pl-5">
-                  <li>
-                    <strong className="text-[#17243B]">
-                      Public Learning Exploration:
-                    </strong>{' '}
-                    You can browse our public subject guides, conceptual
-                    breakdowns, and experiment workflows without creating an
-                    account.
-                  </li>
-                  <li>
-                    <strong className="text-[#17243B]">
-                      Contact Inquiries:
-                    </strong>{' '}
-                    Information submitted through our contact form is used
-                    solely to respond to your educational or partnership inquiry.
-                  </li>
-                  <li>
-                    <strong className="text-[#17243B]">
-                      No Third-Party Data Selling:
-                    </strong>{' '}
-                    We never sell learner data or display intrusive third-party
-                    advertising.
-                  </li>
-                </ul>
-              </div>
-            )}
-
-            {activeModal === 'terms' && (
-              <div className="space-y-4 text-sm text-[#64748B] leading-relaxed">
-                <p className="text-[#17243B] font-medium">
-                  By accessing Genustride Learn, you agree to use our learning
-                  materials responsibly for educational and non-commercial study.
-                </p>
-                <ul className="space-y-2 list-disc pl-5">
-                  <li>
-                    <strong className="text-[#17243B]">
-                      Laboratory & Experiment Safety:
-                    </strong>{' '}
-                    Hands-on observations and experiments should be performed
-                    with appropriate supervision, protective equipment, and care.
-                  </li>
-                  <li>
-                    <strong className="text-[#17243B]">
-                      Conceptual Integrity:
-                    </strong>{' '}
-                    Our guides are designed to foster genuine comprehension and
-                    independent problem-solving rather than rote exam shortcuts.
-                  </li>
-                </ul>
-              </div>
-            )}
-
-            {activeModal === 'contact' && (
+            {activeInfoModal === 'contact' && (
               <div>
                 {contactSubmitted ? (
-                  <div className="p-6 rounded-xl bg-[#EAF8F7] border border-[#16A6A0]/30 space-y-3 text-center">
-                    <CheckCircle2 className="w-8 h-8 text-[#16A6A0] mx-auto" />
-                    <h3 className="text-lg font-bold text-[#17243B]">
-                      Thank You for Reaching Out
-                    </h3>
-                    <p className="text-sm text-[#64748B]">
+                  <div className="p-5 rounded-xl bg-[#EAF8F7] border border-[#16A6A0]/30 space-y-2 text-sm">
+                    <div className="font-bold text-[#17243B]">
+                      Thank you for reaching out to Genustride Learn.
+                    </div>
+                    <p className="text-[#64748B]">
                       We have received your message from{' '}
-                      <strong className="text-[#17243B]">{contactName}</strong>{' '}
-                      ({contactRole}) and will respond to{' '}
-                      <strong className="text-[#17243B]">{contactEmail}</strong>.
+                      <span className="font-medium text-[#17243B]">
+                        {contactForm.name || 'Learner'}
+                      </span>{' '}
+                      and will respond to your inquiry shortly.
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      setContactSubmitted(true);
+                    }}
+                    className="space-y-4"
+                  >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label
-                          htmlFor="contact-name"
-                          className="block text-xs font-semibold text-[#17243B] mb-1.5"
-                        >
+                        <label className="block text-xs font-semibold text-[#17243B] mb-1.5">
                           Your Name
                         </label>
                         <input
-                          id="contact-name"
                           type="text"
                           required
-                          value={contactName}
-                          onChange={(e) => setContactName(e.target.value)}
+                          value={contactForm.name}
+                          onChange={(e) =>
+                            setContactForm({
+                              ...contactForm,
+                              name: e.target.value,
+                            })
+                          }
                           placeholder="e.g., Tahmid Rahman"
-                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-white text-[#17243B] focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
                         />
                       </div>
                       <div>
-                        <label
-                          htmlFor="contact-email"
-                          className="block text-xs font-semibold text-[#17243B] mb-1.5"
-                        >
-                          Email Address
+                        <label className="block text-xs font-semibold text-[#17243B] mb-1.5">
+                          I am a...
                         </label>
-                        <input
-                          id="contact-email"
-                          type="email"
-                          required
-                          value={contactEmail}
-                          onChange={(e) => setContactEmail(e.target.value)}
-                          placeholder="learner@example.com"
-                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
-                        />
+                        <select
+                          value={contactForm.role}
+                          onChange={(e) =>
+                            setContactForm({
+                              ...contactForm,
+                              role: e.target.value,
+                            })
+                          }
+                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-white text-[#17243B] focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                        >
+                          <option>Student / Learner</option>
+                          <option>Educator / Teacher</option>
+                          <option>Parent</option>
+                          <option>Independent Researcher</option>
+                        </select>
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="contact-role"
-                        className="block text-xs font-semibold text-[#17243B] mb-1.5"
-                      >
-                        I am contacting as a
+                      <label className="block text-xs font-semibold text-[#17243B] mb-1.5">
+                        Email Address
                       </label>
-                      <select
-                        id="contact-role"
-                        value={contactRole}
-                        onChange={(e) => setContactRole(e.target.value)}
-                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
-                      >
-                        <option value="Student / Independent Learner">
-                          Student / Independent Learner
-                        </option>
-                        <option value="Parent / Guardian">
-                          Parent / Guardian
-                        </option>
-                        <option value="School / College / University Educator">
-                          School / College / University Educator
-                        </option>
-                        <option value="Curriculum & Science Collaborator">
-                          Curriculum & Science Collaborator
-                        </option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="contact-message"
-                        className="block text-xs font-semibold text-[#17243B] mb-1.5"
-                      >
-                        How can we help?
-                      </label>
-                      <textarea
-                        id="contact-message"
-                        rows={3}
+                      <input
+                        type="email"
                         required
-                        value={contactMessage}
-                        onChange={(e) => setContactMessage(e.target.value)}
-                        placeholder="Share a question about a subject, suggest an experiment, or inquire about Genustride Learn..."
-                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                        value={contactForm.email}
+                        onChange={(e) =>
+                          setContactForm({
+                            ...contactForm,
+                            email: e.target.value,
+                          })
+                        }
+                        placeholder="learner@example.com"
+                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-white text-[#17243B] focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
                       />
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-2">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#17243B] mb-1.5">
+                        How can we help?
+                      </label>
+                      <textarea
+                        rows={3}
+                        required
+                        value={contactForm.message}
+                        onChange={(e) =>
+                          setContactForm({
+                            ...contactForm,
+                            message: e.target.value,
+                          })
+                        }
+                        placeholder="Share a question about a subject, experiment, or educational collaboration..."
+                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#E6EBF2] bg-white text-[#17243B] focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                      />
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-2">
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => setActiveModal(null)}
+                        onClick={() => setActiveInfoModal(null)}
                       >
                         Cancel
                       </Button>
-                      <Button
-                        type="submit"
-                        variant="primary"
-                        size="sm"
-                        rightIcon={<Send className="w-3.5 h-3.5" />}
-                      >
+                      <Button type="submit" variant="primary" size="sm">
                         Send Message
                       </Button>
                     </div>
@@ -523,12 +534,12 @@ export function Footer({onSelectLink}: FooterProps) {
               </div>
             )}
 
-            {activeModal !== 'contact' && (
-              <div className="flex justify-end pt-2 border-t border-[#E6EBF2]">
+            {activeInfoModal !== 'contact' && (
+              <div className="flex justify-end pt-3 border-t border-[#E6EBF2]">
                 <Button
                   variant="primary"
                   size="sm"
-                  onClick={() => setActiveModal(null)}
+                  onClick={() => setActiveInfoModal(null)}
                 >
                   Close
                 </Button>

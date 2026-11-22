@@ -10,11 +10,11 @@ import {MetadataRow} from './badge-label';
 export interface SubjectCardProps {
   title: string;
   disciplineCode?: string;
-  levelScope: string;
+  levelScope?: string;
   description: string;
   coreFocus?: string;
   exemplarTopics?: string[];
-  imageSrc?: string;
+  imageSrc: string;
   imageAlt?: string;
   accentColor?: 'blue' | 'teal' | 'amber';
   href?: string;
@@ -25,7 +25,7 @@ export interface SubjectCardProps {
 export function SubjectCard({
   title,
   disciplineCode,
-  levelScope,
+  levelScope = 'School · College · University',
   description,
   coreFocus,
   exemplarTopics,
@@ -50,7 +50,19 @@ export function SubjectCard({
       )}
     >
       <div className="space-y-4">
-        {imageSrc && (
+        {href ? (
+          <Link
+            href={href}
+            className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-lg"
+          >
+            <ImageContainer
+              src={imageSrc}
+              alt={imageAlt || title}
+              aspectRatio="4:3"
+              rounded="lg"
+            />
+          </Link>
+        ) : (
           <ImageContainer
             src={imageSrc}
             alt={imageAlt || title}
@@ -96,16 +108,18 @@ export function SubjectCard({
         {(coreFocus || (exemplarTopics && exemplarTopics.length > 0)) && (
           <div className="pt-3 border-t border-[#E6EBF2] space-y-2">
             {coreFocus && (
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                <strong className="font-semibold text-[#17243B]">
-                  Key Focus:{' '}
-                </strong>
-                {coreFocus}
-              </p>
+              <>
+                <p className="text-xs font-medium text-[#17243B]">
+                  Real-World Concept Focus:
+                </p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  {coreFocus}
+                </p>
+              </>
             )}
 
             {exemplarTopics && exemplarTopics.length > 0 && (
-              <div className="pt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#17243B]">
+              <div className="pt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#17243B]">
                 {exemplarTopics.map((topic, idx) => (
                   <React.Fragment key={topic}>
                     {idx > 0 && (
@@ -113,7 +127,7 @@ export function SubjectCard({
                         ·
                       </span>
                     )}
-                    <span className="text-xs text-[#17243B]/85">{topic}</span>
+                    <span className="text-xs text-[#17243B]/90">{topic}</span>
                   </React.Fragment>
                 ))}
               </div>
@@ -122,7 +136,7 @@ export function SubjectCard({
         )}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex items-center justify-between gap-3">
+      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex items-center justify-between gap-2">
         <span className="text-xs text-[#64748B]">
           Understand → Explore → Apply → Create
         </span>
