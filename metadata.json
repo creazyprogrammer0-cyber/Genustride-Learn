@@ -1,0 +1,6 @@
+{
+  "name": "Genustride Learn",
+  "description": "A modern, practical, concept-driven online learning platform connecting academic knowledge with real-world understanding, experiments, and creation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
