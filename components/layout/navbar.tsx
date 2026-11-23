@@ -105,38 +105,30 @@ export function Navbar({
             How It Works
           </Link>
 
-          <button
-            type="button"
-            onClick={() =>
-              handleSectionNavigation(
-                'real-world-learning',
-                'Experiments & Practice'
-              )
-            }
+          <Link
+            href="/projects"
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
-              activeSection === 'real-world-learning'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
+              activeSection === 'projects' ||
+                activeSection === 'real-world-learning'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
             Experiments
-          </button>
+          </Link>
 
-          <button
-            type="button"
-            onClick={() =>
-              handleSectionNavigation('vision-bangladesh', 'About & Vision')
-            }
+          <Link
+            href="/resources"
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 cursor-pointer',
-              activeSection === 'vision-bangladesh'
+              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2',
+              activeSection === 'resources'
                 ? 'text-[#315BE8] border-[#315BE8]'
                 : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
             )}
           >
-            Our Vision
-          </button>
+            Resources
+          </Link>
         </nav>
 
         {/* Zone 3: 1 Primary Action + Mobile Drawer Toggle on <1024px */}
@@ -238,54 +230,50 @@ export function Navbar({
               )}
             </div>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation('our-philosophy', 'Our Philosophy')
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            <Link
+              href="/projects"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
             >
-              Our Learning Philosophy
-            </button>
+              <span>Experiments & Projects (/projects)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
+            </Link>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation(
-                  'how-learning-happens',
-                  'How Learning Happens'
-                )
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            <Link
+              href="/resources"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
             >
-              How Learning Happens
-            </button>
+              <span>Learning Resources (/resources)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
+            </Link>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation(
-                  'real-world-learning',
-                  'Real-World Learning'
-                )
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            <Link
+              href="/for-parents-and-educators"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
             >
-              Experiments & Real-World Learning
-            </button>
+              <span>Parents & Educators (/for-parents-and-educators)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
+            </Link>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleSectionNavigation(
-                  'vision-bangladesh',
-                  'Our Vision for Bangladesh'
-                )
-              }
-              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors"
+            <Link
+              href="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
             >
-              Our Vision for Bangladesh
-            </button>
+              <span>About Genustride Learn (/about)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
+            </Link>
+
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[44px] px-3 py-2.5 text-left text-sm font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8] rounded-lg transition-colors flex items-center justify-between"
+            >
+              <span>Contact Us (/contact)</span>
+              <ArrowRight className="w-4 h-4 text-[#64748B]" aria-hidden="true" />
+            </Link>
           </nav>
 
           <div className="pt-3 border-t border-[#E6EBF2]">

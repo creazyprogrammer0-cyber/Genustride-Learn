@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {ArrowRight, FlaskConical} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {ImageContainer} from './image-container';
@@ -16,6 +17,9 @@ export interface ProjectCardProps {
   whyItMatters: string;
   whatYouCreate: string;
   scientificPrinciple: string;
+  href?: string;
+  materialsPreview?: string[];
+  actionLabel?: string;
   onInspectProject?: () => void;
   className?: string;
 }
@@ -30,6 +34,9 @@ export function ProjectCard({
   whyItMatters,
   whatYouCreate,
   scientificPrinciple,
+  href,
+  materialsPreview,
+  actionLabel = 'View Experiment Guide',
   onInspectProject,
   className,
 }: ProjectCardProps) {
@@ -41,12 +48,23 @@ export function ProjectCard({
       )}
     >
       <div className="space-y-4">
-        <ImageContainer
-          src={imageSrc}
-          alt={imageAlt}
-          aspectRatio="4:3"
-          rounded="lg"
-        />
+        {href ? (
+          <Link href={href} className="block group focus-visible:outline-none">
+            <ImageContainer
+              src={imageSrc}
+              alt={imageAlt}
+              aspectRatio="4:3"
+              rounded="lg"
+            />
+          </Link>
+        ) : (
+          <ImageContainer
+            src={imageSrc}
+            alt={imageAlt}
+            aspectRatio="4:3"
+            rounded="lg"
+          />
+        )}
 
         <div className="space-y-2">
           <MetadataRow
@@ -58,7 +76,16 @@ export function ProjectCard({
           />
 
           <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
-            {title}
+            {href ? (
+              <Link
+                href={href}
+                className="hover:text-[#315BE8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+              >
+                {title}
+              </Link>
+            ) : (
+              title
+            )}
           </h3>
 
           <p className="text-[15px] text-[#64748B] leading-relaxed">
@@ -67,11 +94,11 @@ export function ProjectCard({
         </div>
 
         <div className="p-3.5 rounded-lg bg-[#F6F9FF] border border-[#E6EBF2] space-y-2">
-          <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center justify-between gap-2 text-xs">
             <span className="font-semibold text-[#17243B]">
               Core Mechanism
             </span>
-            <span className="font-mono text-[#315BE8]">
+            <span className="font-mono text-[#315BE8] text-right">
               {scientificPrinciple}
             </span>
           </div>
@@ -81,6 +108,14 @@ export function ProjectCard({
             </strong>
             {whatYouCreate}
           </p>
+          {materialsPreview && materialsPreview.length > 0 && (
+            <p className="text-xs text-[#64748B] leading-relaxed pt-1 border-t border-[#E6EBF2]">
+              <strong className="text-[#17243B] font-medium">
+                Key Materials:{' '}
+              </strong>
+              {materialsPreview.join(' · ')}
+            </p>
+          )}
         </div>
       </div>
 
@@ -90,14 +125,24 @@ export function ProjectCard({
           <span>Hands-on Observation & Build</span>
         </span>
 
-        <button
-          type="button"
-          onClick={onInspectProject}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
-        >
-          <span>View Experiment Guide</span>
-          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-        </button>
+        {href ? (
+          <Link
+            href={href}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+          >
+            <span>{actionLabel}</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={onInspectProject}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+          >
+            <span>{actionLabel}</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </article>
   );

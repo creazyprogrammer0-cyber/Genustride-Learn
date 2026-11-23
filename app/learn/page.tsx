@@ -66,9 +66,9 @@ export default function ExploreLearningPage() {
       title: 'How Electric Motors & Household Power Grids Work',
       explanation:
         'See how the Lorentz force spins copper coils inside fans, water pumps, and electric vehicles—and how transformers deliver 220V power across transmission lines.',
-      imageSrc: PLATFORM_IMAGES.physicsElectricMotor,
+      imageSrc: PLATFORM_IMAGES.learnRealWorldElectronics,
       imageAlt:
-        'Laboratory DC electric motor with copper coil armature between permanent magnets connected to power supply',
+        'Electrical engineer testing an oscilloscope and circuit bench to analyze alternating current waveforms and motor power electronics',
     },
     {
       subject: 'Engineering & Mathematics',
@@ -77,9 +77,9 @@ export default function ExploreLearningPage() {
       title: 'How Bridges Carry Heavy Loads Across Turbulent Rivers',
       explanation:
         'Discover why triangular Warren and Pratt trusses distribute downward weight into balanced tension and compression members without buckling.',
-      imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
+      imageSrc: PLATFORM_IMAGES.learnRealWorldBridge,
       imageAlt:
-        'Scale structural truss bridge model undergoing weight load testing with a digital force gauge',
+        'Long-span triangulated steel truss bridge structure crossing a wide river channel under real traffic loads',
     },
     {
       subject: 'Biology & Chemistry',
@@ -88,9 +88,9 @@ export default function ExploreLearningPage() {
       title: 'How Soil Microbes, Osmosis & Stomata Sustain Crops',
       explanation:
         'Trace how nitrogen-fixing root bacteria and leaf guard-cell turgor pressure enable plants to grow and adapt to seasonal water and salinity shifts.',
-      imageSrc: PLATFORM_IMAGES.biologyAgriculture,
+      imageSrc: PLATFORM_IMAGES.learnRealWorldAgriculture,
       imageAlt:
-        'Greenhouse study of young crop plants in clear root observation containers with nitrogen cycle notebook',
+        'Close-up photograph of green crop seedlings growing in nutrient soil inside an agricultural research greenhouse',
     },
   ];
 

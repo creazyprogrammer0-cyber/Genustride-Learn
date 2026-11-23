@@ -5,14 +5,23 @@ import {Compass} from 'lucide-react';
 import {cn} from '@/lib/utils';
 
 export type ImageAspectRatio = '16:9' | '4:3' | '1:1' | '3:4';
+export type ImageObjectPosition =
+  | 'center'
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right';
 
 export interface ImageContainerProps {
   src: string;
   alt: string;
   aspectRatio?: ImageAspectRatio;
+  objectPosition?: ImageObjectPosition;
+  priority?: boolean;
+  sizes?: string;
   caption?: string;
   creditOrContext?: string;
-  rounded?: 'none' | 'lg' | 'xl';
+  rounded?: 'none' | 'md' | 'lg' | 'xl';
   className?: string;
   imageClassName?: string;
 }
@@ -24,23 +33,86 @@ const aspectClasses: Record<ImageAspectRatio, string> = {
   '3:4': 'aspect-[3/4]',
 };
 
+const intrinsicDimensions: Record<
+  ImageAspectRatio,
+  {width: number; height: number}
+> = {
+  '16:9': {width: 1200, height: 675},
+  '4:3': {width: 1200, height: 900},
+  '1:1': {width: 900, height: 900},
+  '3:4': {width: 900, height: 1200},
+};
+
+const objectPositionClasses: Record<ImageObjectPosition, string> = {
+  center: 'object-center',
+  top: 'object-top',
+  bottom: 'object-bottom',
+  left: 'object-left',
+  right: 'object-right',
+};
+
 const roundedClasses = {
   none: 'rounded-none',
+  md: 'rounded-md',
   lg: 'rounded-lg',
   xl: 'rounded-xl',
 };
+
+/**
+ * Generates responsive srcSet strings for Unsplash and Pexels URLs
+ * so mobile viewports download appropriately scaled 480w/800w assets
+ * rather than full-resolution 1200w desktop photographs.
+ */
+function buildResponsiveSrcSet(src: string): string | undefined {
+  if (!src) return undefined;
+
+  if (src.includes('images.unsplash.com')) {
+    const base = src.replace(/([?&])w=\d+/, '$1w=__WIDTH__');
+    if (base.includes('__WIDTH__')) {
+      return [
+        `${base.replace('__WIDTH__', '480')} 480w`,
+        `${base.replace('__WIDTH__', '800')} 800w`,
+        `${base.replace('__WIDTH__', '1200')} 1200w`,
+      ].join(', ');
+    }
+  }
+
+  if (src.includes('images.pexels.com')) {
+    const base = src.replace(/([?&])w=\d+/, '$1w=__WIDTH__');
+    if (base.includes('__WIDTH__')) {
+      return [
+        `${base.replace('__WIDTH__', '480')} 480w`,
+        `${base.replace('__WIDTH__', '800')} 800w`,
+        `${base.replace('__WIDTH__', '1200')} 1200w`,
+      ].join(', ');
+    }
+  }
+
+  return undefined;
+}
 
 export function ImageContainer({
   src,
   alt,
   aspectRatio = '4:3',
+  objectPosition = 'center',
+  priority = false,
+  sizes,
   caption,
   creditOrContext,
-  rounded = 'xl',
+  rounded = 'lg',
   className,
   imageClassName,
 }: ImageContainerProps) {
   const [hasError, setHasError] = useState(false);
+
+  const dims = intrinsicDimensions[aspectRatio];
+  const responsiveSrcSet = buildResponsiveSrcSet(src);
+  const resolvedSizes =
+    sizes ||
+    (priority
+      ? '(max-width: 640px) 94vw, (max-width: 1024px) 52vw, 680px'
+      : '(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 440px');
 
   return (
     <figure className={cn('w-full', className)}>
@@ -55,11 +127,19 @@ export function ImageContainer({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={src}
+            srcSet={responsiveSrcSet}
+            sizes={responsiveSrcSet ? resolvedSizes : undefined}
             alt={alt}
+            width={dims.width}
+            height={dims.height}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
+            decoding={priority ? 'sync' : 'async'}
             referrerPolicy="no-referrer"
             onError={() => setHasError(true)}
             className={cn(
-              'w-full h-full object-cover object-center transition-transform duration-300 ease-out',
+              'w-full h-full object-cover transition-transform duration-300 ease-out',
+              objectPositionClasses[objectPosition],
               imageClassName
             )}
           />

@@ -165,7 +165,8 @@ export default function HomePage() {
                     src={PLATFORM_IMAGES.heroCuriousLearners}
                     alt="Students collaborating at a laboratory workbench with physical prototypes, scientific measurement instruments, and notebooks"
                     aspectRatio="4:3"
-                    rounded="xl"
+                    rounded="lg"
+                    priority
                   />
                   <div className="mt-3.5 px-2 pb-1 flex items-start justify-between gap-4">
                     <div className="space-y-0.5">

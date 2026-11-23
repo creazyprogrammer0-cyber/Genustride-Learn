@@ -1,33 +1,52 @@
 import {SubjectCategorySlug} from './design-tokens';
+import {VERIFIED_PHOTOGRAPHY_INVENTORY} from './photography-inventory';
 
 export const PLATFORM_IMAGES = {
-  heroCuriousLearners:
-    '/src/assets/images/hero_curious_learners_lab_1795308719777.jpg',
-  iceFloatingMolecular:
-    '/src/assets/images/ice_floating_molecular_experiment_1795308719650.jpg',
-  frozenLakeNature:
-    '/src/assets/images/frozen_lake_insulation_nature_1795308718807.jpg',
+  heroCuriousLearners: VERIFIED_PHOTOGRAPHY_INVENTORY.homeHero.url,
+  iceFloatingMolecular: VERIFIED_PHOTOGRAPHY_INVENTORY.iceFloatingMolecular.url,
+  frozenLakeNature: VERIFIED_PHOTOGRAPHY_INVENTORY.frozenLakeNature.url,
   bangladeshLearners:
-    '/src/assets/images/bangladesh_learners_workshop_1795308719101.jpg',
-  mathematicsGeometry:
-    '/src/assets/images/subject_mathematics_geometry_1795308498594.jpg',
-  physicsOptics: '/src/assets/images/subject_physics_optics_1795307344643.jpg',
+    VERIFIED_PHOTOGRAPHY_INVENTORY.bangladeshLearnersVision.url,
+  howItWorksHero: VERIFIED_PHOTOGRAPHY_INVENTORY.howItWorksHero.url,
+  aboutHeroCollaborative:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.aboutHeroCollaborative.url,
+  parentsEducatorsHero:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.parentsEducatorsHero.url,
+
+  // Explore Learning Hub (/learn) real-world examples
+  learnRealWorldElectronics:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.learnRealWorldElectronics.url,
+  learnRealWorldBridge:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.learnRealWorldBridge.url,
+  learnRealWorldAgriculture:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.learnRealWorldAgriculture.url,
+
+  // Subject Heroes & Secondaries
+  mathematicsGeometry: VERIFIED_PHOTOGRAPHY_INVENTORY.mathHeroGeometry.url,
+  mathematicsArchitecture:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.mathSecondaryArchitecture.url,
+  physicsOptics: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsHeroElectricity.url,
   physicsElectricMotor:
-    '/src/assets/images/physics_electric_motor_experiment_1795309289820.jpg',
-  chemistryElectro:
-    '/src/assets/images/subject_chemistry_electrochemistry_1795308502114.jpg',
-  biologyMicroscopy:
-    '/src/assets/images/subject_biology_microscopy_1795307346120.jpg',
-  biologyAgriculture:
-    '/src/assets/images/biology_agriculture_ecology_study_1795309289917.jpg',
+    VERIFIED_PHOTOGRAPHY_INVENTORY.physicsSecondaryCircuitLab.url,
+  chemistryElectro: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryHeroGlassware.url,
+  chemistrySecondary:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.chemistrySecondaryReaction.url,
+  biologyMicroscopy: VERIFIED_PHOTOGRAPHY_INVENTORY.biologyHeroMicroscope.url,
+  biologyAgriculture: VERIFIED_PHOTOGRAPHY_INVENTORY.biologySecondaryLab.url,
   computingMicrocontroller:
-    '/src/assets/images/subject_computing_microcontroller_1795308500861.jpg',
-  solarWaterProject:
-    '/src/assets/images/project_solar_water_sensor_1795307346390.jpg',
+    VERIFIED_PHOTOGRAPHY_INVENTORY.techHeroWorkstation.url,
+  computingSecondary:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.techSecondaryBinaryLogic.url,
   engineeringBridgeTruss:
-    '/src/assets/images/engineering_bridge_truss_model_1795309288794.jpg',
-  fluidDynamicsLab:
-    '/src/assets/images/resource_fluid_dynamics_lab_1795307344557.jpg',
+    VERIFIED_PHOTOGRAPHY_INVENTORY.engHeroPrototypeLab.url,
+  solarWaterProject: VERIFIED_PHOTOGRAPHY_INVENTORY.engSecondarySystems.url,
+
+  // Homepage Section 6 Methods
+  fluidDynamicsLab: VERIFIED_PHOTOGRAPHY_INVENTORY.methodExperimentsLab.url,
+  methodVisualOptics: VERIFIED_PHOTOGRAPHY_INVENTORY.methodVisualOptics.url,
+  methodPracticalSolar: VERIFIED_PHOTOGRAPHY_INVENTORY.methodPracticalSolar.url,
+  methodInteractiveHardware:
+    VERIFIED_PHOTOGRAPHY_INVENTORY.methodInteractiveHardware.url,
 } as const;
 
 export interface TopicCategoryItem {
@@ -143,12 +162,12 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Physics is not a collection of disconnected equations to plug numbers into. It is the systematic study of how energy transforms, how forces change motion, and how fields and waves interact across every scale of reality.',
     coreFocus:
       'Motion, Force, Energy, Electricity, Magnetism, Optics, and Thermodynamics.',
-    imageSrc: PLATFORM_IMAGES.physicsOptics,
-    imageAlt:
-      'Precision glass prism refracting a beam of light across a laboratory notebook with handwritten geometric ray diagrams',
-    secondaryImageSrc: PLATFORM_IMAGES.physicsElectricMotor,
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsHeroElectricity.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsHeroElectricity.alt,
+    secondaryImageSrc:
+      VERIFIED_PHOTOGRAPHY_INVENTORY.physicsSecondaryCircuitLab.url,
     secondaryImageAlt:
-      'Hand-built DC electric motor with copper coil armature between permanent magnets wired to an ammeter and power supply',
+      VERIFIED_PHOTOGRAPHY_INVENTORY.physicsSecondaryCircuitLab.alt,
     exemplarTopics: [
       'Motion, Force & Energy',
       'Electricity & Magnetism',
@@ -330,9 +349,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'When current passes through a rectangular wire loop inside a magnetic field, opposite sides carry current in opposite directions. The magnetic field exerts an upward force on one arm and a downward force on the other, creating a turning couple (torque). A split-ring commutator reverses the current every half-turn so the coil keeps spinning in the same direction.',
         underlyingLaw: 'Lorentz Force Law: F = I (L × B) and Torque τ = N · I · A · B sin(θ)',
-        imageSrc: PLATFORM_IMAGES.physicsElectricMotor,
-        imageAlt:
-          'Laboratory DC electric motor with copper armature between magnets connected to power supply and ammeter',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsExampleMotor.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsExampleMotor.alt,
       },
       {
         id: 'phy-ex-2',
@@ -342,9 +360,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'Light slows down when entering optically denser glass. Because the refractive index of glass varies slightly with wavelength (dispersion), shorter blue/violet wavelengths bend at a steeper angle than longer red wavelengths. Shaped into a curved lens, this controlled bending brings parallel rays to a precise focal point.',
         underlyingLaw: "Snell's Law of Refraction: n₁ sin(θ₁) = n₂ sin(θ₂)",
-        imageSrc: PLATFORM_IMAGES.physicsOptics,
-        imageAlt:
-          'Glass prism refracting a beam of light across a notebook with handwritten geometric ray diagrams',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsExampleOptics.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.physicsExampleOptics.alt,
       },
     ],
     experimentsAndActivities: [
@@ -378,8 +395,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Physics · Optics',
         level: 'School · College',
         duration: '45 min build',
-        imageSrc: PLATFORM_IMAGES.physicsOptics,
-        imageAlt: 'Glass prism refracting light beam across notebook with geometric ray diagrams',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectElectricCircuit.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectElectricCircuit.alt,
         whyItMatters:
           'Optical instruments from cameras to clinical spectrophotometers rely on collimating, refracting, and dispersing light accurately.',
         scientificPrinciple: "Snell's Law & Thin Lens Equation (1/f = 1/d_o + 1/d_i)",
@@ -392,8 +409,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Physics · Electromagnetism',
         level: 'College · University',
         duration: '60 min build',
-        imageSrc: PLATFORM_IMAGES.physicsElectricMotor,
-        imageAlt: 'Hand-built DC electric motor connected to power supply and analog ammeter',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectDcElectricMotor.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectDcElectricMotor.alt,
         whyItMatters:
           'Electric motors consume over 40% of global electricity. Understanding current draw under mechanical load is essential for energy efficiency.',
         scientificPrinciple: "Lorentz Force & Faraday's Law of Back-EMF",
@@ -443,12 +460,12 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Every formula in mathematics was invented to solve a real problem—measuring land after seasonal river floods, balancing trade ledgers, aiming telescopes, or modeling risk. When you see the visual and logical structure behind mathematics, symbols become intuitive.',
     coreFocus:
       'Arithmetic, Algebra, Geometry, Trigonometry, Statistics, Probability, and Calculus.',
-    imageSrc: PLATFORM_IMAGES.mathematicsGeometry,
-    imageAlt:
-      'Mathematical modeling workspace with precision drafting compass, steel ruler, and hand-drawn calculus rate-of-change graphs',
-    secondaryImageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.mathHeroGeometry.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.mathHeroGeometry.alt,
+    secondaryImageSrc:
+      VERIFIED_PHOTOGRAPHY_INVENTORY.mathSecondaryArchitecture.url,
     secondaryImageAlt:
-      'Geometric truss bridge structural model with force vector calculations in a notebook',
+      VERIFIED_PHOTOGRAPHY_INVENTORY.mathSecondaryArchitecture.alt,
     exemplarTopics: [
       'Geometry & Trigonometry',
       'Statistics & Probability',
@@ -630,9 +647,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'Whenever a quantity rises to a peak and then falls—such as solar energy captured across tilt angles, or the volume of a container folded from a fixed sheet of metal—its instantaneous rate of change (the derivative df/dx) passes through zero at the exact maximum.',
         underlyingLaw: 'First Derivative Optimization Criterion: df(x)/dx = 0 at local extrema',
-        imageSrc: PLATFORM_IMAGES.mathematicsGeometry,
-        imageAlt:
-          'Mathematical modeling workspace with hand-drawn rate-of-change tangent graphs and drafting compass',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.mathExampleCalculus.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.mathExampleCalculus.alt,
       },
       {
         id: 'mat-ex-2',
@@ -642,9 +658,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'A rectangle can shear into a parallelogram without changing any side lengths. A triangle’s angles are uniquely locked by the lengths of its three sides (Law of Cosines). By resolving vertical loads into diagonal tension and compression components (F·cos θ and F·sin θ), engineers span wide rivers safely.',
         underlyingLaw: 'Trigonometric Vector Resolution: ΣF_x = F cos(θ), ΣF_y = F sin(θ)',
-        imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
-        imageAlt:
-          'Scale structural truss bridge model undergoing weight load testing alongside force vector calculations',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.mathExampleGeometry.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.mathExampleGeometry.alt,
       },
     ],
     experimentsAndActivities: [
@@ -678,8 +693,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Mathematics · Trigonometry & Calculus',
         level: 'College · University',
         duration: '45 min project',
-        imageSrc: PLATFORM_IMAGES.mathematicsGeometry,
-        imageAlt: 'Mathematical modeling desk with geometric diagrams and rate-of-change graphs',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectMathPatternsNature.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectMathPatternsNature.alt,
         whyItMatters:
           'Solar panels generate maximum power when sunlight strikes perpendicular to the panel surface across changing seasonal sun declinations.',
         scientificPrinciple: 'Spherical Trigonometry & Cosine Incidence Projection',
@@ -692,8 +707,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Mathematics · Geometry & Engineering',
         level: 'School · College',
         duration: '50 min project',
-        imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
-        imageAlt: 'Truss bridge model on workbench with force gauge and vector calculations',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectTrussBridge.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectTrussBridge.alt,
         whyItMatters:
           'Predicting which truss members experience tension versus compression prevents structural buckling before a bridge is built.',
         scientificPrinciple: 'Method of Joints & Trigonometric Equilibrium',
@@ -743,12 +758,12 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Chemistry happens in every kitchen, battery cell, water treatment plant, and living cell. Instead of memorizing disconnected reaction equations, understand why atoms bond, what drives electron and proton transfer, and how molecular geometry determines material properties.',
     coreFocus:
       'Atomic structure, Chemical bonding, Chemical reactions, Acids and bases, Materials, and Organic chemistry.',
-    imageSrc: PLATFORM_IMAGES.chemistryElectro,
-    imageAlt:
-      'Chemistry laboratory workbench showing a galvanic electrochemical cell experiment with copper and zinc electrodes connected to a digital multimeter',
-    secondaryImageSrc: PLATFORM_IMAGES.iceFloatingMolecular,
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryHeroGlassware.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryHeroGlassware.alt,
+    secondaryImageSrc:
+      VERIFIED_PHOTOGRAPHY_INVENTORY.chemistrySecondaryReaction.url,
     secondaryImageAlt:
-      'Beaker of water with floating ice beside a thermometer and a 3D hexagonal molecular lattice model',
+      VERIFIED_PHOTOGRAPHY_INVENTORY.chemistrySecondaryReaction.alt,
     exemplarTopics: [
       'Atomic Structure & Bonding',
       'Chemical Reactions, Acids & Bases',
@@ -919,9 +934,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'Zinc atoms hold their valence electrons less tightly than copper ions do. When connected by an external wire and an ion-conducting salt bridge, solid zinc oxidizes into Zn²⁺ ions and sends two electrons per atom through the multimeter to reduce Cu²⁺ ions onto the copper strip.',
         underlyingLaw: 'Nernst Equation & Standard Cell Potential: E°_cell = E°_cathode − E°_anode = 1.10 V',
-        imageSrc: PLATFORM_IMAGES.chemistryElectro,
-        imageAlt:
-          'Copper and zinc galvanic electrochemical cell in glass beakers connected to a digital multimeter reading 1.103 V',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryExampleTitration.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryExampleTitration.alt,
       },
       {
         id: 'chm-ex-2',
@@ -931,9 +945,10 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'Oxygen is significantly more electronegative than hydrogen, pulling shared electrons closer and making H₂O a polar dipole. This polarity lets water surround and dissolve ionic salts, and upon freezing, locks molecules into an open hexagonal lattice that is 9% less dense than liquid water.',
         underlyingLaw: 'Dipole-Dipole Hydrogen Bonding & Hexagonal Crystal Packing',
-        imageSrc: PLATFORM_IMAGES.iceFloatingMolecular,
+        imageSrc:
+          VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryExampleWaterQuality.url,
         imageAlt:
-          'Glass beaker with floating ice next to a 3D hexagonal water molecular model and thermometer',
+          VERIFIED_PHOTOGRAPHY_INVENTORY.chemistryExampleWaterQuality.alt,
       },
     ],
     experimentsAndActivities: [
@@ -967,8 +982,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Chemistry · Water Treatment',
         level: 'College · University',
         duration: '45 min build',
-        imageSrc: PLATFORM_IMAGES.solarWaterProject,
-        imageAlt: 'Student testing water conductivity probe in a beaker with a multimeter and breadboard circuit',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectWaterFiltration.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectWaterFiltration.alt,
         whyItMatters:
           'Monitoring dissolved ionic salts (TDS) helps communities evaluate drinking and agricultural water quality.',
         scientificPrinciple: 'Electrolyte Ionic Dissociation & Conductance',
@@ -981,8 +996,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Chemistry · Electrochemistry',
         level: 'School · College',
         duration: '40 min build',
-        imageSrc: PLATFORM_IMAGES.chemistryElectro,
-        imageAlt: 'Galvanic cell experiment with copper and zinc electrodes and multimeter',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistrySecondaryReaction.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.chemistrySecondaryReaction.alt,
         whyItMatters:
           'Connecting individual 1.1V galvanic cells in series vs. parallel shows how commercial battery packs scale voltage and current capacity.',
         scientificPrinciple: 'Redox Half-Cells & Series Potential Summation',
@@ -1032,12 +1047,10 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Biology is far more than memorizing Latin names or diagram labels. It is the study of how living cells harvest energy, how genetic information encodes structure, how organs maintain homeostasis, and how organisms interact across food webs and agriculture.',
     coreFocus:
       'Cells, Human body, Genetics, Microorganisms, Ecology, and Evolution.',
-    imageSrc: PLATFORM_IMAGES.biologyMicroscopy,
-    imageAlt:
-      'Student researcher examining plant leaf specimens under a compound microscope in a bright laboratory',
-    secondaryImageSrc: PLATFORM_IMAGES.biologyAgriculture,
-    secondaryImageAlt:
-      'Greenhouse laboratory table with young crop plants in clear root-observation containers, soil samples, and nutrient cycle notes',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.biologyHeroMicroscope.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.biologyHeroMicroscope.alt,
+    secondaryImageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.biologySecondaryLab.url,
+    secondaryImageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.biologySecondaryLab.alt,
     exemplarTopics: [
       'Cells, Genetics & Microorganisms',
       'Human Body, Nutrition & Health',
@@ -1200,9 +1213,10 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'Stomata are flanked by pairs of kidney-shaped guard cells. When sunlight triggers photosynthesis, proton pumps drive potassium ions (K⁺) into the guard cells; water follows by osmosis, swelling the cells and bowing their inner walls apart to let CO₂ in. In dry heat, water leaves, the cells go flaccid, and the pore seals shut.',
         underlyingLaw: 'Osmotic Turgor Pressure & Selective Ion Transport',
-        imageSrc: PLATFORM_IMAGES.biologyMicroscopy,
+        imageSrc:
+          VERIFIED_PHOTOGRAPHY_INVENTORY.biologyExamplePlantOsmosis.url,
         imageAlt:
-          'Student examining plant leaf specimens under a compound microscope beside botanical sketches',
+          VERIFIED_PHOTOGRAPHY_INVENTORY.biologyExamplePlantOsmosis.alt,
       },
       {
         id: 'bio-ex-2',
@@ -1212,9 +1226,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'The triple bond in atmospheric N₂ is too strong for plant enzymes to break. Nitrogen-fixing bacteria in soil and legume root nodules use the nitrogenase enzyme complex to convert N₂ into ammonia (NH₃) and nitrates (NO₃⁻) that plant roots absorb to synthesize amino acids and chlorophyll.',
         underlyingLaw: 'Biological Nitrogen Fixation & Ecological Nutrient Cycling',
-        imageSrc: PLATFORM_IMAGES.biologyAgriculture,
-        imageAlt:
-          'Greenhouse study of young crop plants in clear root containers with soil petri dishes and nitrogen cycle notes',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.biologyExampleEcology.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.biologyExampleEcology.alt,
       },
     ],
     experimentsAndActivities: [
@@ -1248,8 +1261,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Biology · Cellular Microscopy',
         level: 'School · College',
         duration: '45 min project',
-        imageSrc: PLATFORM_IMAGES.biologyMicroscopy,
-        imageAlt: 'Compound microscope with plant leaf specimens in petri dishes and field notebook',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectLeafStomata.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectLeafStomata.alt,
         whyItMatters:
           'Stomatal index and guard-cell behavior reveal how native and agricultural plants adapt to heat, humidity, and drought.',
         scientificPrinciple: 'Osmotic Guard Cell Mechanics & Transpiration',
@@ -1262,8 +1275,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Biology · Agriculture & Ecology',
         level: 'College · University',
         duration: 'Multi-day observation',
-        imageSrc: PLATFORM_IMAGES.biologyAgriculture,
-        imageAlt: 'Clear root observation containers A, B, and C with young plants and nitrogen cycle notebook',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.biologySecondaryLab.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.biologySecondaryLab.alt,
         whyItMatters:
           'Identifying how root architecture responds to soil composition and salinity informs resilient farming practices in delta regions.',
         scientificPrinciple: 'Water Potential Gradients & Root Nutrient Uptake',
@@ -1313,12 +1326,12 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Technology should never feel like magic reserved for passive consumers. Learn how physical transistors execute binary logic, how algorithms sort and route data in milliseconds, how packets traverse the global internet, and how encryption keeps digital communication secure.',
     coreFocus:
       'Programming, Computer systems, Algorithms, Networking, Artificial Intelligence, and Cybersecurity.',
-    imageSrc: PLATFORM_IMAGES.computingMicrocontroller,
-    imageAlt:
-      'Computer engineering desk with an embedded microcontroller board wired to sensors and an oscilloscope display',
-    secondaryImageSrc: PLATFORM_IMAGES.heroCuriousLearners,
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.techHeroWorkstation.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.techHeroWorkstation.alt,
+    secondaryImageSrc:
+      VERIFIED_PHOTOGRAPHY_INVENTORY.techSecondaryBinaryLogic.url,
     secondaryImageAlt:
-      'Students collaborating around an electronics and computing prototype with laptop and oscilloscope',
+      VERIFIED_PHOTOGRAPHY_INVENTORY.techSecondaryBinaryLogic.alt,
     exemplarTopics: [
       'Programming & Algorithms',
       'Computer Systems & Networking',
@@ -1481,9 +1494,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'A physical sensor converts a real-world quantity into a continuous analog voltage (e.g., 0V to 3.3V). An Analog-to-Digital Converter (ADC) samples that voltage at regular intervals (shown on an oscilloscope as a sine wave versus a square clock pulse) and quantizes it into a binary integer that software algorithms can filter and display.',
         underlyingLaw: 'Nyquist-Shannon Sampling Theorem & Binary Quantization (2^n levels)',
-        imageSrc: PLATFORM_IMAGES.computingMicrocontroller,
-        imageAlt:
-          'Computer engineering workbench with microcontroller wired to ultrasonic and humidity sensors and oscilloscope waveforms',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.techExampleEmbedded.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.techExampleEmbedded.alt,
       },
       {
         id: 'tec-ex-2',
@@ -1493,9 +1505,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'By modeling roads or network links as a weighted graph of nodes and edges, Dijkstra’s and A* search algorithms expand outward from the starting node in order of cumulative cost, guaranteeing the optimal route without testing every possible combination.',
         underlyingLaw: 'Graph Theory & Greedy Priority-Queue Relaxation (O((V + E) log V))',
-        imageSrc: PLATFORM_IMAGES.heroCuriousLearners,
-        imageAlt:
-          'Students analyzing system architecture, circuit telemetry, and algorithmic notebooks',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.techExampleNetworking.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.techExampleNetworking.alt,
       },
     ],
     experimentsAndActivities: [
@@ -1529,8 +1540,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Technology · Computer Systems & Programming',
         level: 'College · University',
         duration: '60 min build',
-        imageSrc: PLATFORM_IMAGES.computingMicrocontroller,
-        imageAlt: 'Microcontroller development board wired to ultrasonic sensor, humidity sensor, and LCD display',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectUltrasonicLogger.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectUltrasonicLogger.alt,
         whyItMatters:
           'Combining hardware sensor polling with a software moving-average filter is the foundation of modern automation and IoT telemetry.',
         scientificPrinciple: 'Time-of-Flight Acoustic Echo & Digital Signal Filtering',
@@ -1543,8 +1554,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Technology · Cybersecurity & Algorithms',
         level: 'School · College',
         duration: '40 min project',
-        imageSrc: PLATFORM_IMAGES.mathematicsGeometry,
-        imageAlt: 'Mathematical and algorithmic notebook showing modular arithmetic and state diagrams',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.techSecondaryBinaryLogic.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.techSecondaryBinaryLogic.alt,
         whyItMatters:
           'Understanding modular arithmetic and avalanche hashing explains how digital signatures verify data integrity.',
         scientificPrinciple: 'Modular Arithmetic (c ≡ m^e mod n) & Deterministic Hashing',
@@ -1594,12 +1605,10 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
       'Engineering is where conceptual knowledge meets real-world constraints. Learn how civil structures carry loads across rivers, how mechanical linkages multiply force, how renewable solar systems regulate power, and how sensors and actuators form intelligent robotic devices.',
     coreFocus:
       'Mechanical systems, Electrical systems, Civil engineering, Electronics, Robotics, and Design and manufacturing.',
-    imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
-    imageAlt:
-      'Engineering workbench featuring a scale structural truss bridge model undergoing weight load testing with a digital force gauge',
-    secondaryImageSrc: PLATFORM_IMAGES.solarWaterProject,
-    secondaryImageAlt:
-      'Student testing a solar-powered breadboard circuit and water quality probe with a digital multimeter',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.engHeroPrototypeLab.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.engHeroPrototypeLab.alt,
+    secondaryImageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.engSecondarySystems.url,
+    secondaryImageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.engSecondarySystems.alt,
     exemplarTopics: [
       'Mechanical & Civil Engineering',
       'Electrical Systems & Electronics',
@@ -1762,9 +1771,10 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'By constructing a scale Warren truss model from uniform structural members, engineers apply calibrated dead weights at the mid-span deck and measure downward tension force and deflection with a digital force gauge and calipers. Comparing measured strain against static equilibrium calculations (ΣF = 0, ΣM = 0) identifies which diagonal struts require reinforcement.',
         underlyingLaw: 'Static Equilibrium (ΣF_x = 0, ΣF_y = 0, ΣM = 0) & Hooke’s Stress-Strain Law',
-        imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
+        imageSrc:
+          VERIFIED_PHOTOGRAPHY_INVENTORY.engExampleTrussArchitecture.url,
         imageAlt:
-          'Scale wood truss bridge model under calibrated brass weights and digital force gauge reading 132.4 N',
+          VERIFIED_PHOTOGRAPHY_INVENTORY.engExampleTrussArchitecture.alt,
       },
       {
         id: 'eng-ex-2',
@@ -1774,9 +1784,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         explanation:
           'A photovoltaic cell charges a regulated power rail on a breadboard. A voltage-divider and oscillator probe excites two electrodes immersed in a water sample, while a multimeter or ADC measures voltage as a function of dissolved ionic conductivity—documented with a calibration curve in the engineering notebook.',
         underlyingLaw: 'Photovoltaic Power Regulation & Sensor Voltage-Divider Calibration',
-        imageSrc: PLATFORM_IMAGES.solarWaterProject,
-        imageAlt:
-          'Student measuring voltage on a solar-powered breadboard circuit connected to a water quality probe in a glass beaker',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.engExampleSolarPower.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.engExampleSolarPower.alt,
       },
     ],
     experimentsAndActivities: [
@@ -1810,8 +1819,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Engineering · Civil & Mechanical',
         level: 'School · College · University',
         duration: '60 min build',
-        imageSrc: PLATFORM_IMAGES.engineeringBridgeTruss,
-        imageAlt: 'Scale structural truss bridge model undergoing weight load testing with force gauge and blueprints',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectTrussBridge.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectTrussBridge.alt,
         whyItMatters:
           'Bridges and roof trusses must carry heavy loads using minimal material without buckling or shearing.',
         scientificPrinciple: 'Truss Joint Equilibrium & Structural Stiffness',
@@ -1824,8 +1833,8 @@ export const SUBJECTS_DATA: Record<SubjectCategorySlug, SubjectPageContent> = {
         subject: 'Engineering · Electrical & Electronics',
         level: 'College · University',
         duration: '45 min build',
-        imageSrc: PLATFORM_IMAGES.solarWaterProject,
-        imageAlt: 'Student testing solar-powered water sensor circuit with multimeter and engineering notebook',
+        imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.projectSolarEnergy.url,
+        imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.projectSolarEnergy.alt,
         whyItMatters:
           'Low-cost, solar-powered instrumentation enables communities to monitor water salinity and agricultural irrigation quality.',
         scientificPrinciple: 'Photovoltaic Regulation & Ionic Conductance Sensing',
@@ -2128,10 +2137,9 @@ export const REAL_WORLD_LEARNING_METHODS = [
     subtitle: 'See Where Concepts Live Outside Textbooks',
     description:
       'Every topic connects directly to tangible systems—from how river ferries use sacrificial zinc anodes against corrosion to how fiber-optic cables guide laser pulses across continents.',
-    exampleConnection: 'Physics & Engineering · Laminar vs. turbulent flow past river bridge piers',
-    imageSrc: PLATFORM_IMAGES.fluidDynamicsLab,
-    imageAlt:
-      'Students observing a real fluid dynamics wave tank experiment in an engineering laboratory',
+    exampleConnection: 'Physics & Engineering · Quantitative laboratory measurement and fluid dynamics',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.methodExperimentsLab.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.methodExperimentsLab.alt,
   },
   {
     id: 'experiments-observations',
@@ -2140,10 +2148,9 @@ export const REAL_WORLD_LEARNING_METHODS = [
     subtitle: 'Test Ideas Through Direct Physical Evidence',
     description:
       'Science is built on observation. Guided experiments show how to set up simple apparatus, record measurements honestly, trace light rays or biological structures, and verify principles firsthand.',
-    exampleConnection: 'Physics & Biology · Prism ray-tracing & leaf stomatal microscopy',
-    imageSrc: PLATFORM_IMAGES.physicsOptics,
-    imageAlt:
-      'Glass prism refracting a beam of light across a notebook with handwritten geometric ray diagrams',
+    exampleConnection: 'Physics & Optics · Wave trajectories and optical ray measurement',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.methodVisualOptics.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.methodVisualOptics.alt,
   },
   {
     id: 'practical-projects',
@@ -2152,10 +2159,9 @@ export const REAL_WORLD_LEARNING_METHODS = [
     subtitle: 'Synthesize Knowledge by Building Something Useful',
     description:
       'Move from passive reading to active creation. Combine concepts across subjects to prototype working instruments, environmental sensors, mathematical models, and experimental tools.',
-    exampleConnection: 'Engineering & Chemistry · Solar-powered water conductivity & salinity probe',
-    imageSrc: PLATFORM_IMAGES.solarWaterProject,
-    imageAlt:
-      'Student testing a solar-powered breadboard circuit and water quality probe with a digital multimeter',
+    exampleConnection: 'Engineering & Energy · Photovoltaic solar array tilt and power optimization',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.methodPracticalSolar.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.methodPracticalSolar.alt,
   },
   {
     id: 'interactive-learning',
@@ -2164,10 +2170,9 @@ export const REAL_WORLD_LEARNING_METHODS = [
     subtitle: 'Explore Cause and Effect Step by Step',
     description:
       'Manipulate variables, step through multi-stage conceptual breakdowns, and trace how changing one physical parameter reshapes an entire mathematical, biological, or electronic system.',
-    exampleConnection: 'Computing & Systems · Real-time sensor signal sampling and waveform analysis',
-    imageSrc: PLATFORM_IMAGES.computingMicrocontroller,
-    imageAlt:
-      'Computer engineering workbench with microcontroller circuit and live waveform display on monitor',
+    exampleConnection: 'Computing & Systems · Integrated circuit architecture and hardware signal flow',
+    imageSrc: VERIFIED_PHOTOGRAPHY_INVENTORY.methodInteractiveHardware.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.methodInteractiveHardware.alt,
   },
 ] as const;
 

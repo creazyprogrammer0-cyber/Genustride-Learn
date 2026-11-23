@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {ArrowUpRight, BookOpen} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {ImageContainer} from './image-container';
@@ -16,6 +17,8 @@ export interface ResourceCardProps {
   imageSrc?: string;
   imageAlt?: string;
   layout?: 'horizontal' | 'vertical';
+  href?: string;
+  actionLabel?: string;
   onOpenResource?: () => void;
   className?: string;
 }
@@ -30,6 +33,8 @@ export function ResourceCard({
   imageSrc,
   imageAlt,
   layout = 'vertical',
+  href,
+  actionLabel = 'Read Concept Guide',
   onOpenResource,
   className,
 }: ResourceCardProps) {
@@ -47,13 +52,28 @@ export function ResourceCard({
     >
       {imageSrc && (
         <div className={cn(isHorizontal ? 'lg:col-span-5' : 'mb-4')}>
-          <ImageContainer
-            src={imageSrc}
-            alt={imageAlt || title}
-            aspectRatio={isHorizontal ? '16:9' : '4:3'}
-            rounded="lg"
-            className="h-full"
-          />
+          {href ? (
+            <Link
+              href={href}
+              className="block h-full focus-visible:outline-none"
+            >
+              <ImageContainer
+                src={imageSrc}
+                alt={imageAlt || title}
+                aspectRatio={isHorizontal ? '16:9' : '4:3'}
+                rounded="lg"
+                className="h-full"
+              />
+            </Link>
+          ) : (
+            <ImageContainer
+              src={imageSrc}
+              alt={imageAlt || title}
+              aspectRatio={isHorizontal ? '16:9' : '4:3'}
+              rounded="lg"
+              className="h-full"
+            />
+          )}
         </div>
       )}
 
@@ -73,7 +93,16 @@ export function ResourceCard({
           />
 
           <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
-            {title}
+            {href ? (
+              <Link
+                href={href}
+                className="hover:text-[#315BE8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+              >
+                {title}
+              </Link>
+            ) : (
+              title
+            )}
           </h3>
 
           <p className="text-[15px] text-[#64748B] leading-relaxed">
@@ -108,14 +137,24 @@ export function ResourceCard({
             <span>Concept & Real-World Application</span>
           </span>
 
-          <button
-            type="button"
-            onClick={onOpenResource}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
-          >
-            <span>Read Concept Guide</span>
-            <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-          </button>
+          {href ? (
+            <Link
+              href={href}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+            >
+              <span>{actionLabel}</span>
+              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={onOpenResource}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+            >
+              <span>{actionLabel}</span>
+              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </button>
+          )}
         </div>
       </div>
     </article>

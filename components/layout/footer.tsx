@@ -64,6 +64,26 @@ export function Footer({onSelectSection}: FooterProps) {
                   </React.Fragment>
                 ))}
               </div>
+              <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-semibold text-[#315BE8]">
+                <Link href="/about" className="hover:underline">
+                  About Us
+                </Link>
+                <span aria-hidden="true" className="text-[#CBD5E1]">
+                  ·
+                </span>
+                <Link
+                  href="/for-parents-and-educators"
+                  className="hover:underline"
+                >
+                  Parents & Educators
+                </Link>
+                <span aria-hidden="true" className="text-[#CBD5E1]">
+                  ·
+                </span>
+                <Link href="/contact" className="hover:underline">
+                  Contact
+                </Link>
+              </div>
             </div>
 
             {/* Column 1: Explore */}
@@ -93,22 +113,19 @@ export function Footer({onSelectSection}: FooterProps) {
               </ul>
             </div>
 
-            {/* Column 2: About */}
+            {/* Column 2: About & Approach */}
             <div className="lg:col-span-2 space-y-3">
               <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
                 About
               </h3>
               <ul className="space-y-2.5 text-sm text-[#64748B]">
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo('our-philosophy', 'Our Learning Philosophy')
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/about"
+                    className="hover:text-[#315BE8] transition-colors block font-medium text-[#17243B]"
                   >
-                    Learning Philosophy
-                  </button>
+                    About Genustride Learn
+                  </Link>
                 </li>
                 <li>
                   <Link
@@ -116,6 +133,14 @@ export function Footer({onSelectSection}: FooterProps) {
                     className="hover:text-[#315BE8] transition-colors block"
                   >
                     How It Works
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/for-parents-and-educators"
+                    className="hover:text-[#315BE8] transition-colors block"
+                  >
+                    Parents & Educators
                   </Link>
                 </li>
                 <li>
@@ -132,77 +157,80 @@ export function Footer({onSelectSection}: FooterProps) {
                     Vision for Bangladesh
                   </button>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setActiveInfoModal('about')}
-                    className="hover:text-[#315BE8] transition-colors text-left"
-                  >
-                    About Genustride Learn
-                  </button>
-                </li>
               </ul>
             </div>
 
-            {/* Column 3: For Learners */}
+            {/* Column 3: Learning Resources */}
             <div className="lg:col-span-2 space-y-3">
               <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
-                For Learners
+                Learning Resources
               </h3>
               <ul className="space-y-2.5 text-sm text-[#64748B]">
                 <li>
                   <Link
-                    href="/how-it-works"
-                    className="hover:text-[#315BE8] transition-colors block"
+                    href="/resources"
+                    className="hover:text-[#315BE8] transition-colors block font-medium text-[#17243B]"
                   >
-                    4-Step Learning Framework
+                    All Articles & Guides
                   </Link>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo(
-                        'real-world-learning',
-                        'Experiments & Projects'
-                      )
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/projects"
+                    className="hover:text-[#315BE8] transition-colors block"
                   >
                     Experiments & Projects
-                  </button>
+                  </Link>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo('skills-beyond', 'Skills Beyond Academics')
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/resources/why-voltage-is-pressure-not-flow"
+                    className="hover:text-[#315BE8] transition-colors block"
                   >
-                    Practical Skills
-                  </button>
+                    Concept Explainers
+                  </Link>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSectionGo('learning-areas', 'Explore Learning Areas')
-                    }
-                    className="hover:text-[#315BE8] transition-colors text-left"
+                  <Link
+                    href="/resources/how-to-read-any-equation-like-a-sentence"
+                    className="hover:text-[#315BE8] transition-colors block"
                   >
-                    Subject Guides
-                  </button>
+                    Mathematics Explained
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/four-questions-that-replace-rote-memorization"
+                    className="hover:text-[#315BE8] transition-colors block"
+                  >
+                    Practical Study Guides
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Column 4: Information (Privacy Policy, Terms of Use, Contact) */}
+            {/* Column 4: Contact & Information (Privacy Policy, Terms of Use, Contact) */}
             <div className="lg:col-span-2 space-y-3">
               <h3 className="text-xs font-semibold text-[#17243B] tracking-wide">
-                Information
+                Contact & Legal
               </h3>
               <ul className="space-y-2.5 text-sm text-[#64748B]">
+                <li>
+                  <Link
+                    href="/contact"
+                    className="hover:text-[#315BE8] transition-colors block font-medium text-[#17243B]"
+                  >
+                    Contact Page
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/for-parents-and-educators"
+                    className="hover:text-[#315BE8] transition-colors block"
+                  >
+                    For Parents & Educators
+                  </Link>
+                </li>
                 <li>
                   <button
                     type="button"
@@ -221,18 +249,6 @@ export function Footer({onSelectSection}: FooterProps) {
                     Terms of Use
                   </button>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setContactSubmitted(false);
-                      setActiveInfoModal('contact');
-                    }}
-                    className="hover:text-[#315BE8] transition-colors text-left"
-                  >
-                    Contact
-                  </button>
-                </li>
               </ul>
             </div>
           </div>
@@ -244,6 +260,34 @@ export function Footer({onSelectSection}: FooterProps) {
               practical education.
             </p>
             <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/about"
+                className="hover:text-[#315BE8] transition-colors"
+              >
+                About
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href="/resources"
+                className="hover:text-[#315BE8] transition-colors"
+              >
+                Learning Resources
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href="/for-parents-and-educators"
+                className="hover:text-[#315BE8] transition-colors"
+              >
+                Parents & Educators
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href="/contact"
+                className="hover:text-[#315BE8] transition-colors"
+              >
+                Contact
+              </Link>
+              <span aria-hidden="true">·</span>
               <button
                 type="button"
                 onClick={() => setActiveInfoModal('privacy')}
@@ -258,17 +302,6 @@ export function Footer({onSelectSection}: FooterProps) {
                 className="hover:text-[#315BE8] transition-colors"
               >
                 Terms of Use
-              </button>
-              <span aria-hidden="true">·</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setContactSubmitted(false);
-                  setActiveInfoModal('contact');
-                }}
-                className="hover:text-[#315BE8] transition-colors"
-              >
-                Contact
               </button>
             </div>
           </div>

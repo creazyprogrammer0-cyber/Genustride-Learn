@@ -189,7 +189,8 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                     src={subject.imageSrc}
                     alt={subject.imageAlt}
                     aspectRatio="4:3"
-                    rounded="xl"
+                    rounded="lg"
+                    priority
                     caption={subject.coreFocus}
                     creditOrContext={subject.disciplineCode}
                   />
