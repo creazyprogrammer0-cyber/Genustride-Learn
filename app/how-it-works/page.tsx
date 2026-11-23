@@ -286,7 +286,12 @@ export default function HowItWorksPage() {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({behavior: 'smooth'});
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
     }
   };
 
@@ -345,7 +350,7 @@ export default function HowItWorksPage() {
         </div>
       </div>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO SECTION
            ===================================================================== */}

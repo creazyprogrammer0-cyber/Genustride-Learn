@@ -7,6 +7,7 @@ import {
   ArrowRight,
   BookOpen,
   Search,
+  X,
   Sparkles,
   FlaskConical,
   Layers,
@@ -60,7 +61,7 @@ export default function ResourcesPage() {
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO SECTION
             Headline: "Ideas, Explanations, and Discoveries Worth Exploring."
@@ -108,13 +109,23 @@ export default function ResourcesPage() {
                   <div className="relative">
                     <Search className="w-4 h-4 text-[#64748B] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
-                      type="text"
+                      type="search"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search articles by concept, equation, or everyday question..."
                       aria-label="Search learning resources"
-                      className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                      className="w-full pl-11 pr-10 py-3 text-sm rounded-xl border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
                     />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery('')}
+                        aria-label="Clear search query"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#64748B] hover:text-[#17243B] hover:bg-[#E6EBF2]/60 transition-colors cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -197,50 +208,75 @@ export default function ResourcesPage() {
                 description="Select any category below to filter articles, or browse all seven domains of inquiry."
               />
 
-              {selectedCategory !== 'All' && (
+              {(selectedCategory !== 'All' || searchQuery.trim() !== '') && (
                 <button
                   type="button"
-                  onClick={() => setSelectedCategory('All')}
+                  onClick={() => {
+                    setSelectedCategory('All');
+                    setSearchQuery('');
+                  }}
                   className="text-xs font-semibold text-[#315BE8] hover:underline self-start md:self-end cursor-pointer"
                 >
-                  Reset Filter (Show All Categories)
+                  Reset Filters (Show All Articles)
                 </button>
               )}
             </div>
 
             {/* Category Selector Tabs */}
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('All')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
-                  selectedCategory === 'All'
-                    ? 'bg-[#315BE8] text-white border-[#315BE8]'
-                    : 'bg-white text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]'
-                }`}
+            <div className="space-y-3">
+              <div
+                role="group"
+                aria-label="Filter articles by category"
+                className="flex flex-wrap items-center gap-2"
               >
-                All Categories ({RESOURCE_ARTICLES.length})
-              </button>
+                <button
+                  type="button"
+                  aria-pressed={selectedCategory === 'All'}
+                  onClick={() => setSelectedCategory('All')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+                    selectedCategory === 'All'
+                      ? 'bg-[#315BE8] text-white border-[#315BE8]'
+                      : 'bg-white text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]'
+                  }`}
+                >
+                  All Categories ({RESOURCE_ARTICLES.length})
+                </button>
 
-              {RESOURCE_CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory === cat.name;
-                return (
-                  <button
-                    key={cat.name}
-                    type="button"
-                    onClick={() =>
-                      setSelectedCategory(isSelected ? 'All' : cat.name)
-                    }
-                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#315BE8] text-white border-[#315BE8]'
-                        : 'bg-white text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]'
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                );
-              })}
+                {RESOURCE_CATEGORIES.map((cat) => {
+                  const isSelected = selectedCategory === cat.name;
+                  return (
+                    <button
+                      key={cat.name}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() =>
+                        setSelectedCategory(isSelected ? 'All' : cat.name)
+                      }
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+                        isSelected
+                          ? 'bg-[#315BE8] text-white border-[#315BE8]'
+                          : 'bg-white text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div
+                aria-live="polite"
+                className="text-xs font-medium text-[#64748B]"
+              >
+                Showing {filteredArticles.length} of {RESOURCE_ARTICLES.length}{' '}
+                {filteredArticles.length === 1 ? 'article' : 'articles'}
+                {selectedCategory !== 'All'
+                  ? ` in "${selectedCategory}"`
+                  : ''}
+                {searchQuery.trim()
+                  ? ` matching "${searchQuery.trim()}"`
+                  : ''}
+              </div>
             </div>
 
             {/* Filtered Article Cards Grid */}

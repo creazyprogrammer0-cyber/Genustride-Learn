@@ -43,27 +43,42 @@ export function ProjectCard({
   return (
     <article
       className={cn(
-        'surface-card surface-card-interactive rounded-xl overflow-hidden flex flex-col justify-between p-6',
+        'group surface-card surface-card-interactive rounded-xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 bg-white',
         className
       )}
     >
       <div className="space-y-4">
         {href ? (
-          <Link href={href} className="block group focus-visible:outline-none">
+          <Link
+            href={href}
+            tabIndex={-1}
+            aria-hidden="true"
+            className="block rounded-lg overflow-hidden focus-visible:outline-none"
+          >
             <ImageContainer
               src={imageSrc}
               alt={imageAlt}
               aspectRatio="4:3"
               rounded="lg"
+              imageClassName="group-hover:scale-[1.02] transition-transform duration-300 ease-out"
             />
           </Link>
         ) : (
-          <ImageContainer
-            src={imageSrc}
-            alt={imageAlt}
-            aspectRatio="4:3"
-            rounded="lg"
-          />
+          <div
+            onClick={onInspectProject}
+            className={cn(
+              'rounded-lg overflow-hidden',
+              onInspectProject && 'cursor-pointer'
+            )}
+          >
+            <ImageContainer
+              src={imageSrc}
+              alt={imageAlt}
+              aspectRatio="4:3"
+              rounded="lg"
+              imageClassName="group-hover:scale-[1.02] transition-transform duration-300 ease-out"
+            />
+          </div>
         )}
 
         <div className="space-y-2">
@@ -79,10 +94,18 @@ export function ProjectCard({
             {href ? (
               <Link
                 href={href}
-                className="hover:text-[#315BE8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+                className="group-hover:text-[#315BE8] hover:text-[#315BE8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
               >
                 {title}
               </Link>
+            ) : onInspectProject ? (
+              <button
+                type="button"
+                onClick={onInspectProject}
+                className="text-left group-hover:text-[#315BE8] hover:text-[#315BE8] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+              >
+                {title}
+              </button>
             ) : (
               title
             )}
@@ -94,11 +117,11 @@ export function ProjectCard({
         </div>
 
         <div className="p-3.5 rounded-lg bg-[#F6F9FF] border border-[#E6EBF2] space-y-2">
-          <div className="flex items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
             <span className="font-semibold text-[#17243B]">
               Core Mechanism
             </span>
-            <span className="font-mono text-[#315BE8] text-right">
+            <span className="font-mono text-[#315BE8] break-all sm:break-normal">
               {scientificPrinciple}
             </span>
           </div>
@@ -119,7 +142,7 @@ export function ProjectCard({
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex items-center justify-between gap-4">
+      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <span className="inline-flex items-center gap-1.5 text-xs text-[#16A6A0] font-medium">
           <FlaskConical className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
           <span>Hands-on Observation & Build</span>
@@ -128,19 +151,25 @@ export function ProjectCard({
         {href ? (
           <Link
             href={href}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
           >
             <span>{actionLabel}</span>
-            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            <ArrowRight
+              className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5 shrink-0"
+              aria-hidden="true"
+            />
           </Link>
         ) : (
           <button
             type="button"
             onClick={onInspectProject}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
           >
             <span>{actionLabel}</span>
-            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            <ArrowRight
+              className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5 shrink-0"
+              aria-hidden="true"
+            />
           </button>
         )}
       </div>

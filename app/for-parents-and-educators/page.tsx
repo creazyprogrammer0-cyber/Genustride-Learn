@@ -26,6 +26,7 @@ import {
   CTASection,
 } from '@/components/design-system';
 import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
+import {buildParentsFaqJsonLd} from '@/lib/seo';
 
 const FAQ_ITEMS = [
   {
@@ -63,16 +64,21 @@ const FAQ_ITEMS = [
 export default function ParentsAndEducatorsPage() {
   const router = useRouter();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const faqJsonLd = buildParentsFaqJsonLd(FAQ_ITEMS);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(faqJsonLd)}}
+      />
       <Navbar
         activeSection="for-parents-and-educators"
         primaryCtaLabel="Explore Learning"
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO SECTION
             Headline: "Helping Learners Understand More Than What They Memorize."

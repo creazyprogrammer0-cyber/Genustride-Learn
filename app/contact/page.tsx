@@ -214,7 +214,7 @@ export default function ContactPage() {
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO SECTION
             Headline: "Have a Question, Idea, or Something to Share?"
@@ -280,10 +280,11 @@ export default function ContactPage() {
                         <button
                           key={cat.label}
                           type="button"
+                          aria-pressed={isSelected}
                           onClick={() =>
                             handleFieldChange('category', cat.label)
                           }
-                          className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
+                          className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
                             isSelected
                               ? 'bg-[#F6F9FF] border-[#315BE8] ring-1 ring-[#315BE8]/30'
                               : 'bg-white border-[#E6EBF2] hover:border-[#315BE8]/50'
@@ -354,6 +355,11 @@ export default function ContactPage() {
                           onBlur={() => handleFieldBlur('name')}
                           placeholder="e.g., Farhana Ahmed"
                           aria-invalid={Boolean(touched.name && errors.name)}
+                          aria-describedby={
+                            touched.name && errors.name
+                              ? 'contact-name-error'
+                              : undefined
+                          }
                           className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 ${
                             touched.name && errors.name
                               ? 'border-red-500 focus:ring-red-500'
@@ -361,7 +367,11 @@ export default function ContactPage() {
                           }`}
                         />
                         {touched.name && errors.name && (
-                          <p className="text-xs text-red-600 flex items-center gap-1 pt-0.5">
+                          <p
+                            id="contact-name-error"
+                            role="alert"
+                            className="text-xs text-red-600 flex items-center gap-1 pt-0.5"
+                          >
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>{errors.name}</span>
                           </p>
@@ -387,6 +397,11 @@ export default function ContactPage() {
                           onBlur={() => handleFieldBlur('email')}
                           placeholder="learner@example.com"
                           aria-invalid={Boolean(touched.email && errors.email)}
+                          aria-describedby={
+                            touched.email && errors.email
+                              ? 'contact-email-error'
+                              : undefined
+                          }
                           className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 ${
                             touched.email && errors.email
                               ? 'border-red-500 focus:ring-red-500'
@@ -394,7 +409,11 @@ export default function ContactPage() {
                           }`}
                         />
                         {touched.email && errors.email && (
-                          <p className="text-xs text-red-600 flex items-center gap-1 pt-0.5">
+                          <p
+                            id="contact-email-error"
+                            role="alert"
+                            className="text-xs text-red-600 flex items-center gap-1 pt-0.5"
+                          >
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>{errors.email}</span>
                           </p>
@@ -450,6 +469,11 @@ export default function ContactPage() {
                         aria-invalid={Boolean(
                           touched.subject && errors.subject
                         )}
+                        aria-describedby={
+                          touched.subject && errors.subject
+                            ? 'contact-subject-error'
+                            : undefined
+                        }
                         className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 ${
                           touched.subject && errors.subject
                             ? 'border-red-500 focus:ring-red-500'
@@ -457,7 +481,11 @@ export default function ContactPage() {
                         }`}
                       />
                       {touched.subject && errors.subject && (
-                        <p className="text-xs text-red-600 flex items-center gap-1 pt-0.5">
+                        <p
+                          id="contact-subject-error"
+                          role="alert"
+                          className="text-xs text-red-600 flex items-center gap-1 pt-0.5"
+                        >
                           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                           <span>{errors.subject}</span>
                         </p>
@@ -489,6 +517,11 @@ export default function ContactPage() {
                         aria-invalid={Boolean(
                           touched.message && errors.message
                         )}
+                        aria-describedby={
+                          touched.message && errors.message
+                            ? 'contact-message-error'
+                            : undefined
+                        }
                         className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 ${
                           touched.message && errors.message
                             ? 'border-red-500 focus:ring-red-500'
@@ -496,7 +529,11 @@ export default function ContactPage() {
                         }`}
                       />
                       {touched.message && errors.message && (
-                        <p className="text-xs text-red-600 flex items-center gap-1 pt-0.5">
+                        <p
+                          id="contact-message-error"
+                          role="alert"
+                          className="text-xs text-red-600 flex items-center gap-1 pt-0.5"
+                        >
                           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                           <span>{errors.message}</span>
                         </p>

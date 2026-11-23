@@ -44,7 +44,12 @@ export default function HomePage() {
     setActiveNavSection(sectionId);
     const el = document.getElementById(sectionId);
     if (el) {
-      el.scrollIntoView({behavior: 'smooth'});
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
     }
   };
 
@@ -63,7 +68,7 @@ export default function HomePage() {
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             SECTION 1 — HERO
            ===================================================================== */}

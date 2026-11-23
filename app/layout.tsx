@@ -1,43 +1,59 @@
 import type {Metadata} from 'next';
+import {Inter, JetBrains_Mono, Manrope} from 'next/font/google';
 import './globals.css';
+import {buildPageMetadata, buildWebsiteJsonLd, getSiteUrl} from '@/lib/seo';
+import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'Genustride Learn — Concept-Driven Practical Learning Platform',
-  description:
-    'A modern, practical, concept-driven online learning platform connecting academic knowledge with real-world understanding, experiments, and creation.',
-  openGraph: {
+  metadataBase: new URL(getSiteUrl()),
+  ...buildPageMetadata({
     title: 'Genustride Learn — Concept-Driven Practical Learning Platform',
     description:
-      'A modern, practical, concept-driven online learning platform connecting academic knowledge with real-world understanding, experiments, and creation.',
+      'Move beyond rote memorization. Explore mathematics, physics, chemistry, biology, technology, and engineering through real-world understanding and experiments.',
+    path: '/',
+    imageUrl: VERIFIED_PHOTOGRAPHY_INVENTORY.homeHero.url,
+    imageAlt: VERIFIED_PHOTOGRAPHY_INVENTORY.homeHero.alt,
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Genustride Learn — Concept-Driven Practical Learning Platform',
-    description:
-      'A modern, practical, concept-driven online learning platform connecting academic knowledge with real-world understanding, experiments, and creation.',
-  },
+  }),
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
+  const websiteJsonLd = buildWebsiteJsonLd();
+
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+    >
       <body
         suppressHydrationWarning
         className="min-h-screen bg-[#FFFFFF] text-[#17243B] antialiased selection:bg-[#315BE8]/15 selection:text-[#17243B]"
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(websiteJsonLd)}}
+        />
         {children}
       </body>
     </html>

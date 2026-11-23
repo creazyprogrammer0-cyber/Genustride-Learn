@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {X, Mail, ShieldCheck, FileText, Compass} from 'lucide-react';
@@ -24,6 +24,17 @@ export function Footer({onSelectSection}: FooterProps) {
     email: '',
     message: '',
   });
+
+  useEffect(() => {
+    if (!activeInfoModal) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveInfoModal(null);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [activeInfoModal]);
 
   const handleSectionGo = (sectionId: string, label: string) => {
     if (onSelectSection) {

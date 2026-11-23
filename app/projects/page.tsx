@@ -15,6 +15,8 @@ import {
   Clock,
   Layers,
   ClipboardList,
+  Search,
+  X,
 } from 'lucide-react';
 import {
   Navbar,
@@ -44,6 +46,7 @@ export default function ProjectsPage() {
   const [selectedDifficultyFilter, setSelectedDifficultyFilter] = useState<
     ProjectDifficulty | 'all'
   >('all');
+  const [projectSearchQuery, setProjectSearchQuery] = useState('');
 
   const featuredProjects = PROJECTS_DATA.filter((p) => p.isFeatured);
   const engineeringProjects = PROJECTS_DATA.filter(
@@ -65,13 +68,26 @@ export default function ProjectsPage() {
     const matchesDifficulty =
       selectedDifficultyFilter === 'all' ||
       project.difficulty === selectedDifficultyFilter;
-    return matchesCategory && matchesDifficulty;
+    const query = projectSearchQuery.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      project.title.toLowerCase().includes(query) ||
+      project.subtitle.toLowerCase().includes(query) ||
+      project.subjectLabel.toLowerCase().includes(query) ||
+      project.coreMechanismFormula.toLowerCase().includes(query);
+    return matchesCategory && matchesDifficulty && matchesSearch;
   });
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({behavior: 'smooth', block: 'start'});
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
     }
   };
 
@@ -84,7 +100,7 @@ export default function ProjectsPage() {
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             SECTION 1 — HERO INTRODUCTION
             Headline: "Don't Just Read About It. Try It. Build It. Discover It."
@@ -693,102 +709,178 @@ export default function ProjectsPage() {
               })}
             </div>
 
-            {/* Filter Bar: Category + Difficulty */}
-            <div className="p-4 rounded-xl bg-white border border-[#E6EBF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-semibold text-[#17243B] mr-1">
-                  Category:
-                </span>
-                {(
-                  [
-                    {slug: 'all', label: 'All Categories'},
-                    {slug: 'engineering', label: 'Engineering'},
-                    {slug: 'science', label: 'Science'},
-                    {slug: 'technology', label: 'Technology'},
-                    {slug: 'mathematics', label: 'Mathematics'},
-                  ] as const
-                ).map((item) => (
-                  <button
-                    key={item.slug}
-                    type="button"
-                    onClick={() => setSelectedCategoryFilter(item.slug)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                      selectedCategoryFilter === item.slug
-                        ? 'bg-[#315BE8] text-white'
-                        : 'bg-[#F6F9FF] text-[#64748B] hover:text-[#17243B]'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+            {/* Filter Bar: Category + Difficulty + Search */}
+            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#E6EBF2] space-y-4">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold text-[#17243B] mr-1">
+                    Category:
+                  </span>
+                  {(
+                    [
+                      {slug: 'all', label: 'All Categories'},
+                      {slug: 'engineering', label: 'Engineering'},
+                      {slug: 'science', label: 'Science'},
+                      {slug: 'technology', label: 'Technology'},
+                      {slug: 'mathematics', label: 'Mathematics'},
+                    ] as const
+                  ).map((item) => (
+                    <button
+                      key={item.slug}
+                      type="button"
+                      aria-pressed={selectedCategoryFilter === item.slug}
+                      onClick={() => setSelectedCategoryFilter(item.slug)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+                        selectedCategoryFilter === item.slug
+                          ? 'bg-[#315BE8] text-white'
+                          : 'bg-[#F6F9FF] text-[#64748B] hover:text-[#17243B]'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold text-[#17243B] mr-1">
+                    Difficulty:
+                  </span>
+                  {(
+                    [
+                      {slug: 'all', label: 'All Levels'},
+                      {slug: 'Beginner', label: 'Beginner'},
+                      {slug: 'Intermediate', label: 'Intermediate'},
+                    ] as const
+                  ).map((level) => (
+                    <button
+                      key={level.slug}
+                      type="button"
+                      aria-pressed={selectedDifficultyFilter === level.slug}
+                      onClick={() => setSelectedDifficultyFilter(level.slug)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A6A0] ${
+                        selectedDifficultyFilter === level.slug
+                          ? 'bg-[#16A6A0] text-white'
+                          : 'bg-[#F6F9FF] text-[#64748B] hover:text-[#17243B]'
+                      }`}
+                    >
+                      {level.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-semibold text-[#17243B] mr-1">
-                  Difficulty:
-                </span>
-                {(
-                  [
-                    {slug: 'all', label: 'All Levels'},
-                    {slug: 'Beginner', label: 'Beginner'},
-                    {slug: 'Intermediate', label: 'Intermediate'},
-                  ] as const
-                ).map((level) => (
-                  <button
-                    key={level.slug}
-                    type="button"
-                    onClick={() => setSelectedDifficultyFilter(level.slug)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                      selectedDifficultyFilter === level.slug
-                        ? 'bg-[#16A6A0] text-white'
-                        : 'bg-[#F6F9FF] text-[#64748B] hover:text-[#17243B]'
-                    }`}
-                  >
-                    {level.label}
-                  </button>
-                ))}
+              <div className="pt-3 border-t border-[#E6EBF2] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="relative w-full sm:max-w-md">
+                  <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="search"
+                    value={projectSearchQuery}
+                    onChange={(e) => setProjectSearchQuery(e.target.value)}
+                    placeholder="Filter projects by title, subject, or formula..."
+                    aria-label="Filter projects by keyword"
+                    className="w-full pl-10 pr-9 py-2 text-xs sm:text-sm rounded-lg border border-[#E6EBF2] bg-[#F6F9FF] text-[#17243B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#315BE8]"
+                  />
+                  {projectSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setProjectSearchQuery('')}
+                      aria-label="Clear project search"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#64748B] hover:text-[#17243B] cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  aria-live="polite"
+                  className="text-xs font-medium text-[#64748B] flex items-center justify-between sm:justify-end gap-3"
+                >
+                  <span>
+                    Showing {filteredCategoryProjects.length} of{' '}
+                    {PROJECTS_DATA.length} projects
+                  </span>
+                  {(selectedCategoryFilter !== 'all' ||
+                    selectedDifficultyFilter !== 'all' ||
+                    projectSearchQuery.trim() !== '') && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCategoryFilter('all');
+                        setSelectedDifficultyFilter('all');
+                        setProjectSearchQuery('');
+                      }}
+                      className="text-xs font-semibold text-[#315BE8] hover:underline cursor-pointer"
+                    >
+                      Reset Filters
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Filtered Compact Directory List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredCategoryProjects.map((project) => (
-                <Link
-                  key={project.slug}
-                  href={`/projects/${project.slug}`}
-                  className="p-4 rounded-xl bg-white border border-[#E6EBF2] hover:border-[#315BE8] transition-all flex items-center justify-between gap-4 group"
-                >
-                  <div className="space-y-1">
-                    <MetadataRow
-                      items={[
-                        {label: project.categoryLabel, tone: 'primary'},
-                        {label: project.difficulty, tone: 'secondary'},
-                        {
-                          label: project.estimatedTime,
-                          tone: 'neutral',
-                          mono: true,
-                        },
-                      ]}
-                    />
-                    <h4 className="text-base font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
-                      {project.title}
-                    </h4>
-                    <p className="text-xs text-[#64748B] line-clamp-1">
-                      {project.whatYouCreateSummary}
-                    </p>
-                  </div>
-                  <div className="shrink-0 text-right space-y-1">
-                    <div className="text-xs font-mono text-[#315BE8] hidden sm:block">
-                      {project.coreMechanismFormula}
+            {filteredCategoryProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredCategoryProjects.map((project) => (
+                  <Link
+                    key={project.slug}
+                    href={`/projects/${project.slug}`}
+                    className="p-4 rounded-xl bg-white border border-[#E6EBF2] hover:border-[#315BE8] transition-all flex items-center justify-between gap-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
+                  >
+                    <div className="space-y-1 min-w-0">
+                      <MetadataRow
+                        items={[
+                          {label: project.categoryLabel, tone: 'primary'},
+                          {label: project.difficulty, tone: 'secondary'},
+                          {
+                            label: project.estimatedTime,
+                            tone: 'neutral',
+                            mono: true,
+                          },
+                        ]}
+                      />
+                      <h4 className="text-base font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
+                        {project.title}
+                      </h4>
+                      <p className="text-xs text-[#64748B] line-clamp-1">
+                        {project.whatYouCreateSummary}
+                      </p>
                     </div>
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8]">
-                      <span>Open Guide</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                    <div className="shrink-0 text-right space-y-1">
+                      <div className="text-xs font-mono text-[#315BE8] hidden sm:block">
+                        {project.coreMechanismFormula}
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8]">
+                        <span>Open Guide</span>
+                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="p-10 rounded-2xl bg-white border border-[#E6EBF2] text-center space-y-3">
+                <p className="text-base font-bold text-[#17243B]">
+                  No projects matched your current filter.
+                </p>
+                <p className="text-xs text-[#64748B]">
+                  Try clearing your search query or resetting category and
+                  difficulty filters.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedCategoryFilter('all');
+                    setSelectedDifficultyFilter('all');
+                    setProjectSearchQuery('');
+                  }}
+                >
+                  Show All Projects
+                </Button>
+              </div>
+            )}
           </div>
         </section>
 

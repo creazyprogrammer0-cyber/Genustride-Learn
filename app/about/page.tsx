@@ -94,7 +94,7 @@ export default function AboutPage() {
         onPrimaryCta={() => router.push('/learn')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO SECTION
             Headline: "We Believe Education Should Create Understanding, Not Just Remembering."

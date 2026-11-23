@@ -356,7 +356,7 @@ export function ProjectDetailTemplate({project}: {project: ProjectDetailData}) {
         onPrimaryCta={() => router.push('/projects')}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             HERO & OVERVIEW HEADER (1. Title, 2. Main Photograph, 3. Difficulty, 4. Time)
            ===================================================================== */}

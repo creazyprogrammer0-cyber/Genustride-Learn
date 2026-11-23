@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {
@@ -43,6 +43,17 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
   const [activeProjectModal, setActiveProjectModal] =
     useState<SubjectRelatedProject | null>(null);
 
+  useEffect(() => {
+    if (!activeProjectModal) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveProjectModal(null);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [activeProjectModal]);
+
   const selectedTopic =
     subject.topicCategories.find((t) => t.id === selectedTopicId) ||
     subject.topicCategories[0];
@@ -50,7 +61,12 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({behavior: 'smooth'});
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
     }
   };
 
@@ -91,7 +107,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         </div>
       </div>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* =====================================================================
             1. SUBJECT-SPECIFIC HERO SECTION
            ===================================================================== */}
@@ -785,17 +801,29 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-[#E6EBF2]">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E6EBF2]">
               <span className="text-xs text-[#64748B]">
                 {activeProjectModal.level} · {activeProjectModal.duration}
               </span>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setActiveProjectModal(null)}
-              >
-                Close Guide
-              </Button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setActiveProjectModal(null)}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setActiveProjectModal(null);
+                    router.push('/projects');
+                  }}
+                >
+                  Explore Full Project Guides
+                </Button>
+              </div>
             </div>
           </div>
         </div>
