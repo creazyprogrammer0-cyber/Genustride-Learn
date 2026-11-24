@@ -70,7 +70,7 @@ export const HERO_FORMULA_BADGES: readonly FloatingFormulaBadgeData[] = [
 ];
 
 /**
- * Word-by-Word Clip Reveal for the Hero Headline
+ * Word-by-Word Clip Reveal for the Hero Headline with Multi-Tone Gradient Coloring System
  */
 export function HeroHeadlineReveal({text}: {text: string}) {
   const {reduceMotion} = useMotionSystem();
@@ -79,31 +79,40 @@ export function HeroHeadlineReveal({text}: {text: string}) {
   return (
     <h1
       aria-label={text}
-      className="text-3xl sm:text-5xl lg:text-[3.35rem] font-extrabold text-[#17243B] tracking-tight leading-[1.1] text-balance"
+      className="text-3xl sm:text-5xl lg:text-[3.35rem] font-extrabold tracking-tight leading-[1.12] text-balance"
     >
-      {words.map((word, idx) => (
-        <span
-          key={`${word}-${idx}`}
-          className="inline-block overflow-hidden align-bottom mr-[0.26em] pb-0.5"
-        >
+      {words.map((word, idx) => {
+        // First sentence ("Don't Just Learn What It Is.") in deep navy -> royal cobalt gradient;
+        // Second sentence ("Understand Why It Matters.") in vibrant cobalt -> cyan -> scientific teal gradient
+        const wordGradientClass =
+          idx < 6
+            ? 'bg-gradient-to-br from-[#0F172A] via-[#1E3A8A] to-[#315BE8] bg-clip-text text-transparent'
+            : 'bg-gradient-to-r from-[#315BE8] via-[#0284C7] to-[#16A6A0] bg-clip-text text-transparent';
+
+        return (
           <span
-            style={
-              reduceMotion
-                ? undefined
-                : {
-                    animationDelay: `${idx * 42}ms`,
-                  }
-            }
-            className={
-              reduceMotion
-                ? 'inline-block'
-                : 'inline-block hero-word-clip-reveal'
-            }
+            key={`${word}-${idx}`}
+            className="inline-block overflow-hidden align-bottom mr-[0.26em] pb-1"
           >
-            {word}
+            <span
+              style={
+                reduceMotion
+                  ? undefined
+                  : {
+                      animationDelay: `${idx * 42}ms`,
+                    }
+              }
+              className={`${
+                reduceMotion
+                  ? 'inline-block'
+                  : 'inline-block hero-word-clip-reveal'
+              } ${wordGradientClass}`}
+            >
+              {word}
+            </span>
           </span>
-        </span>
-      ))}
+        );
+      })}
     </h1>
   );
 }

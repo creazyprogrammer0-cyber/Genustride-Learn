@@ -23,6 +23,7 @@ import {
   HeroHeadlineReveal,
   HeroFloatingStemBadges,
 } from '@/components/home/hero-concept-field';
+import {HomepageOpeningMotion} from '@/components/home/homepage-opening-motion';
 import {RethinkingLearningComparison} from '@/components/home/rethinking-learning-comparison';
 import {FourStageMethodology} from '@/components/home/four-stage-methodology';
 import {IceFloatLab} from '@/components/IceFloatLab';
@@ -57,6 +58,9 @@ const CURIOSITY_LAUNCHPAD_QUESTIONS = [
 export default function HomePage() {
   return (
     <div id="top" className="min-h-screen flex flex-col bg-transparent">
+      {/* Full-Screen Opening Animation Screen (Shows ONLY when loading the homepage) */}
+      <HomepageOpeningMotion />
+
       {/* Global Navigation Bar & Mobile Navigation */}
       <Navbar
         activeSection="home"
@@ -99,8 +103,35 @@ export default function HomePage() {
                 <div className="space-y-3.5">
                   <HeroHeadlineReveal text="Don't Just Learn What It Is. Understand Why It Matters." />
 
-                  <p className="text-xl sm:text-2xl font-semibold text-[#315BE8] tracking-tight leading-snug">
-                    Discover how knowledge works in the real world.
+                  <p
+                    aria-label="Discover how knowledge works in the real world."
+                    className="text-xl sm:text-2xl font-semibold text-[#315BE8] tracking-tight leading-snug"
+                  >
+                    {'Discover how knowledge works in the real world.'
+                      .split(' ')
+                      .map((word, wordIdx, allWords) => {
+                        const prevCharsCount = allWords
+                          .slice(0, wordIdx)
+                          .reduce((acc, w) => acc + w.length, 0);
+                        return (
+                          <span
+                            key={`${word}-${wordIdx}`}
+                            className="inline-block mr-[0.28em] whitespace-nowrap"
+                          >
+                            {word.split('').map((ch, charIdx) => (
+                              <span
+                                key={`${ch}-${charIdx}`}
+                                style={{
+                                  animationDelay: `${(prevCharsCount + charIdx) * 55}ms`,
+                                }}
+                                className="char-harmonic-wave bg-gradient-to-r from-[#315BE8] to-[#16A6A0] bg-clip-text text-transparent"
+                              >
+                                {ch}
+                              </span>
+                            ))}
+                          </span>
+                        );
+                      })}
                   </p>
                 </div>
 
