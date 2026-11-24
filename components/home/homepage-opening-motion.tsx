@@ -9,6 +9,21 @@ const WAVE_SENTENCE_TEXT = 'Discover how knowledge works in the real world.';
 const WAVE_SENTENCE_WORDS = WAVE_SENTENCE_TEXT.split(' ');
 
 /**
+ * Captured once when the document/bundle initially loads in the browser tab.
+ * - If the user loads or refreshes directly on `/`, INITIAL_DOCUMENT_PATHNAME is `'/'`.
+ * - If the user loads/refreshes on another route (e.g., `/learn`) and later clicks a link to `/`,
+ *   INITIAL_DOCUMENT_PATHNAME is `'/learn'`, so the homepage splash screen will not trigger on link clicks.
+ * - Once the homepage splash plays once in the current document load, `hasConsumedHomepageLoadAnimation`
+ *   becomes `true`, preventing the animation from re-triggering on any subsequent in-app navigation to `/`.
+ */
+const INITIAL_DOCUMENT_PATHNAME =
+  typeof window !== 'undefined'
+    ? window.location.pathname.replace(/\/+$/, '') || '/'
+    : '/';
+
+let hasConsumedHomepageLoadAnimation = false;
+
+/**
  * Interactive HTML5 Canvas that renders a Space Background Wave with an orbital
  * "wave-writer" stylus particle that traces the path while writing "Genustride",
  * plus an impact ripple when "Learn" drops from the top into place.
@@ -233,19 +248,24 @@ function SpaceWaveCanvas() {
 
 /**
  * Full-Screen Homepage Preloader / Opening Splash Screen.
- * Shows ONLY when the homepage loads, playing:
- * 1. "Genustride" spinning/writing across the space background wave
- * 2. "Learn" falling from the top and landing to the right side of "Genustride"
- * 3. Blinking and waving "Discover how knowledge works in the real world."
- * Then smoothly fades out to reveal the homepage content.
+ * Shows ONLY when the site is loaded or refreshed directly on the homepage (`/`).
+ * Does NOT show when navigating to the homepage via internal link clicks.
  */
 export function HomepageOpeningMotion() {
   const {reduceMotion} = useMotionSystem();
   const [overlayPhase, setOverlayPhase] = useState<
     'playing' | 'exiting' | 'hidden'
-  >('playing');
+  >(() => {
+    if (typeof window === 'undefined') {
+      return 'playing';
+    }
+    const isInitialRefreshOnHomepage =
+      INITIAL_DOCUMENT_PATHNAME === '/' && !hasConsumedHomepageLoadAnimation;
+    return isInitialRefreshOnHomepage ? 'playing' : 'hidden';
+  });
 
   const dismissOverlay = useCallback(() => {
+    hasConsumedHomepageLoadAnimation = true;
     setOverlayPhase('exiting');
     window.setTimeout(() => {
       setOverlayPhase('hidden');
@@ -253,7 +273,23 @@ export function HomepageOpeningMotion() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion || overlayPhase !== 'playing') return;
+    if (overlayPhase !== 'playing') return;
+
+    // Mark consumed on the first animation frame after mount so client-side
+    // navigations back to `/` never replay the splash screen.
+    const rafId = window.requestAnimationFrame(() => {
+      hasConsumedHomepageLoadAnimation = true;
+    });
+
+    if (reduceMotion) {
+      const immediateTimer = window.setTimeout(() => {
+        setOverlayPhase('hidden');
+      }, 0);
+      return () => {
+        window.cancelAnimationFrame(rafId);
+        window.clearTimeout(immediateTimer);
+      };
+    }
 
     const exitTimer = window.setTimeout(() => {
       setOverlayPhase('exiting');
@@ -264,6 +300,7 @@ export function HomepageOpeningMotion() {
     }, 4020);
 
     return () => {
+      window.cancelAnimationFrame(rafId);
       window.clearTimeout(exitTimer);
       window.clearTimeout(hideTimer);
     };
