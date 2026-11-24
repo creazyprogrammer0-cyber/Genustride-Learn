@@ -322,9 +322,9 @@ export default function HowItWorksPage() {
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
       <Navbar
-        activeSection="how-learning-happens"
+        activeSection="how-it-works"
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       {/* Breadcrumbs Bar */}

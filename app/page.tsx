@@ -59,6 +59,7 @@ export default function HomePage() {
     <div id="top" className="min-h-screen flex flex-col bg-transparent">
       {/* Global Navigation Bar & Mobile Navigation */}
       <Navbar
+        activeSection="home"
         primaryCtaLabel="Explore Learning"
         primaryCtaHref="/learn"
       />

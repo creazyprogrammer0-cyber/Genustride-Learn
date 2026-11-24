@@ -72,7 +72,7 @@ const STAGES_DATA = [
     activeBg: 'bg-[#FEF3C7]/35 ring-2 ring-[#D97706]/35',
     footerTintBg: 'bg-[#FEF3C7]/55',
     accentHex: '#D97706',
-    practiceHref: '/projects/design-a-mini-solar-power-model',
+    practiceHref: '/projects/understand-solar-energy',
     practiceCta: 'Open Solar Engineering Project',
   },
 ] as const;

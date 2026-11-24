@@ -123,13 +123,13 @@ export function DropdownMenu({
         aria-expanded={open}
         aria-haspopup="menu"
         className={cn(
-          'inline-flex items-center gap-1.5 text-sm font-medium transition-colors whitespace-nowrap shrink-0 py-1.5 px-2 rounded-md border-b-2',
+          'inline-flex items-center gap-1.5 text-sm transition-colors whitespace-nowrap shrink-0 py-1.5 px-2 rounded-md border-b-2',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
           open
-            ? 'text-[#315BE8] bg-[#F6F9FF] border-[#315BE8]'
+            ? 'text-[#315BE8] bg-[#F6F9FF] border-[#315BE8] font-semibold'
             : hasActiveSelection
-              ? 'text-[#315BE8] border-[#315BE8]'
-              : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
+              ? 'text-[#315BE8] border-[#315BE8] font-semibold'
+              : 'text-[#17243B] border-transparent font-medium hover:text-[#315BE8]'
         )}
       >
         <span>{triggerLabel}</span>

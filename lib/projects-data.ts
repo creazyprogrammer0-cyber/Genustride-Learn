@@ -2196,8 +2196,23 @@ export const PROJECTS_DATA: ProjectDetailData[] = [
   },
 ];
 
+export const PROJECT_SLUG_ALIASES: Record<string, string> = {
+  'design-a-mini-solar-power-model': 'understand-solar-energy',
+  'build-a-solar-energy-model': 'understand-solar-energy',
+  'build-a-homopolar-dc-electric-motor': 'build-a-commutated-dc-electric-motor',
+  'observe-plant-stomata-and-osmosis': 'leaf-stomata-microscopy-and-osmosis',
+  'measure-distance-with-ultrasonic-waves':
+    'microcontroller-ultrasonic-distance-logger',
+  'create-a-mini-weather-station': 'build-a-simple-weather-station',
+  '[project-slug]': 'build-a-simple-electric-circuit',
+  '%5Bproject-slug%5D': 'build-a-simple-electric-circuit',
+};
+
 export function getProjectBySlug(slug: string): ProjectDetailData | undefined {
-  return PROJECTS_DATA.find((project) => project.slug === slug);
+  const decoded = decodeURIComponent(slug);
+  const resolvedSlug =
+    PROJECT_SLUG_ALIASES[slug] || PROJECT_SLUG_ALIASES[decoded] || decoded;
+  return PROJECTS_DATA.find((project) => project.slug === resolvedSlug);
 }
 
 export function getProjectsByCategory(

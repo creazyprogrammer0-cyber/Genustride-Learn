@@ -211,7 +211,7 @@ export default function ContactPage() {
       <Navbar
         activeSection="contact"
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">

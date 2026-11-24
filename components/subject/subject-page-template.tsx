@@ -24,17 +24,17 @@ export interface SubjectPageTemplateProps {
 
 const RELATED_PROJECT_HREF_MAP: Record<string, string> = {
   'phy-proj-1': '/projects/build-a-simple-electric-circuit',
-  'phy-proj-2': '/projects/build-a-homopolar-dc-electric-motor',
+  'phy-proj-2': '/projects/build-a-commutated-dc-electric-motor',
   'mat-proj-1': '/projects/explore-mathematical-patterns-in-nature',
   'mat-proj-2': '/projects/load-test-a-structural-truss-bridge',
   'chm-proj-1': '/projects/explore-water-filtration',
   'chm-proj-2': '/projects/build-a-simple-electric-circuit',
-  'bio-proj-1': '/projects/observe-plant-stomata-and-osmosis',
+  'bio-proj-1': '/projects/leaf-stomata-microscopy-and-osmosis',
   'bio-proj-2': '/projects/explore-water-filtration',
-  'tec-proj-1': '/projects/measure-distance-with-ultrasonic-waves',
-  'tec-proj-2': '/projects/create-a-mini-weather-station',
+  'tec-proj-1': '/projects/microcontroller-ultrasonic-distance-logger',
+  'tec-proj-2': '/projects/build-a-simple-weather-station',
   'eng-proj-1': '/projects/load-test-a-structural-truss-bridge',
-  'eng-proj-2': '/projects/build-a-solar-energy-model',
+  'eng-proj-2': '/projects/understand-solar-energy',
 };
 
 export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
@@ -66,6 +66,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* Global Navigation Bar */}
       <Navbar
+        activeSection="subjects"
         primaryCtaLabel="Explore Learning"
         primaryCtaHref="/learn"
       />

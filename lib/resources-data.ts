@@ -602,5 +602,11 @@ export const RESOURCE_ARTICLES: ResourceArticleData[] = [
 export function getResourceArticleBySlug(
   slug: string
 ): ResourceArticleData | undefined {
-  return RESOURCE_ARTICLES.find((article) => article.slug === slug);
+  const decoded = decodeURIComponent(slug);
+  if (decoded === '[article-slug]') {
+    return RESOURCE_ARTICLES[0];
+  }
+  return RESOURCE_ARTICLES.find(
+    (article) => article.slug === slug || article.slug === decoded
+  );
 }

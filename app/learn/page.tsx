@@ -86,7 +86,7 @@ const PRACTICAL_EXPERIMENTS_HIGHLIGHT = [
   {
     subject: 'Biology',
     slug: 'biology' as SubjectCategorySlug,
-    projectHref: '/projects/observe-plant-stomata-and-osmosis',
+    projectHref: '/projects/leaf-stomata-microscopy-and-osmosis',
     ...SUBJECTS_DATA.biology.experimentsAndActivities[0],
   },
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
 import {Menu, X, ChevronDown, ArrowRight, ArrowUpRight} from 'lucide-react';
@@ -9,8 +9,22 @@ import {Button} from '@/components/ui/button';
 import {DropdownMenu, DropdownMenuItem} from '@/components/ui/dropdown-menu';
 import {SUBJECT_CATEGORIES} from '@/lib/design-tokens';
 
+export type NavbarSection =
+  | 'home'
+  | 'learn'
+  | 'subjects'
+  | 'how-it-works'
+  | 'how-learning-happens'
+  | 'projects'
+  | 'real-world-learning'
+  | 'resources'
+  | 'about'
+  | 'for-parents-and-educators'
+  | 'contact'
+  | (string & {});
+
 export interface NavbarProps {
-  activeSection?: string;
+  activeSection?: NavbarSection;
   onNavigate?: (targetId: string, label?: string) => void;
   primaryCtaLabel?: string;
   primaryCtaHref?: string;
@@ -45,6 +59,12 @@ const ABOUT_MENU_LINKS = [
   },
 ] as const;
 
+const PRIMARY_CTA_BUTTON_CLASS =
+  'min-h-[40px] px-4 py-2 text-sm font-semibold rounded-lg';
+
+const DESKTOP_NAV_LINK_BASE_CLASS =
+  'py-1.5 px-2 transition-colors whitespace-nowrap shrink-0 border-b-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]';
+
 export function Navbar({
   activeSection,
   primaryCtaLabel = 'Explore Learning',
@@ -63,10 +83,16 @@ export function Navbar({
   const activeSubjectSlug = activeSubjectMatch?.slug;
 
   // Determine active navigation states from current URL pathname + optional prop
-  const isExploreActive = pathname === '/learn';
-  const isSubjectsActive = Boolean(activeSubjectSlug) || isExploreActive;
+  const isExploreActive =
+    pathname === '/learn' || activeSection === 'learn';
+  const isSubjectsActive =
+    Boolean(activeSubjectSlug) ||
+    isExploreActive ||
+    activeSection === 'subjects';
   const isHowItWorksActive =
-    pathname === '/how-it-works' || activeSection === 'how-learning-happens';
+    pathname === '/how-it-works' ||
+    activeSection === 'how-it-works' ||
+    activeSection === 'how-learning-happens';
   const isProjectsActive =
     pathname === '/projects' ||
     pathname.startsWith('/projects/') ||
@@ -141,10 +167,19 @@ export function Navbar({
     [router]
   );
 
+  const handlePrimaryCtaClick = useCallback(() => {
+    setMobileMenuOpen(false);
+    if (onPrimaryCta) {
+      onPrimaryCta();
+    }
+  }, [onPrimaryCta]);
+
+  const resolvedCtaHref = onPrimaryCta ? undefined : primaryCtaHref;
+
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full bg-white/98 sm:bg-white/95 sm:backdrop-blur-md border-b border-[#E6EBF2]',
+        'sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#E6EBF2]',
         className
       )}
     >
@@ -161,7 +196,7 @@ export function Navbar({
         {/* Zone 1: Single text element Brand Wordmark */}
         <Link
           href="/"
-          className="text-base sm:text-xl font-extrabold tracking-tight text-[#17243B] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+          className="text-lg sm:text-xl font-extrabold tracking-tight text-[#17243B] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
         >
           Genustride Learn
         </Link>
@@ -169,7 +204,7 @@ export function Navbar({
         {/* Zone 2: 5 Unified Primary Navigation Items (Identical structure to Mobile/Tablet Drawer) */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#64748B]"
+          className="hidden lg:flex items-center gap-5 text-sm font-medium text-[#64748B]"
         >
           <DropdownMenu
             triggerLabel="Subjects"
@@ -186,10 +221,10 @@ export function Navbar({
             href="/how-it-works"
             aria-current={isHowItWorksActive ? 'page' : undefined}
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs',
+              DESKTOP_NAV_LINK_BASE_CLASS,
               isHowItWorksActive
                 ? 'text-[#315BE8] border-[#315BE8] font-semibold'
-                : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
+                : 'text-[#17243B] border-transparent font-medium hover:text-[#315BE8]'
             )}
           >
             How It Works
@@ -199,10 +234,10 @@ export function Navbar({
             href="/projects"
             aria-current={isProjectsActive ? 'page' : undefined}
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs',
+              DESKTOP_NAV_LINK_BASE_CLASS,
               isProjectsActive
                 ? 'text-[#315BE8] border-[#315BE8] font-semibold'
-                : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
+                : 'text-[#17243B] border-transparent font-medium hover:text-[#315BE8]'
             )}
           >
             Experiments
@@ -212,10 +247,10 @@ export function Navbar({
             href="/resources"
             aria-current={isResourcesActive ? 'page' : undefined}
             className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs',
+              DESKTOP_NAV_LINK_BASE_CLASS,
               isResourcesActive
                 ? 'text-[#315BE8] border-[#315BE8] font-semibold'
-                : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
+                : 'text-[#17243B] border-transparent font-medium hover:text-[#315BE8]'
             )}
           >
             Resources
@@ -236,14 +271,9 @@ export function Navbar({
             <Button
               variant="primary"
               size="sm"
-              href={onPrimaryCta ? undefined : primaryCtaHref}
-              onClick={
-                onPrimaryCta
-                  ? () => {
-                      onPrimaryCta();
-                    }
-                  : undefined
-              }
+              className={PRIMARY_CTA_BUTTON_CLASS}
+              href={resolvedCtaHref}
+              onClick={handlePrimaryCtaClick}
             >
               {primaryCtaLabel}
             </Button>
@@ -456,19 +486,15 @@ export function Navbar({
             </div>
           </nav>
 
-          {/* Primary CTA Button (Identical label and destination to Desktop Zone 3) */}
+          {/* Primary CTA Button (Identical button styling, label, and destination to Desktop Zone 3) */}
           <div className="pt-3 border-t border-[#E6EBF2]">
             <Button
               variant="primary"
-              size="md"
+              size="sm"
               fullWidth
-              href={onPrimaryCta ? undefined : primaryCtaHref}
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (onPrimaryCta) {
-                  onPrimaryCta();
-                }
-              }}
+              className={PRIMARY_CTA_BUTTON_CLASS}
+              href={resolvedCtaHref}
+              onClick={handlePrimaryCtaClick}
             >
               {primaryCtaLabel}
             </Button>

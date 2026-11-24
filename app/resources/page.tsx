@@ -60,7 +60,7 @@ export default function ResourcesPage() {
       <Navbar
         activeSection="resources"
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">

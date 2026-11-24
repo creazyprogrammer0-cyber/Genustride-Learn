@@ -74,7 +74,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (href && !disabled) {
       return (
-        <Link href={href} className={sharedClasses}>
+        <Link
+          href={href}
+          className={sharedClasses}
+          onClick={
+            props.onClick as unknown as
+              | React.MouseEventHandler<HTMLAnchorElement>
+              | undefined
+          }
+        >
           {leftIcon && <span className="shrink-0">{leftIcon}</span>}
           <span>{children}</span>
           {rightIcon && <span className="shrink-0">{rightIcon}</span>}

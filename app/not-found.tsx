@@ -6,7 +6,10 @@ import {Navbar, Footer, KickerLabel} from '@/components/design-system';
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
-      <Navbar primaryCtaLabel="Explore Learning" />
+      <Navbar
+        primaryCtaLabel="Explore Learning"
+        primaryCtaHref="/learn"
+      />
 
       <main
         id="main-content"
