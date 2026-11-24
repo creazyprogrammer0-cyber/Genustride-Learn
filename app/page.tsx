@@ -124,7 +124,7 @@ export default function HomePage() {
                                 style={{
                                   animationDelay: `${(prevCharsCount + charIdx) * 55}ms`,
                                 }}
-                                className="char-harmonic-wave bg-gradient-to-r from-[#315BE8] to-[#16A6A0] bg-clip-text text-transparent"
+                                className="char-harmonic-wave"
                               >
                                 {ch}
                               </span>
