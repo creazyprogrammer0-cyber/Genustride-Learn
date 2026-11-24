@@ -6,7 +6,7 @@ import {ArrowRight, X} from 'lucide-react';
 import {useRafLoop} from '@/hooks/use-raf-loop';
 import {useMotionSystem} from '@/components/motion/motion-provider';
 
-interface FloatingFormulaBadgeData {
+export interface FloatingFormulaBadgeData {
   id: string;
   formula: string;
   discipline: string;
@@ -18,7 +18,7 @@ interface FloatingFormulaBadgeData {
   accentHex: string;
 }
 
-const HERO_FORMULA_BADGES: readonly FloatingFormulaBadgeData[] = [
+export const HERO_FORMULA_BADGES: readonly FloatingFormulaBadgeData[] = [
   {
     id: 'density-ice',
     formula: 'ρ(ice) = 0.917',
@@ -108,69 +108,157 @@ export function HeroHeadlineReveal({text}: {text: string}) {
   );
 }
 
+export interface FloatingStemBadgeProps {
+  badge: FloatingFormulaBadgeData;
+  isOpen?: boolean;
+  onToggle?: (badgeId: string) => void;
+  onClose?: () => void;
+  renderInlineTooltip?: boolean;
+}
+
+/**
+ * Individual FloatingStemBadge component that uses `useRafLoop` to float gently
+ * in the viewport and opens a dismissible tooltip with real-world intuition when clicked.
+ */
+export function FloatingStemBadge({
+  badge,
+  isOpen: controlledIsOpen,
+  onToggle,
+  onClose,
+  renderInlineTooltip = false,
+}: FloatingStemBadgeProps) {
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const badgeElRef = useRef<HTMLDivElement | null>(null);
+
+  const isSelected =
+    controlledIsOpen !== undefined ? controlledIsOpen : uncontrolledOpen;
+
+  useRafLoop((_delta, elapsed) => {
+    const el = badgeElRef.current;
+    if (!el) return;
+    const y = Math.sin(elapsed * 1.35 + badge.phaseOffset) * 5.5;
+    const x = Math.cos(elapsed * 0.95 + badge.phaseOffset) * 3.0;
+    el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+  });
+
+  const handleToggle = () => {
+    if (onToggle) {
+      onToggle(badge.id);
+    } else {
+      setUncontrolledOpen((prev) => !prev);
+    }
+  };
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setUncontrolledOpen(false);
+    }
+  };
+
+  return (
+    <div
+      ref={badgeElRef}
+      className={`pointer-events-auto absolute ${badge.positionClass} will-change-transform`}
+    >
+      <button
+        type="button"
+        aria-expanded={isSelected}
+        onClick={handleToggle}
+        className={`px-3 py-1.5 rounded-lg font-mono text-xs font-semibold backdrop-blur-md border transition-all cursor-pointer whitespace-nowrap shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+          isSelected
+            ? 'bg-[#17243B] text-white border-[#17243B] shadow-md scale-105'
+            : 'bg-white/85 text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]/50 hover:bg-white'
+        }`}
+      >
+        <span
+          style={{
+            color: isSelected ? '#FFFFFF' : badge.accentHex,
+          }}
+        >
+          {badge.formula}
+        </span>
+        <span className="ml-1.5 text-[10px] font-sans font-medium text-[#64748B]">
+          {isSelected ? '×' : '?'}
+        </span>
+      </button>
+
+      {renderInlineTooltip && isSelected && (
+        <div
+          role="dialog"
+          aria-label={`Quick concept intuition for ${badge.formula}`}
+          className="mt-2 w-72 sm:w-80 rounded-xl bg-white/95 backdrop-blur-md border border-[#315BE8]/35 p-3.5 shadow-md animate-reveal"
+        >
+          <div className="flex items-start justify-between gap-2.5">
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 text-[11px]">
+                <span className="font-mono font-bold text-[#315BE8]">
+                  {badge.formula}
+                </span>
+                <span aria-hidden="true" className="text-[#64748B]">
+                  ·
+                </span>
+                <span className="font-medium text-[#16A6A0]">
+                  {badge.discipline}
+                </span>
+              </div>
+              <h2 className="text-xs font-bold text-[#17243B]">
+                {badge.intuitionTitle}
+              </h2>
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                {badge.intuitionBody}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              aria-label="Close concept intuition tooltip"
+              onClick={handleClose}
+              className="p-1 rounded-md text-[#64748B] hover:text-[#17243B] hover:bg-[#F6F9FF] transition-colors cursor-pointer shrink-0"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="mt-2.5 pt-2 border-t border-[#E6EBF2] flex items-center justify-end text-xs">
+            <Link
+              href={badge.href}
+              className="inline-flex items-center gap-1 font-semibold text-[#315BE8] hover:text-[#2548C9] whitespace-nowrap shrink-0"
+            >
+              <span>Explore Concept</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /**
  * Interactive Floating STEM Formula Badges positioned in the outer hero margins.
- * Clicking or hovering any badge opens a compact, dismissible "Quick Concept Tooltip".
+ * Clicking any badge opens a compact, dismissible "Quick Concept Tooltip" with real-world intuition.
  */
 export function HeroFloatingStemBadges() {
   const [activeBadgeId, setActiveBadgeId] = useState<string | null>(null);
-  const badgeElsRef = useRef<Record<string, HTMLDivElement | null>>({});
-
-  useRafLoop((_delta, elapsed) => {
-    for (const badge of HERO_FORMULA_BADGES) {
-      const el = badgeElsRef.current[badge.id];
-      if (!el) continue;
-      const y = Math.sin(elapsed * 1.35 + badge.phaseOffset) * 5.5;
-      const x = Math.cos(elapsed * 0.95 + badge.phaseOffset) * 3.0;
-      el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
-    }
-  });
-
   const activeBadge = HERO_FORMULA_BADGES.find((b) => b.id === activeBadgeId);
 
   return (
     <>
       {/* Outer-Margin Floating Formula Buttons (Hidden on cramped <640px screens so hero text never clips) */}
       <div className="pointer-events-none absolute inset-0 hidden sm:block z-20">
-        {HERO_FORMULA_BADGES.map((badge) => {
-          const isSelected = activeBadgeId === badge.id;
-          return (
-            <div
-              key={badge.id}
-              ref={(node) => {
-                badgeElsRef.current[badge.id] = node;
-              }}
-              className={`pointer-events-auto absolute ${badge.positionClass} will-change-transform`}
-            >
-              <button
-                type="button"
-                aria-expanded={isSelected}
-                onClick={() =>
-                  setActiveBadgeId((prev) =>
-                    prev === badge.id ? null : badge.id
-                  )
-                }
-                onMouseEnter={() => setActiveBadgeId(badge.id)}
-                className={`px-3 py-1.5 rounded-lg font-mono text-xs font-semibold backdrop-blur-md border transition-all cursor-pointer whitespace-nowrap shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
-                  isSelected
-                    ? 'bg-[#17243B] text-white border-[#17243B] shadow-md scale-105'
-                    : 'bg-white/85 text-[#17243B] border-[#E6EBF2] hover:border-[#315BE8]/50 hover:bg-white'
-                }`}
-              >
-                <span
-                  style={{
-                    color: isSelected ? '#FFFFFF' : badge.accentHex,
-                  }}
-                >
-                  {badge.formula}
-                </span>
-                <span className="ml-1.5 text-[10px] font-sans font-medium text-[#64748B]">
-                  {isSelected ? '×' : '?'}
-                </span>
-              </button>
-            </div>
-          );
-        })}
+        {HERO_FORMULA_BADGES.map((badge) => (
+          <FloatingStemBadge
+            key={badge.id}
+            badge={badge}
+            isOpen={activeBadgeId === badge.id}
+            onToggle={(id) =>
+              setActiveBadgeId((prev) => (prev === id ? null : id))
+            }
+            onClose={() => setActiveBadgeId(null)}
+          />
+        ))}
       </div>
 
       {/* Dismissible Quick Concept Tooltip Drawer */}

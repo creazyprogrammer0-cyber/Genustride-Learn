@@ -4,7 +4,7 @@ import './globals.css';
 import {buildPageMetadata, buildWebsiteJsonLd, getSiteUrl} from '@/lib/seo';
 import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
 import {InteractiveBackground} from '@/components/layout/interactive-background';
-import {MotionProvider, MotionControls} from '@/components/motion';
+import {MotionProvider} from '@/components/motion';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -58,7 +58,6 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             type="application/ld+json"
             dangerouslySetInnerHTML={{__html: JSON.stringify(websiteJsonLd)}}
           />
-          <MotionControls />
           {children}
         </MotionProvider>
       </body>

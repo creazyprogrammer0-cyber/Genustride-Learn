@@ -8,7 +8,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {Pause, Play, EyeOff, Sparkles} from 'lucide-react';
 
 export interface MotionSystemContextValue {
   reduceMotion: boolean;
@@ -109,77 +108,6 @@ export function MotionProvider({children}: {children: React.ReactNode}) {
   );
 }
 
-/**
- * Compact, non-intrusive Motion & Accessibility Control Bar.
- * Provides instant "Reduce Motion" and "Pause Animations" toggles.
- */
 export function MotionControls() {
-  const {
-    reduceMotion,
-    pauseAnimations,
-    toggleReduceMotion,
-    togglePauseAnimations,
-  } = useMotionSystem();
-
-  return (
-    <div
-      role="region"
-      aria-label="Motion and animation accessibility controls"
-      className="bg-[#FAF9F6]/90 border-b border-[#E6EBF2] text-xs text-[#64748B]"
-    >
-      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-1.5 flex flex-wrap items-center justify-between gap-2">
-        <div className="hidden sm:flex items-center gap-2 text-[11px] font-medium text-[#64748B]">
-          <span>Interactive Concept Platform</span>
-          <span aria-hidden="true">·</span>
-          <span className="font-mono text-[#17243B]">
-            Understand → Explore → Apply → Create
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2 ml-auto">
-          <span className="text-[11px] font-medium text-[#64748B] hidden md:inline">
-            Motion Preferences:
-          </span>
-
-          <button
-            type="button"
-            aria-pressed={reduceMotion}
-            onClick={toggleReduceMotion}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
-              reduceMotion
-                ? 'bg-[#17243B] text-white'
-                : 'bg-white border border-[#E6EBF2] text-[#17243B] hover:border-[#315BE8]/50 hover:text-[#315BE8]'
-            }`}
-          >
-            {reduceMotion ? (
-              <EyeOff className="w-3 h-3 text-[#16A6A0]" aria-hidden="true" />
-            ) : (
-              <Sparkles className="w-3 h-3 text-[#315BE8]" aria-hidden="true" />
-            )}
-            <span>{reduceMotion ? 'Motion Reduced' : 'Reduce Motion'}</span>
-          </button>
-
-          <button
-            type="button"
-            aria-pressed={pauseAnimations}
-            onClick={togglePauseAnimations}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
-              pauseAnimations
-                ? 'bg-[#315BE8] text-white'
-                : 'bg-white border border-[#E6EBF2] text-[#17243B] hover:border-[#315BE8]/50 hover:text-[#315BE8]'
-            }`}
-          >
-            {pauseAnimations ? (
-              <Play className="w-3 h-3" aria-hidden="true" />
-            ) : (
-              <Pause className="w-3 h-3 text-[#16A6A0]" aria-hidden="true" />
-            )}
-            <span>
-              {pauseAnimations ? 'Resume Animations' : 'Pause Animations'}
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
