@@ -104,8 +104,8 @@ export default function ExploreLearningPage() {
     <div id="top" className="min-h-screen flex flex-col bg-transparent">
       <Navbar
         activeSection="learn"
-        primaryCtaLabel="Browse 6 Subjects"
-        primaryCtaHref="#subject-categories"
+        primaryCtaLabel="Explore Learning"
+        primaryCtaHref="/learn"
       />
 
       {/* Breadcrumbs Bar */}

@@ -3,7 +3,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
-import {Menu, X, ChevronDown, ArrowRight} from 'lucide-react';
+import {Menu, X, ChevronDown, ArrowRight, ArrowUpRight} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {Button} from '@/components/ui/button';
 import {DropdownMenu, DropdownMenuItem} from '@/components/ui/dropdown-menu';
@@ -17,6 +17,33 @@ export interface NavbarProps {
   onPrimaryCta?: () => void;
   className?: string;
 }
+
+const ABOUT_MENU_LINKS = [
+  {
+    id: 'about',
+    label: 'About Us',
+    meta: 'Mission & Vision',
+    description:
+      'Why we created a practical, concept-driven learning platform for real understanding.',
+    href: '/about',
+  },
+  {
+    id: 'for-parents-and-educators',
+    label: 'Parents & Educators',
+    meta: 'Schools & Home',
+    description:
+      'How concept-driven learning supports classroom teaching, homework, and curiosity.',
+    href: '/for-parents-and-educators',
+  },
+  {
+    id: 'contact',
+    label: 'Contact',
+    meta: 'Get in Touch',
+    description:
+      'Reach out with subject questions, feedback, or educational partnership inquiries.',
+    href: '/contact',
+  },
+] as const;
 
 export function Navbar({
   activeSection,
@@ -35,17 +62,11 @@ export function Navbar({
   );
   const activeSubjectSlug = activeSubjectMatch?.slug;
 
-  const [mobileSubjectsExpanded, setMobileSubjectsExpanded] = useState(
-    Boolean(activeSubjectSlug)
-  );
-
   // Determine active navigation states from current URL pathname + optional prop
-  const isExploreActive =
-    pathname === '/learn' || activeSection === 'learn';
-  const isSubjectsActive = Boolean(activeSubjectSlug);
+  const isExploreActive = pathname === '/learn';
+  const isSubjectsActive = Boolean(activeSubjectSlug) || isExploreActive;
   const isHowItWorksActive =
-    pathname === '/how-it-works' ||
-    activeSection === 'how-learning-happens';
+    pathname === '/how-it-works' || activeSection === 'how-learning-happens';
   const isProjectsActive =
     pathname === '/projects' ||
     pathname.startsWith('/projects/') ||
@@ -55,9 +76,26 @@ export function Navbar({
     pathname === '/resources' ||
     pathname.startsWith('/resources/') ||
     activeSection === 'resources';
-  const isParentsActive = pathname === '/for-parents-and-educators';
-  const isAboutActive = pathname === '/about';
-  const isContactActive = pathname === '/contact';
+  const isAboutActive = pathname === '/about' || activeSection === 'about';
+  const isParentsActive =
+    pathname === '/for-parents-and-educators' ||
+    activeSection === 'for-parents-and-educators';
+  const isContactActive =
+    pathname === '/contact' || activeSection === 'contact';
+
+  const activeAboutItemId = isAboutActive
+    ? 'about'
+    : isParentsActive
+      ? 'for-parents-and-educators'
+      : isContactActive
+        ? 'contact'
+        : undefined;
+  const isAboutGroupActive = Boolean(activeAboutItemId);
+
+  const [mobileSubjectsExpanded, setMobileSubjectsExpanded] =
+    useState<boolean>(isSubjectsActive);
+  const [mobileAboutExpanded, setMobileAboutExpanded] =
+    useState<boolean>(isAboutGroupActive);
 
   // Close mobile drawer on Escape key
   useEffect(() => {
@@ -88,6 +126,21 @@ export function Navbar({
     [router]
   );
 
+  const aboutDropdownItems: DropdownMenuItem[] = useMemo(
+    () =>
+      ABOUT_MENU_LINKS.map((item) => ({
+        id: item.id,
+        label: item.label,
+        meta: item.meta,
+        description: item.description,
+        onSelect: () => {
+          setMobileMenuOpen(false);
+          router.push(item.href);
+        },
+      })),
+    [router]
+  );
+
   return (
     <header
       className={cn(
@@ -103,7 +156,7 @@ export function Navbar({
         Skip to main content
       </a>
 
-      {/* Strict 3-Zone Top Bar Contract on Desktop, Compact at 320px */}
+      {/* Strict 3-Zone Top Bar Contract on Desktop, Compact on Mobile/Tablet (<1024px) */}
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4 lg:gap-8">
         {/* Zone 1: Single text element Brand Wordmark */}
         <Link
@@ -113,31 +166,18 @@ export function Navbar({
           Genustride Learn
         </Link>
 
-        {/* Zone 2: 5 concise single-line navigation links */}
+        {/* Zone 2: 5 Unified Primary Navigation Items (Identical structure to Mobile/Tablet Drawer) */}
         <nav
           aria-label="Primary Navigation"
           className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#64748B]"
         >
-          <Link
-            href="/learn"
-            aria-current={isExploreActive ? 'page' : undefined}
-            className={cn(
-              'py-1.5 transition-colors whitespace-nowrap shrink-0 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs',
-              isExploreActive
-                ? 'text-[#315BE8] border-[#315BE8] font-semibold'
-                : 'text-[#17243B] border-transparent hover:text-[#315BE8]'
-            )}
-          >
-            Explore Learning
-          </Link>
-
           <DropdownMenu
             triggerLabel="Subjects"
             items={subjectDropdownItems}
             activeItemId={activeSubjectSlug}
             isActiveTrigger={isSubjectsActive}
             footerAction={{
-              label: 'Open Explore Learning Hub (/learn)',
+              label: 'All Subjects Hub (/learn)',
               onClick: () => router.push('/learn'),
             }}
           />
@@ -180,11 +220,19 @@ export function Navbar({
           >
             Resources
           </Link>
+
+          <DropdownMenu
+            triggerLabel="About"
+            items={aboutDropdownItems}
+            activeItemId={activeAboutItemId}
+            isActiveTrigger={isAboutGroupActive}
+            align="right"
+          />
         </nav>
 
-        {/* Zone 3: 1 Primary Action + Mobile Drawer Toggle on <1024px */}
+        {/* Zone 3: 1 Primary CTA on Desktop (lg:block) + Drawer Toggle on Mobile/Tablet (<1024px) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <div className="hidden sm:block">
+          <div className="hidden lg:block">
             <Button
               variant="primary"
               size="sm"
@@ -220,7 +268,7 @@ export function Navbar({
         </div>
       </div>
 
-      {/* Responsive Mobile & Tablet Navigation Drawer (320px - 1023px) */}
+      {/* Responsive Mobile & Tablet Navigation Drawer (320px - 1023px) — 100% Unified with Desktop */}
       {mobileMenuOpen && (
         <div
           id="mobile-navigation-drawer"
@@ -230,22 +278,7 @@ export function Navbar({
             aria-label="Mobile Navigation"
             className="flex flex-col space-y-1"
           >
-            <Link
-              href="/learn"
-              aria-current={isExploreActive ? 'page' : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                'min-h-[44px] px-3 py-2.5 text-left text-sm rounded-lg transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
-                isExploreActive
-                  ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
-                  : 'font-semibold text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
-              )}
-            >
-              <span>Explore Learning Hub</span>
-              <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
-            </Link>
-
-            {/* Mobile Accordion for Subjects */}
+            {/* 1. Subjects Accordion (Matches Desktop 'Subjects' Dropdown) */}
             <div>
               <button
                 type="button"
@@ -258,7 +291,7 @@ export function Navbar({
                     : 'font-medium text-[#17243B] hover:bg-[#F6F9FF]'
                 )}
               >
-                <span>Subjects (6 Learning Areas)</span>
+                <span>Subjects</span>
                 <ChevronDown
                   className={cn(
                     'w-4 h-4 text-[#64748B] transition-transform duration-150 shrink-0',
@@ -285,14 +318,36 @@ export function Navbar({
                         )}
                       >
                         <span>{subject.name}</span>
-                        <ArrowRight className="w-3 h-3 shrink-0" aria-hidden="true" />
+                        <ArrowRight
+                          className="w-3 h-3 shrink-0"
+                          aria-hidden="true"
+                        />
                       </Link>
                     );
                   })}
+
+                  <Link
+                    href="/learn"
+                    aria-current={isExploreActive ? 'page' : undefined}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      'w-full min-h-[40px] px-3 py-2 text-left text-xs rounded-md transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
+                      isExploreActive
+                        ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
+                        : 'font-semibold text-[#315BE8] hover:bg-[#F6F9FF]'
+                    )}
+                  >
+                    <span>All Subjects Hub (/learn)</span>
+                    <ArrowUpRight
+                      className="w-3.5 h-3.5 shrink-0"
+                      aria-hidden="true"
+                    />
+                  </Link>
                 </div>
               )}
             </div>
 
+            {/* 2. How It Works */}
             <Link
               href="/how-it-works"
               aria-current={isHowItWorksActive ? 'page' : undefined}
@@ -311,6 +366,7 @@ export function Navbar({
               />
             </Link>
 
+            {/* 3. Experiments */}
             <Link
               href="/projects"
               aria-current={isProjectsActive ? 'page' : undefined}
@@ -322,13 +378,14 @@ export function Navbar({
                   : 'font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
               )}
             >
-              <span>Experiments & Projects</span>
+              <span>Experiments</span>
               <ArrowRight
                 className="w-4 h-4 text-[#64748B] shrink-0"
                 aria-hidden="true"
               />
             </Link>
 
+            {/* 4. Resources */}
             <Link
               href="/resources"
               aria-current={isResourcesActive ? 'page' : undefined}
@@ -340,79 +397,76 @@ export function Navbar({
                   : 'font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
               )}
             >
-              <span>Learning Resources</span>
+              <span>Resources</span>
               <ArrowRight
                 className="w-4 h-4 text-[#64748B] shrink-0"
                 aria-hidden="true"
               />
             </Link>
 
-            <Link
-              href="/for-parents-and-educators"
-              aria-current={isParentsActive ? 'page' : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                'min-h-[44px] px-3 py-2.5 text-left text-sm rounded-lg transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
-                isParentsActive
-                  ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
-                  : 'font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
-              )}
-            >
-              <span>Parents & Educators</span>
-              <ArrowRight
-                className="w-4 h-4 text-[#64748B] shrink-0"
-                aria-hidden="true"
-              />
-            </Link>
+            {/* 5. About Accordion (Matches Desktop 'About' Dropdown) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setMobileAboutExpanded((prev) => !prev)}
+                aria-expanded={mobileAboutExpanded}
+                className={cn(
+                  'w-full min-h-[44px] px-3 py-2.5 flex items-center justify-between gap-2 text-left text-sm rounded-lg transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
+                  isAboutGroupActive
+                    ? 'bg-[#EEF3FF]/60 font-bold text-[#315BE8]'
+                    : 'font-medium text-[#17243B] hover:bg-[#F6F9FF]'
+                )}
+              >
+                <span>About</span>
+                <ChevronDown
+                  className={cn(
+                    'w-4 h-4 text-[#64748B] transition-transform duration-150 shrink-0',
+                    mobileAboutExpanded && 'rotate-180 text-[#315BE8]'
+                  )}
+                />
+              </button>
 
-            <Link
-              href="/about"
-              aria-current={isAboutActive ? 'page' : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                'min-h-[44px] px-3 py-2.5 text-left text-sm rounded-lg transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
-                isAboutActive
-                  ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
-                  : 'font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
+              {mobileAboutExpanded && (
+                <div className="mt-1 ml-3 pl-3 border-l-2 border-[#E6EBF2] space-y-1">
+                  {ABOUT_MENU_LINKS.map((item) => {
+                    const isCurrent = activeAboutItemId === item.id;
+                    return (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        aria-current={isCurrent ? 'page' : undefined}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                          'w-full min-h-[40px] px-3 py-2 text-left text-xs rounded-md transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
+                          isCurrent
+                            ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
+                            : 'font-medium text-[#64748B] hover:text-[#315BE8] hover:bg-[#F6F9FF]'
+                        )}
+                      >
+                        <span>{item.label}</span>
+                        <ArrowRight
+                          className="w-3 h-3 shrink-0"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    );
+                  })}
+                </div>
               )}
-            >
-              <span>About Genustride Learn</span>
-              <ArrowRight
-                className="w-4 h-4 text-[#64748B] shrink-0"
-                aria-hidden="true"
-              />
-            </Link>
-
-            <Link
-              href="/contact"
-              aria-current={isContactActive ? 'page' : undefined}
-              onClick={() => setMobileMenuOpen(false)}
-              className={cn(
-                'min-h-[44px] px-3 py-2.5 text-left text-sm rounded-lg transition-colors flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
-                isContactActive
-                  ? 'bg-[#EEF3FF] font-bold text-[#315BE8]'
-                  : 'font-medium text-[#17243B] hover:bg-[#F6F9FF] hover:text-[#315BE8]'
-              )}
-            >
-              <span>Contact Us</span>
-              <ArrowRight
-                className="w-4 h-4 text-[#64748B] shrink-0"
-                aria-hidden="true"
-              />
-            </Link>
+            </div>
           </nav>
 
+          {/* Primary CTA Button (Identical label and destination to Desktop Zone 3) */}
           <div className="pt-3 border-t border-[#E6EBF2]">
             <Button
               variant="primary"
               size="md"
               fullWidth
+              href={onPrimaryCta ? undefined : primaryCtaHref}
               onClick={() => {
                 setMobileMenuOpen(false);
                 if (onPrimaryCta) {
                   onPrimaryCta();
-                } else {
-                  router.push('/learn');
                 }
               }}
             >

@@ -46,8 +46,8 @@ export function ArticleDetailTemplate({
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
       <Navbar
         activeSection="resources"
-        primaryCtaLabel="All Resources"
-        primaryCtaHref="/resources"
+        primaryCtaLabel="Explore Learning"
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">

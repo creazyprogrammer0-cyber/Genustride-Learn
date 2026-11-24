@@ -358,8 +358,8 @@ export function ProjectDetailTemplate({
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
       <Navbar
         activeSection="projects"
-        primaryCtaLabel="All Experiments"
-        onPrimaryCta={() => router.push('/projects')}
+        primaryCtaLabel="Explore Learning"
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">

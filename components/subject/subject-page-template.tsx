@@ -66,9 +66,8 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* Global Navigation Bar */}
       <Navbar
-        activeSection="learn"
-        primaryCtaLabel="Explore All Subjects"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaLabel="Explore Learning"
+        primaryCtaHref="/learn"
       />
 
       {/* Breadcrumbs & Back to Explore Learning Bar */}
