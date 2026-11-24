@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {ArrowUpRight, BookOpen} from 'lucide-react';
+import {ArrowUpRight} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {ImageContainer} from './image-container';
 import {MetadataRow} from './badge-label';
@@ -114,9 +114,9 @@ export function ResourceCard({
           </p>
 
           {conceptQuestions.length > 0 && (
-            <div className="pt-2 space-y-1.5">
+            <div className="pt-3 border-t border-[#E6EBF2] space-y-1.5">
               <p className="text-xs font-semibold text-[#17243B]">
-                Questions Explored in This Guide:
+                Core Inquiry:
               </p>
               <ul className="space-y-1 text-xs text-[#64748B]">
                 {conceptQuestions.map((q) => (
@@ -135,13 +135,9 @@ export function ResourceCard({
           )}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-          <span className="inline-flex items-center gap-1.5 text-xs text-[#64748B]">
-            <BookOpen
-              className="w-3.5 h-3.5 text-[#315BE8] shrink-0"
-              aria-hidden="true"
-            />
-            <span>Concept & Real-World Application</span>
+        <div className="mt-5 pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <span className="text-xs text-[#64748B]">
+            First-Principles Explanation
           </span>
 
           {href ? (

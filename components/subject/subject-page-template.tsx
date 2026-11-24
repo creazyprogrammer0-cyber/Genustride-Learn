@@ -1,19 +1,9 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Compass,
-  FlaskConical,
-  Layers,
-  Lightbulb,
-  BookOpen,
-  CheckCircle2,
-  X,
-} from 'lucide-react';
+import {ArrowLeft, ArrowRight} from 'lucide-react';
 import {
   Navbar,
   Footer,
@@ -26,37 +16,39 @@ import {
   ProjectCard,
   CTASection,
 } from '@/components/design-system';
-import {
-  SubjectPageContent,
-  SubjectRelatedProject,
-} from '@/lib/content-data';
+import {SubjectPageContent} from '@/lib/content-data';
 
 export interface SubjectPageTemplateProps {
   subject: SubjectPageContent;
 }
+
+const RELATED_PROJECT_HREF_MAP: Record<string, string> = {
+  'phy-proj-1': '/projects/build-a-simple-electric-circuit',
+  'phy-proj-2': '/projects/build-a-homopolar-dc-electric-motor',
+  'mat-proj-1': '/projects/explore-mathematical-patterns-in-nature',
+  'mat-proj-2': '/projects/load-test-a-structural-truss-bridge',
+  'chm-proj-1': '/projects/explore-water-filtration',
+  'chm-proj-2': '/projects/build-a-simple-electric-circuit',
+  'bio-proj-1': '/projects/observe-plant-stomata-and-osmosis',
+  'bio-proj-2': '/projects/explore-water-filtration',
+  'tec-proj-1': '/projects/measure-distance-with-ultrasonic-waves',
+  'tec-proj-2': '/projects/create-a-mini-weather-station',
+  'eng-proj-1': '/projects/load-test-a-structural-truss-bridge',
+  'eng-proj-2': '/projects/build-a-solar-energy-model',
+};
 
 export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
   const router = useRouter();
   const [selectedTopicId, setSelectedTopicId] = useState<string>(
     subject.topicCategories[0]?.id || ''
   );
-  const [activeProjectModal, setActiveProjectModal] =
-    useState<SubjectRelatedProject | null>(null);
 
-  useEffect(() => {
-    if (!activeProjectModal) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveProjectModal(null);
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [activeProjectModal]);
-
+  const selectedTopicIndex = Math.max(
+    0,
+    subject.topicCategories.findIndex((t) => t.id === selectedTopicId)
+  );
   const selectedTopic =
-    subject.topicCategories.find((t) => t.id === selectedTopicId) ||
-    subject.topicCategories[0];
+    subject.topicCategories[selectedTopicIndex] || subject.topicCategories[0];
 
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
@@ -131,13 +123,13 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                       tone: 'primary',
                       mono: true,
                     },
-                    {label: subject.title.toUpperCase(), tone: 'secondary'},
+                    {label: subject.title, tone: 'secondary'},
                     {label: subject.levelScope, tone: 'neutral'},
                   ]}
                 />
 
                 <div className="space-y-3">
-                  <h1 className="text-3xl sm:text-5xl font-extrabold text-[#17243B] tracking-tight leading-[1.12]">
+                  <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold text-[#17243B] tracking-tight leading-[1.1] text-balance">
                     {subject.heroHeadline}
                   </h1>
                   <p className="text-lg sm:text-xl font-semibold text-[#315BE8] leading-snug">
@@ -145,12 +137,12 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                   </p>
                 </div>
 
-                <p className="text-[15px] sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
+                <p className="text-[15px] sm:text-[17px] text-[#64748B] leading-relaxed max-w-2xl">
                   {subject.leadSummary}
                 </p>
 
                 {/* Quick Jump Topic Links */}
-                <div className="pt-1 space-y-2">
+                <div className="pt-2 border-t border-[#E6EBF2] space-y-2">
                   <div className="text-xs font-semibold text-[#17243B]">
                     Core Topics Covered in {subject.shortTitle}:
                   </div>
@@ -200,7 +192,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
               </div>
 
               <div className="lg:col-span-5">
-                <div className="surface-card rounded-2xl p-3.5 bg-white">
+                <div className="surface-card rounded-2xl p-4 sm:p-5 bg-white">
                   <ImageContainer
                     src={subject.imageSrc}
                     alt={subject.imageAlt}
@@ -217,7 +209,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         </section>
 
         {/* =====================================================================
-            2. WHY THIS SUBJECT MATTERS
+            2. WHY THIS SUBJECT MATTERS (Unified 3-Column Hairline Matrix)
            ===================================================================== */}
         <section
           id="why-it-matters"
@@ -226,23 +218,21 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <SectionHeading
               index="01"
-              kicker={`WHY ${subject.shortTitle.toUpperCase()} MATTERS`}
+              kicker={`Why ${subject.shortTitle} Matters`}
               title={`Why Understanding ${subject.title} Changes How You See the World`}
               description={subject.whyItMatters.lead}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="rounded-2xl border border-[#E6EBF2] bg-white overflow-hidden grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2]">
               {subject.whyItMatters.pillars.map((pillar, idx) => (
                 <div
                   key={pillar.title}
-                  className="surface-card rounded-xl p-6 sm:p-7 bg-white space-y-3"
+                  className="p-6 sm:p-8 bg-white space-y-3"
                 >
-                  <KickerLabel
-                    index={`01.${idx + 1}`}
-                    label="CORE PURPOSE"
-                    tone={idx === 1 ? 'secondary' : 'primary'}
-                  />
-                  <h3 className="text-lg font-bold text-[#17243B]">
+                  <div className="font-mono tabular-nums text-xs font-semibold text-[#315BE8]">
+                    01.{idx + 1} — Core Purpose
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#17243B] tracking-tight">
                     {pillar.title}
                   </h3>
                   <p className="text-sm text-[#64748B] leading-relaxed">
@@ -255,7 +245,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         </section>
 
         {/* =====================================================================
-            3. WHAT LEARNERS WILL UNDERSTAND
+            3. WHAT LEARNERS WILL UNDERSTAND (Editorial 2-Column Ledger)
            ===================================================================== */}
         <section
           id="what-learners-understand"
@@ -264,18 +254,18 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <SectionHeading
               index="02"
-              kicker="CONCEPTUAL OUTCOMES"
+              kicker="Conceptual Outcomes"
               title={`What Learners Will Understand in ${subject.title}`}
               description="Moving beyond memorized definitions to build lasting conceptual models you can reason with."
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 border-t border-[#E6EBF2] pt-8">
               {subject.whatLearnersWillUnderstand.map((outcome) => (
                 <div
                   key={outcome.index}
-                  className="rounded-xl border border-[#E6EBF2] bg-[#F6F9FF] p-6 sm:p-7 flex items-start gap-4"
+                  className="flex items-start gap-4"
                 >
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-white text-[#315BE8] border border-[#E6EBF2] shrink-0 mt-0.5">
+                  <span className="font-mono tabular-nums text-base font-extrabold text-[#315BE8] shrink-0 mt-0.5">
                     {outcome.index}
                   </span>
                   <div className="space-y-1.5">
@@ -293,134 +283,136 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         </section>
 
         {/* =====================================================================
-            4. TOPIC CATEGORIES
+            4. TOPIC CATEGORIES (Unified Two-Zone Topic Architecture Explorer)
            ===================================================================== */}
         <section
           id="topic-categories"
           className="py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <SectionHeading
               index="03"
-              kicker={`${subject.shortTitle.toUpperCase()} TOPIC ARCHITECTURE`}
+              kicker={`${subject.shortTitle} Topic Architecture`}
               title={`Core Topic Categories in ${subject.title}`}
-              description={`Select any topic below to inspect its underlying mechanism, guiding question, and real-life anchor—or browse the complete ${subject.topicCategories.length}-topic overview.`}
+              description={`Select any of the ${subject.topicCategories.length} topic areas below to inspect its guiding conceptual question, underlying mechanism, and real-world anchor.`}
             />
 
-            {/* Interactive Topic Inspector Banner */}
             {selectedTopic && (
-              <div className="surface-card rounded-2xl p-6 sm:p-8 bg-white space-y-6">
-                <div className="flex flex-wrap items-center gap-2 border-b border-[#E6EBF2] pb-4">
-                  <span className="text-xs font-semibold text-[#64748B] mr-1">
-                    Select Topic to Inspect:
-                  </span>
-                  {subject.topicCategories.map((topic) => {
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Left Column: Interactive Numbered Topic List */}
+                <div
+                  role="group"
+                  aria-label={`${subject.title} topic categories`}
+                  className="lg:col-span-5 rounded-2xl border border-[#E6EBF2] bg-white overflow-hidden divide-y divide-[#E6EBF2]"
+                >
+                  {subject.topicCategories.map((topic, idx) => {
                     const isSelected = topic.id === selectedTopic.id;
                     return (
                       <button
                         key={topic.id}
                         type="button"
+                        aria-pressed={isSelected}
                         onClick={() => setSelectedTopicId(topic.id)}
-                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        className={`w-full text-left p-4 sm:p-5 transition-colors flex items-start justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#315BE8] ${
                           isSelected
-                            ? 'bg-[#315BE8] text-white shadow-2xs'
-                            : 'bg-[#F6F9FF] text-[#17243B] border border-[#E6EBF2] hover:border-[#315BE8]/40'
+                            ? 'bg-[#F6F9FF]'
+                            : 'bg-white hover:bg-[#F6F9FF]/60'
                         }`}
                       >
-                        {topic.name}
+                        <div className="flex items-start gap-3.5">
+                          <span
+                            className={`font-mono tabular-nums text-xs font-bold mt-0.5 ${
+                              isSelected ? 'text-[#315BE8]' : 'text-[#64748B]'
+                            }`}
+                          >
+                            0{idx + 1}
+                          </span>
+                          <div className="space-y-1">
+                            <div
+                              className={`text-sm sm:text-base font-bold ${
+                                isSelected ? 'text-[#315BE8]' : 'text-[#17243B]'
+                              }`}
+                            >
+                              {topic.name}
+                            </div>
+                            <p className="text-xs text-[#64748B] line-clamp-1">
+                              {topic.realLifeAnchor}
+                            </p>
+                          </div>
+                        </div>
+                        <span
+                          className={`text-xs font-mono shrink-0 mt-0.5 ${
+                            isSelected
+                              ? 'text-[#315BE8] font-bold'
+                              : 'text-[#64748B]/50'
+                          }`}
+                        >
+                          →
+                        </span>
                       </button>
                     );
                   })}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-7 space-y-3">
+                {/* Right Column: Active Topic Deep-Dive Breakdown */}
+                <div className="lg:col-span-7 surface-card rounded-2xl p-6 sm:p-8 lg:p-9 bg-white space-y-6 lg:sticky lg:top-24">
+                  <div className="space-y-2 border-b border-[#E6EBF2] pb-5">
                     <KickerLabel
-                      label={`ACTIVE TOPIC · ${selectedTopic.name.toUpperCase()}`}
+                      index={`Topic 0${selectedTopicIndex + 1} of 0${subject.topicCategories.length}`}
+                      label={subject.title}
                       tone="primary"
                     />
-                    <h3 className="text-2xl font-bold text-[#17243B]">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#17243B] tracking-tight">
                       {selectedTopic.name}
                     </h3>
-                    <p className="text-[15px] text-[#17243B]/90 leading-relaxed">
+                    <p className="text-[15px] sm:text-base text-[#64748B] leading-relaxed">
                       {selectedTopic.summary}
                     </p>
-                    <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
-                      <div className="text-xs font-semibold text-[#315BE8]">
-                        How the Underlying Concept Works:
-                      </div>
-                      <p className="text-xs text-[#64748B] leading-relaxed">
-                        {selectedTopic.coreMechanism}
-                      </p>
-                    </div>
                   </div>
 
-                  <div className="lg:col-span-5 space-y-3">
-                    <div className="p-4 rounded-xl bg-[#EAF8F7]/60 border border-[#16A6A0]/25 space-y-1.5">
-                      <div className="text-xs font-semibold text-[#16A6A0]">
-                        Guiding Conceptual Question
-                      </div>
-                      <p className="text-sm font-bold text-[#17243B] leading-snug">
-                        &ldquo;{selectedTopic.guidingQuestion}&rdquo;
-                      </p>
+                  {/* Guiding Conceptual Question */}
+                  <div className="space-y-1.5">
+                    <div className="text-xs font-semibold text-[#16A6A0]">
+                      01 · Guiding Conceptual Question
                     </div>
+                    <p className="text-base sm:text-lg font-bold text-[#17243B] leading-snug">
+                      &ldquo;{selectedTopic.guidingQuestion}&rdquo;
+                    </p>
+                  </div>
 
-                    <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
+                  {/* How the Underlying Mechanism Works */}
+                  <div className="pt-5 border-t border-[#E6EBF2] space-y-1.5">
+                    <div className="text-xs font-semibold text-[#315BE8]">
+                      02 · How the Underlying Mechanism Works
+                    </div>
+                    <p className="text-sm sm:text-[15px] text-[#64748B] leading-relaxed">
+                      {selectedTopic.coreMechanism}
+                    </p>
+                  </div>
+
+                  {/* Where You See It in Reality */}
+                  <div className="pt-5 border-t border-[#E6EBF2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
                       <div className="text-xs font-semibold text-[#17243B]">
-                        Where You See It in Reality
+                        03 · Where You See It in Reality
                       </div>
-                      <p className="text-xs text-[#64748B]">
+                      <p className="text-xs sm:text-sm text-[#64748B]">
                         {selectedTopic.realLifeAnchor}
                       </p>
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => scrollToId('experiments-activities')}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] shrink-0 cursor-pointer"
+                    >
+                      <span>See Hands-On Experiments</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>
             )}
-
-            {/* Complete All-Topics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {subject.topicCategories.map((topic, idx) => (
-                <article
-                  key={topic.id}
-                  onClick={() => setSelectedTopicId(topic.id)}
-                  className={`surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between cursor-pointer ${
-                    topic.id === selectedTopic?.id
-                      ? 'ring-2 ring-[#315BE8]'
-                      : ''
-                  }`}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-semibold text-[#315BE8]">
-                        TOPIC 0{idx + 1}
-                      </span>
-                      <BookOpen
-                        className="w-4 h-4 text-[#64748B]"
-                        aria-hidden="true"
-                      />
-                    </div>
-
-                    <h3 className="text-lg font-bold text-[#17243B]">
-                      {topic.name}
-                    </h3>
-
-                    <p className="text-sm text-[#64748B] leading-relaxed">
-                      {topic.summary}
-                    </p>
-                  </div>
-
-                  <div className="mt-5 pt-3.5 border-t border-[#E6EBF2] space-y-1">
-                    <div className="text-[11px] font-semibold text-[#16A6A0]">
-                      Real-Life Connection:
-                    </div>
-                    <p className="text-xs text-[#17243B]/90">
-                      {topic.realLifeAnchor}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -434,7 +426,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="04"
-              kicker="REAL-WORLD CONNECTIONS"
+              kicker="Real-World Connections"
               kickerTone="secondary"
               title={`Where ${subject.title} Operates in Everyday Life`}
               description={`Every concept in ${subject.shortTitle} explains systems you encounter daily. Here is how academic knowledge powers real-world phenomena.`}
@@ -444,13 +436,13 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
               {subject.realWorldConnections.map((conn, idx) => (
                 <div
                   key={conn.title}
-                  className="surface-card rounded-xl p-6 sm:p-7 bg-white flex flex-col justify-between space-y-4"
+                  className="surface-card rounded-xl p-6 sm:p-7 bg-white flex flex-col justify-between space-y-5"
                 >
                   <div className="space-y-3">
                     <MetadataRow
                       items={[
                         {
-                          label: `APPLICATION 0${idx + 1}`,
+                          label: `Application 0${idx + 1}`,
                           tone: 'primary',
                           mono: true,
                         },
@@ -467,9 +459,9 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-lg bg-[#F6F9FF] border border-[#E6EBF2] text-xs text-[#17243B]">
-                    <strong className="text-[#315BE8] font-semibold">
-                      Direct Observation:{' '}
+                  <div className="pt-3.5 border-t border-[#E6EBF2] text-xs text-[#64748B] leading-relaxed">
+                    <strong className="text-[#17243B] font-semibold">
+                      Everyday Observation:{' '}
                     </strong>
                     {conn.everydayObservation}
                   </div>
@@ -489,7 +481,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="05"
-              kicker="FEATURED PRACTICAL EXAMPLES"
+              kicker="Featured Practical Examples"
               title={`Inside the Mechanism: ${subject.shortTitle} in Action`}
               description="Step-by-step conceptual case studies connecting physical evidence to fundamental principles."
             />
@@ -521,7 +513,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                     <MetadataRow
                       items={[
                         {
-                          label: `CASE STUDY 0${idx + 1}`,
+                          label: `Case Study 0${idx + 1}`,
                           tone: 'primary',
                           mono: true,
                         },
@@ -533,7 +525,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                       {example.title}
                     </h3>
 
-                    <div className="p-3.5 rounded-lg bg-[#F6F9FF] border border-[#E6EBF2] text-xs font-semibold text-[#315BE8]">
+                    <div className="text-sm font-semibold text-[#315BE8]">
                       Guiding Question: &ldquo;{example.question}&rdquo;
                     </div>
 
@@ -541,11 +533,11 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                       {example.explanation}
                     </p>
 
-                    <div className="pt-3 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div className="pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-2 text-xs">
                       <span className="font-semibold text-[#17243B]">
-                        Core Principle / Relationship:
+                        Governing Principle / Relationship:
                       </span>
-                      <span className="font-mono text-[#16A6A0] font-medium">
+                      <span className="font-mono text-[#16A6A0] font-semibold">
                         {example.underlyingLaw}
                       </span>
                     </div>
@@ -566,7 +558,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="06"
-              kicker="EXPERIMENTS & HANDS-ON ACTIVITIES"
+              kicker="Experiments & Hands-On Activities"
               kickerTone="secondary"
               title={`Observe and Test ${subject.title} Firsthand`}
               description="Practical experiments and observations designed to verify principles using accessible laboratory or household instruments."
@@ -579,29 +571,23 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                   className="surface-card rounded-2xl p-6 sm:p-8 bg-white flex flex-col justify-between space-y-6"
                 >
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <MetadataRow
-                        items={[
-                          {
-                            label: `EXPERIMENT 0${idx + 1}`,
-                            tone: 'secondary',
-                            mono: true,
-                          },
-                          {label: exp.topic, tone: 'primary'},
-                          {label: exp.duration, tone: 'neutral', mono: true},
-                        ]}
-                      />
-                      <FlaskConical
-                        className="w-5 h-5 text-[#16A6A0] shrink-0"
-                        aria-hidden="true"
-                      />
-                    </div>
+                    <MetadataRow
+                      items={[
+                        {
+                          label: `Experiment 0${idx + 1}`,
+                          tone: 'secondary',
+                          mono: true,
+                        },
+                        {label: exp.topic, tone: 'primary'},
+                        {label: exp.duration, tone: 'neutral', mono: true},
+                      ]}
+                    />
 
                     <h3 className="text-xl font-bold text-[#17243B]">
                       {exp.title}
                     </h3>
 
-                    <div className="p-3.5 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] text-xs text-[#64748B]">
+                    <div className="pt-3 border-t border-[#E6EBF2] text-xs text-[#64748B] leading-relaxed">
                       <strong className="text-[#17243B] font-semibold">
                         Materials & Apparatus:{' '}
                       </strong>
@@ -618,7 +604,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#EAF8F7]/60 border border-[#16A6A0]/25 space-y-1">
+                  <div className="pt-4 border-t border-[#E6EBF2] space-y-1">
                     <div className="text-xs font-semibold text-[#16A6A0]">
                       What You Will Discover:
                     </div>
@@ -633,7 +619,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         </section>
 
         {/* =====================================================================
-            8. RELATED PROJECTS
+            8. RELATED PROJECTS (Direct links to 16-part /projects/[project-slug])
            ===================================================================== */}
         <section
           id="related-projects"
@@ -642,28 +628,42 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="07"
-              kicker="APPLY & CREATE"
+              kicker="Apply & Create"
               kickerTone="accent"
               title={`Related Practical Projects in ${subject.title}`}
               description="Move from understanding and observation to building working models, calibrated instruments, and investigative prototypes."
+              action={
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#315BE8] hover:text-[#2548C9]"
+                >
+                  <span>Browse All Projects (/projects)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              }
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {subject.relatedProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  title={project.title}
-                  subject={project.subject}
-                  level={project.level}
-                  duration={project.duration}
-                  imageSrc={project.imageSrc}
-                  imageAlt={project.imageAlt}
-                  whyItMatters={project.whyItMatters}
-                  scientificPrinciple={project.scientificPrinciple}
-                  whatYouCreate={project.whatYouCreate}
-                  onInspectProject={() => setActiveProjectModal(project)}
-                />
-              ))}
+              {subject.relatedProjects.map((project) => {
+                const projectHref =
+                  RELATED_PROJECT_HREF_MAP[project.id] || '/projects';
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    title={project.title}
+                    subject={project.subject}
+                    level={project.level}
+                    duration={project.duration}
+                    imageSrc={project.imageSrc}
+                    imageAlt={project.imageAlt}
+                    whyItMatters={project.whyItMatters}
+                    scientificPrinciple={project.scientificPrinciple}
+                    whatYouCreate={project.whatYouCreate}
+                    href={projectHref}
+                    actionLabel="Open Full 16-Part Lab Guide"
+                  />
+                );
+              })}
             </div>
           </div>
         </section>
@@ -678,7 +678,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <SectionHeading
               index="08"
-              kicker="INTERCONNECTED KNOWLEDGE"
+              kicker="Interconnected Knowledge"
               title={`How ${subject.title} Connects With Other Fields`}
               description="Real-world challenges cross academic boundaries. Explore how this subject links directly with neighboring disciplines."
             />
@@ -688,7 +688,7 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
                 <Link
                   key={rel.slug}
                   href={`/learn/${rel.slug}`}
-                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5 group"
+                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
                 >
                   <div className="space-y-2.5">
                     <div className="text-xs font-semibold text-[#16A6A0]">
@@ -704,7 +704,10 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
 
                   <div className="pt-4 border-t border-[#E6EBF2] flex items-center justify-between text-xs font-semibold text-[#315BE8]">
                     <span>Explore {rel.name}</span>
-                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                    <ArrowRight
+                      className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+                      aria-hidden="true"
+                    />
                   </div>
                 </Link>
               ))}
@@ -718,9 +721,9 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
         <section className="py-16 sm:py-24 bg-[#FFFFFF]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CTASection
-              kicker="CONTINUE YOUR LEARNING JOURNEY"
+              kicker="Continue Your Learning Journey"
               title="Ready to Connect More Ideas Across the Real World?"
-              description={`Return to the Explore Learning hub to browse all six disciplines, cross-disciplinary learning paths, and practical experiments.`}
+              description="Return to the Explore Learning hub to browse all six disciplines, cross-disciplinary learning paths, and practical experiments."
               primaryActionLabel="Explore All Learning Areas"
               onPrimaryAction={() => router.push('/learn')}
               secondaryActionLabel={
@@ -742,92 +745,6 @@ export function SubjectPageTemplate({subject}: SubjectPageTemplateProps) {
       </main>
 
       <Footer />
-
-      {/* Project Inspection Dialog */}
-      {activeProjectModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#17243B]/40 backdrop-blur-xs"
-          onClick={() => setActiveProjectModal(null)}
-        >
-          <div
-            className="w-full max-w-xl rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 shadow-2xl space-y-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 border-b border-[#E6EBF2] pb-4">
-              <div className="space-y-1">
-                <KickerLabel label={activeProjectModal.subject} tone="primary" />
-                <h2 className="text-xl font-bold text-[#17243B]">
-                  {activeProjectModal.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveProjectModal(null)}
-                aria-label="Close project guide"
-                className="min-h-[40px] min-w-[40px] rounded-lg border border-[#E6EBF2] flex items-center justify-center text-[#64748B] hover:text-[#17243B] hover:bg-[#F6F9FF] transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-sm">
-              <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
-                <div className="text-xs font-semibold text-[#315BE8]">
-                  01 · Why This Project Matters
-                </div>
-                <p className="text-[#17243B] leading-relaxed">
-                  {activeProjectModal.whyItMatters}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#EAF8F7]/60 border border-[#16A6A0]/25 space-y-1">
-                <div className="text-xs font-semibold text-[#16A6A0]">
-                  02 · Governing Scientific Principle
-                </div>
-                <p className="font-mono text-xs text-[#17243B]">
-                  {activeProjectModal.scientificPrinciple}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#FEF6EB] border border-[#F3A644]/35 space-y-1">
-                <div className="text-xs font-semibold text-[#C87A19]">
-                  03 · What Learners Create
-                </div>
-                <p className="text-[#17243B] leading-relaxed">
-                  {activeProjectModal.whatYouCreate}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E6EBF2]">
-              <span className="text-xs text-[#64748B]">
-                {activeProjectModal.level} · {activeProjectModal.duration}
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setActiveProjectModal(null)}
-                >
-                  Close
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => {
-                    setActiveProjectModal(null);
-                    router.push('/projects');
-                  }}
-                >
-                  Explore Full Project Guides
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

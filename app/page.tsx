@@ -3,16 +3,7 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {
-  ArrowRight,
-  Compass,
-  FlaskConical,
-  Layers,
-  Lightbulb,
-  BookOpen,
-  CheckCircle2,
-  HelpCircle,
-} from 'lucide-react';
+import {ArrowRight, CheckCircle2} from 'lucide-react';
 import {
   Navbar,
   Footer,
@@ -31,6 +22,32 @@ import {
   REAL_WORLD_LEARNING_METHODS,
   BEYOND_CLASSROOM_SKILLS,
 } from '@/lib/content-data';
+
+const METHOD_DESTINATION_MAP: Record<
+  string,
+  {href: string; actionLabel: string; stageConnection: string}
+> = {
+  'real-world-examples': {
+    href: '/resources',
+    actionLabel: 'Explore Concept Articles (/resources)',
+    stageConnection: 'Stage 01–02 · Understand & Explore',
+  },
+  'visual-explanations': {
+    href: '/how-it-works',
+    actionLabel: 'Inspect Our 4-Step Framework (/how-it-works)',
+    stageConnection: 'Stage 02 · Mechanism & Intuition',
+  },
+  'practical-projects': {
+    href: '/projects',
+    actionLabel: 'Open 16-Part Experiment Guides (/projects)',
+    stageConnection: 'Stage 03–04 · Apply & Create',
+  },
+  'interactive-exploration': {
+    href: '/learn',
+    actionLabel: 'Explore All 6 Subject Hubs (/learn)',
+    stageConnection: 'All Stages · Cross-Disciplinary Inquiry',
+  },
+};
 
 export default function HomePage() {
   const router = useRouter();
@@ -57,6 +74,12 @@ export default function HomePage() {
   const activeMethod =
     REAL_WORLD_LEARNING_METHODS.find((m) => m.id === activeMethodId) ||
     REAL_WORLD_LEARNING_METHODS[0];
+  const activeMethodRoute =
+    METHOD_DESTINATION_MAP[activeMethod.id] ||
+    METHOD_DESTINATION_MAP['real-world-examples'];
+  const activeIceStep =
+    ICE_FLOATING_JOURNEY_STEPS[activeIceStepIndex] ||
+    ICE_FLOATING_JOURNEY_STEPS[0];
 
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
@@ -72,7 +95,7 @@ export default function HomePage() {
         {/* =====================================================================
             SECTION 1 — HERO
            ===================================================================== */}
-        <section className="relative overflow-hidden bg-[#FFFFFF] border-b border-[#E6EBF2] pt-12 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
+        <section className="relative overflow-hidden bg-[#FFFFFF] border-b border-[#E6EBF2] pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-28">
           {/* Subtle Blue and Teal Ambient Radial Glows on White Background */}
           <div
             aria-hidden="true"
@@ -89,7 +112,7 @@ export default function HomePage() {
               <div className="lg:col-span-7 space-y-6">
                 <MetadataRow
                   items={[
-                    {label: 'CONCEPT-DRIVEN LEARNING PLATFORM', tone: 'primary'},
+                    {label: 'Concept-Driven Learning Platform', tone: 'primary'},
                     {
                       label: 'Understand → Explore → Apply → Create',
                       tone: 'secondary',
@@ -97,8 +120,8 @@ export default function HomePage() {
                   ]}
                 />
 
-                <div className="space-y-3">
-                  <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold text-[#17243B] tracking-tight leading-[1.12]">
+                <div className="space-y-3.5">
+                  <h1 className="text-3xl sm:text-5xl lg:text-[3.35rem] font-extrabold text-[#17243B] tracking-tight leading-[1.1] text-balance">
                     Don&apos;t Just Learn What It Is. Understand Why It Matters.
                   </h1>
 
@@ -132,7 +155,7 @@ export default function HomePage() {
                   </Button>
                 </div>
 
-                {/* Quiet Editorial Principle Strip */}
+                {/* Editorial 4-Stage Pedagogical Spine */}
                 <div className="pt-6 border-t border-[#E6EBF2] grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
                   {[
                     {step: '01', label: 'Understand', note: 'Why it matters'},
@@ -144,7 +167,7 @@ export default function HomePage() {
                       key={item.step}
                       type="button"
                       onClick={() => scrollToSection('our-philosophy')}
-                      className="text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-md"
+                      className="text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-md"
                     >
                       <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#315BE8]">
                         <span>{item.step}</span>
@@ -165,7 +188,7 @@ export default function HomePage() {
 
               {/* Balanced Editorial Photography Column */}
               <div className="lg:col-span-5">
-                <div className="surface-card rounded-2xl p-3 sm:p-4 bg-white">
+                <div className="surface-card rounded-2xl p-4 sm:p-5 bg-white space-y-4">
                   <ImageContainer
                     src={PLATFORM_IMAGES.heroCuriousLearners}
                     alt="Students collaborating at a laboratory workbench with physical prototypes, scientific measurement instruments, and notebooks"
@@ -173,19 +196,20 @@ export default function HomePage() {
                     rounded="lg"
                     priority
                   />
-                  <div className="mt-3.5 px-2 pb-1 flex items-start justify-between gap-4">
-                    <div className="space-y-0.5">
-                      <div className="text-xs font-semibold text-[#17243B]">
-                        Connecting Academic Knowledge with Practical Experience
-                      </div>
-                      <p className="text-xs text-[#64748B]">
-                        Observations, experiments, logical reasoning, and
-                        real-world problem-solving.
-                      </p>
+                  <div className="pt-1 border-t border-[#E6EBF2] space-y-2">
+                    <div className="flex items-center justify-between gap-2 text-xs">
+                      <span className="font-semibold text-[#17243B]">
+                        From Academic Theory to Physical Reality
+                      </span>
+                      <span className="font-mono text-[11px] text-[#16A6A0] font-semibold shrink-0">
+                        6 Core Disciplines
+                      </span>
                     </div>
-                    <span className="font-mono text-[11px] text-[#16A6A0] font-semibold shrink-0">
-                      Concept → Reality
-                    </span>
+                    <p className="text-xs text-[#64748B] leading-relaxed">
+                      Every concept is anchored in a real question—from why ice
+                      floats on winter lakes to how triangular trusses support
+                      river bridges and how circuits control current.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -201,16 +225,16 @@ export default function HomePage() {
           className="py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="max-w-3xl space-y-4">
+            <div className="max-w-3xl space-y-3.5">
               <KickerLabel
                 index="01"
-                label="RETHINKING HOW WE LEARN"
+                label="Rethinking How We Learn"
                 tone="primary"
               />
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#17243B] tracking-tight leading-[1.2]">
+              <h2 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-extrabold text-[#17243B] tracking-tight leading-[1.15] text-balance">
                 Knowing the Answer Isn&apos;t the Same as Understanding It.
               </h2>
-              <p className="text-[15px] sm:text-base text-[#64748B] leading-relaxed">
+              <p className="text-[15px] sm:text-[17px] text-[#64748B] leading-relaxed">
                 Classroom curricula and textbooks provide essential academic
                 foundations. Yet when learning stops at memorizing definitions or
                 repeating steps for an examination, knowledge remains fragile.
@@ -220,24 +244,27 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Contrasting Approaches Split Editorial Comparison */}
+            {/* Side-by-Side Editorial Ledger Comparison (Zero nested boxes within cards) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
               {/* Traditional Approach */}
-              <div className="lg:col-span-5 rounded-2xl bg-white border border-[#E6EBF2] p-7 sm:p-8 flex flex-col justify-between space-y-6">
+              <div className="lg:col-span-5 rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
-                  <div className="text-xs font-semibold text-[#64748B] tracking-wide">
-                    CONVENTIONAL HABIT
+                  <div className="space-y-1">
+                    <div className="text-xs font-semibold text-[#64748B]">
+                      Conventional Habit
+                    </div>
+                    <h3 className="text-xl font-bold text-[#17243B]">
+                      Traditional Approach
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-bold text-[#17243B]">
-                    Traditional Approach
-                  </h3>
+
                   <p className="text-sm text-[#64748B] leading-relaxed">
                     Focuses primarily on recalling information in the exact form
                     it was presented, often leaving learners unsure how to use
                     that knowledge outside a test paper.
                   </p>
 
-                  <ul className="pt-2 space-y-3.5">
+                  <ul className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
                     {[
                       {
                         title: 'Memorize definitions.',
@@ -262,9 +289,9 @@ export default function HomePage() {
                     ].map((point, idx) => (
                       <li
                         key={point.title}
-                        className="flex items-start gap-3 text-sm"
+                        className="py-3.5 flex items-start gap-3 text-sm"
                       >
-                        <span className="font-mono text-xs text-[#64748B] mt-0.5 shrink-0">
+                        <span className="font-mono tabular-nums text-xs text-[#64748B] mt-0.5 shrink-0">
                           0{idx + 1}
                         </span>
                         <div>
@@ -279,25 +306,22 @@ export default function HomePage() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E6EBF2] text-xs text-[#64748B]">
-                  Result: Information is remembered briefly, but rarely applied.
+                  Outcome: Information is remembered briefly for an exam, then
+                  quickly forgotten.
                 </div>
               </div>
 
               {/* Genustride Learn Concept-Driven Approach */}
-              <div className="lg:col-span-7 relative overflow-hidden rounded-2xl bg-white border border-[#315BE8]/30 p-7 sm:p-9 shadow-[0_8px_28px_-6px_rgba(49,91,232,0.08)] flex flex-col justify-between space-y-6">
+              <div className="lg:col-span-7 relative overflow-hidden rounded-2xl bg-white border border-[#315BE8]/35 p-6 sm:p-8 shadow-[0_8px_28px_-6px_rgba(49,91,232,0.08)] flex flex-col justify-between space-y-6">
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full ambient-glow-blue"
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -bottom-20 -left-20 w-72 h-72 rounded-full ambient-glow-teal"
+                  className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full ambient-glow-blue"
                 />
 
                 <div className="relative z-10 space-y-4">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <KickerLabel
-                      label="GENUSTRIDE LEARN APPROACH"
+                      label="Genustride Learn Approach"
                       tone="primary"
                     />
                     <span className="text-xs font-medium text-[#16A6A0]">
@@ -315,64 +339,63 @@ export default function HomePage() {
                     and putting it to work on real questions.
                   </p>
 
-                  <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Clean Hairline Ledger instead of nested boxes */}
+                  <ul className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
                     {[
                       {
                         title: 'Understand concepts.',
                         detail:
-                          'Grasp the core principle and intuition behind every law or equation first.',
+                          'Grasp the core principle, physical cause, and intuition behind every law or equation before memorizing symbols.',
                         tone: 'text-[#315BE8]',
                       },
                       {
                         title: 'Ask questions and reason.',
                         detail:
-                          'Investigate cause and effect instead of accepting formulas on authority alone.',
+                          'Investigate cause and effect step by step instead of accepting formulas on authority alone.',
                         tone: 'text-[#16A6A0]',
                       },
                       {
                         title: 'Apply knowledge.',
                         detail:
-                          'Test understanding through observations, experiments, and practical scenarios.',
+                          'Test understanding through hands-on observations, controlled experiments, and practical scenarios.',
                         tone: 'text-[#315BE8]',
                       },
                       {
                         title: 'Connect ideas with reality.',
                         detail:
-                          'Bridge mathematics, science, and computing to see how the real world operates.',
+                          'Bridge mathematics, physics, chemistry, biology, and computing to see how complete real-world systems operate.',
                         tone: 'text-[#16A6A0]',
                       },
                     ].map((point) => (
-                      <div
+                      <li
                         key={point.title}
-                        className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1.5"
+                        className="py-3.5 flex items-start gap-3 text-sm"
                       >
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2
-                            className={`w-4 h-4 shrink-0 ${point.tone}`}
-                            aria-hidden="true"
-                          />
-                          <span className="text-sm font-bold text-[#17243B]">
-                            {point.title}
+                        <CheckCircle2
+                          className={`w-4 h-4 shrink-0 mt-0.5 ${point.tone}`}
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <span className="font-bold text-[#17243B]">
+                            {point.title}{' '}
                           </span>
+                          <span className="text-[#64748B]">{point.detail}</span>
                         </div>
-                        <p className="text-xs text-[#64748B] leading-relaxed">
-                          {point.detail}
-                        </p>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
                 <div className="relative z-10 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-3">
                   <span className="text-xs font-medium text-[#17243B]">
-                    Result: Durable understanding that empowers learners to solve
-                    unfamiliar problems.
+                    Outcome: Durable understanding that empowers learners to
+                    solve unfamiliar problems.
                   </span>
                   <Link
                     href="/how-it-works"
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors"
                   >
-                    <span>See the 4-Step Framework (/how-it-works)</span>
+                    <span>Explore Our 4-Step Framework</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -388,21 +411,16 @@ export default function HomePage() {
           id="our-philosophy"
           className="relative overflow-hidden py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#E6EBF2]"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full ambient-glow-blue"
-          />
-
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="02"
-              kicker="OUR LEARNING PHILOSOPHY"
+              kicker="Our Learning Philosophy"
               title="Learning Should Go Beyond Knowing."
-              description="Every topic on Genustride Learn is structured around a progressive four-stage cycle—guiding learners from initial comprehension to independent creation."
+              description="Every topic on Genustride Learn follows a connected four-stage progression—guiding learners from initial comprehension to independent creation."
             />
 
-            {/* Four Visually Distinctive Yet Consistent Step Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Architectural 4-Stage Connected Hairline Matrix (Replaces generic SaaS icon cards) */}
+            <div className="rounded-2xl border border-[#E6EBF2] bg-white overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2] shadow-2xs">
               {[
                 {
                   number: '01',
@@ -411,10 +429,9 @@ export default function HomePage() {
                     'Discover what something is, why it exists, and why it matters.',
                   guidingPrompt: 'What is it & why does it matter?',
                   exampleNote:
-                    'Grasp the real-world purpose of a concept before memorizing symbols.',
-                  accentHex: '#315BE8',
-                  badgeBg: 'bg-[#EEF3FF] text-[#315BE8]',
-                  icon: BookOpen,
+                    'Before memorizing Ohm’s Law (V = I·R), first understand why voltage acts like water pressure pushing charge through a wire.',
+                  topBarClass: 'bg-[#315BE8]',
+                  numberColor: 'text-[#315BE8]',
                 },
                 {
                   number: '02',
@@ -423,80 +440,83 @@ export default function HomePage() {
                     'Understand how it works and connect different concepts.',
                   guidingPrompt: 'How does the mechanism work?',
                   exampleNote:
-                    'Trace cause and effect across disciplines to see how the system behaves.',
-                  accentHex: '#16A6A0',
-                  badgeBg: 'bg-[#EAF8F7] text-[#16A6A0]',
-                  icon: Compass,
+                    'Trace how changing resistance alters current flow, and see how mathematics models that inverse proportionality.',
+                  topBarClass: 'bg-[#16A6A0]',
+                  numberColor: 'text-[#16A6A0]',
                 },
                 {
                   number: '03',
                   title: 'Apply',
                   description:
                     'Use knowledge through practical examples, experiments, and challenges.',
-                  guidingPrompt: 'Where is it used in real life?',
+                  guidingPrompt: 'Where is it used & how can we test it?',
                   exampleNote:
-                    'Verify principles through hands-on observations and real-world scenarios.',
-                  accentHex: '#315BE8',
-                  badgeBg: 'bg-[#EEF3FF] text-[#315BE8]',
-                  icon: FlaskConical,
+                    'Wire a 3V battery pack, 220Ω resistor, and LED on a breadboard to measure voltage drops and verify the law firsthand.',
+                  topBarClass: 'bg-[#315BE8]',
+                  numberColor: 'text-[#315BE8]',
                 },
                 {
                   number: '04',
                   title: 'Create',
                   description:
                     'Build, innovate, and solve meaningful problems.',
-                  guidingPrompt: 'What can you do or build with it?',
+                  guidingPrompt: 'What can you build or improve with it?',
                   exampleNote:
-                    'Synthesize what you have learned to design something new and useful.',
-                  accentHex: '#F3A644',
-                  badgeBg: 'bg-[#FEF6EB] text-[#C87A19]',
-                  icon: Lightbulb,
+                    'Combine circuits with solar panels or environmental sensors to build a working weather logger or water probe.',
+                  topBarClass: 'bg-[#F3A644]',
+                  numberColor: 'text-[#C87A19]',
                 },
-              ].map((step) => {
-                const IconComponent = step.icon;
-                return (
-                  <article
-                    key={step.number}
-                    className="surface-card surface-card-interactive rounded-2xl p-6 sm:p-7 flex flex-col justify-between bg-white"
-                  >
-                    <div className="space-y-5">
-                      <div className="flex items-center justify-between">
+              ].map((step, idx) => (
+                <article
+                  key={step.number}
+                  className={`flex flex-col justify-between bg-white ${
+                    idx >= 2 ? 'md:border-t md:border-[#E6EBF2] lg:border-t-0' : ''
+                  }`}
+                >
+                  <div>
+                    <div className={`h-1.5 w-full ${step.topBarClass}`} />
+                    <div className="p-6 sm:p-7 space-y-4">
+                      <div className="flex items-baseline justify-between">
                         <span
-                          className={`font-mono text-sm font-bold px-3 py-1 rounded-lg ${step.badgeBg}`}
+                          className={`font-mono tabular-nums text-2xl font-extrabold ${step.numberColor}`}
                         >
                           {step.number}
                         </span>
-                        <IconComponent
-                          className="w-5 h-5 text-[#64748B]"
-                          aria-hidden="true"
-                        />
+                        <span className="text-xs font-mono text-[#64748B]">
+                          Stage {step.number} of 04
+                        </span>
                       </div>
 
                       <div className="space-y-2">
                         <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
-                          {step.number}. {step.title}
+                          {step.title}
                         </h3>
                         <p className="text-[15px] text-[#17243B]/90 font-medium leading-relaxed">
                           {step.description}
                         </p>
                       </div>
 
-                      <p className="text-xs text-[#64748B] leading-relaxed">
-                        {step.exampleNote}
-                      </p>
+                      <div className="pt-3 border-t border-[#E6EBF2] space-y-1">
+                        <div className="text-xs font-semibold text-[#17243B]">
+                          In Practice:
+                        </div>
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          {step.exampleNote}
+                        </p>
+                      </div>
                     </div>
+                  </div>
 
-                    <div className="mt-6 pt-4 border-t border-[#E6EBF2]">
-                      <div className="text-xs font-medium text-[#64748B]">
-                        Core Question:
-                      </div>
-                      <div className="text-xs font-semibold text-[#17243B] mt-0.5">
-                        {step.guidingPrompt}
-                      </div>
+                  <div className="px-6 sm:px-7 py-4 bg-[#F6F9FF] border-t border-[#E6EBF2]">
+                    <div className="text-[11px] font-medium text-[#64748B]">
+                      Guiding Question
                     </div>
-                  </article>
-                );
-              })}
+                    <div className="text-xs font-bold text-[#17243B] mt-0.5">
+                      &ldquo;{step.guidingPrompt}&rdquo;
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -511,7 +531,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="03"
-              kicker="EXPLORE LEARNING AREAS"
+              kicker="Explore Learning Areas"
               title="Explore the World Through Different Fields of Knowledge."
               description="Select any discipline below to open its dedicated subject landing page—complete with real-world concept breakdowns, experiments, and creative challenges."
             />
@@ -553,38 +573,35 @@ export default function HomePage() {
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <SectionHeading
                 index="04"
-                kicker="HOW LEARNING ACTUALLY HAPPENS"
+                kicker="How Learning Actually Happens"
                 kickerTone="secondary"
                 title="From a Simple Question to Real Understanding."
                 description="See how a single everyday observation unfolds across chemistry, physics, ecology, and engineering when you follow a concept from start to finish."
               />
 
-              <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] shrink-0">
-                <HelpCircle
-                  className="w-4 h-4 text-[#315BE8] shrink-0"
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-medium text-[#64748B]">
-                  Exemplar Question:
-                </span>
-                <span className="text-sm font-bold text-[#17243B]">
+              <div className="px-4 py-3 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] shrink-0 space-y-0.5">
+                <div className="text-[11px] font-semibold text-[#315BE8]">
+                  Exemplar Inquiry Walkthrough
+                </div>
+                <div className="text-sm sm:text-base font-bold text-[#17243B]">
                   &ldquo;Why Does Ice Float on Water?&rdquo;
-                </span>
+                </div>
               </div>
             </div>
 
             {/* Asymmetric Visual Progression & Interactive 6-Step Walkthrough */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
               {/* Left Column: 6-Step Interactive Progression List */}
-              <div className="lg:col-span-7 space-y-3.5">
+              <div className="lg:col-span-7 space-y-3">
                 {ICE_FLOATING_JOURNEY_STEPS.map((item, idx) => {
                   const isActive = idx === activeIceStepIndex;
                   return (
                     <button
                       key={item.stepNumber}
                       type="button"
+                      aria-pressed={isActive}
                       onClick={() => setActiveIceStepIndex(idx)}
-                      className={`w-full text-left rounded-xl p-5 transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+                      className={`w-full text-left rounded-xl p-5 transition-all border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
                         isActive
                           ? 'bg-[#F6F9FF] border-[#315BE8] shadow-xs'
                           : 'bg-white border-[#E6EBF2] hover:border-[#315BE8]/40 hover:bg-[#F6F9FF]/50'
@@ -592,19 +609,19 @@ export default function HomePage() {
                     >
                       <div className="flex items-start gap-4">
                         <span
-                          className={`font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5 ${
+                          className={`font-mono tabular-nums text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5 ${
                             isActive
                               ? 'bg-[#315BE8] text-white'
                               : 'bg-[#F6F9FF] text-[#315BE8] border border-[#E6EBF2]'
                           }`}
                         >
-                          {idx + 1}
+                          0{idx + 1}
                         </span>
 
                         <div className="space-y-1.5 flex-1">
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <h3 className="text-base sm:text-lg font-bold text-[#17243B]">
-                              {idx + 1}. {item.title}
+                              {item.title}
                             </h3>
                             <span className="text-xs font-mono text-[#16A6A0] font-semibold">
                               Stage: {item.stageTag}
@@ -620,8 +637,11 @@ export default function HomePage() {
                           </p>
 
                           {isActive && (
-                            <div className="pt-2 mt-2 border-t border-[#E6EBF2] text-xs text-[#17243B] font-medium">
-                              Key Insight: {item.scientificNote}
+                            <div className="pt-2.5 mt-2.5 border-t border-[#E6EBF2] text-xs text-[#17243B] font-medium">
+                              <strong className="text-[#315BE8]">
+                                Scientific Mechanism:{' '}
+                              </strong>
+                              {item.scientificNote}
                             </div>
                           )}
                         </div>
@@ -631,23 +651,49 @@ export default function HomePage() {
                 })}
               </div>
 
-              {/* Right Column: Dual Real Scientific Photography & Molecular-to-Ecosystem Connection */}
+              {/* Right Column: Dual Real Scientific Photography dynamically linked to active step */}
               <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-                <div className="surface-card rounded-2xl p-5 bg-white space-y-4">
-                  <div className="flex items-center justify-between">
+                {/* Active Step Status Banner */}
+                <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-xs font-mono font-semibold text-[#315BE8]">
+                      Inspecting Step 0{activeIceStepIndex + 1} of 06 ·{' '}
+                      {activeIceStep.stageTag}
+                    </div>
+                    <div className="text-sm font-bold text-[#17243B] mt-0.5">
+                      {activeIceStep.title}: {activeIceStep.subtitle}
+                    </div>
+                  </div>
+                  <Link
+                    href="/how-it-works#real-learning-example"
+                    className="text-xs font-semibold text-[#315BE8] hover:underline shrink-0"
+                  >
+                    Interactive Sim →
+                  </Link>
+                </div>
+
+                {/* Card 1: Molecular & Density Regime (Highlighted during Steps 1–4) */}
+                <div
+                  className={`rounded-2xl p-5 bg-white transition-all space-y-4 border ${
+                    activeIceStepIndex < 4
+                      ? 'border-[#315BE8] ring-2 ring-[#315BE8]/15 shadow-sm'
+                      : 'border-[#E6EBF2] opacity-90'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
                     <KickerLabel
-                      index="STEPS 1–4"
-                      label="DENSITY & MOLECULAR STRUCTURE"
+                      index="Steps 01–04"
+                      label="Density & Molecular Structure"
                       tone="primary"
                     />
-                    <span className="font-mono text-xs text-[#64748B]">
+                    <span className="font-mono text-xs text-[#315BE8] font-semibold">
                       ρ(ice) = 0.917 g/cm³
                     </span>
                   </div>
 
                   <ImageContainer
                     src={PLATFORM_IMAGES.iceFloatingMolecular}
-                    alt="Ice floating at the top of a laboratory beaker beside a thermometer and a 3D hexagonal ball-and-stick molecular model of water"
+                    alt="Crystalline ice floating at the top of liquid water demonstrating lower solid density than liquid water"
                     aspectRatio="16:9"
                     rounded="lg"
                   />
@@ -659,50 +705,62 @@ export default function HomePage() {
                     <p className="text-xs text-[#64748B] leading-relaxed">
                       In solid ice, hydrogen bonds lock H₂O molecules into an
                       open hexagonal crystal structure, increasing volume by ~9%
-                      so ice floats above denser 4°C liquid water.
+                      so ice floats above denser 4°C liquid water (1.000 g/cm³).
                     </p>
                   </div>
                 </div>
 
-                <div className="surface-card rounded-2xl p-5 bg-white space-y-4">
-                  <div className="flex items-center justify-between">
+                {/* Card 2: Ecological & Engineering Regime (Highlighted during Steps 5–6) */}
+                <div
+                  className={`rounded-2xl p-5 bg-white transition-all space-y-4 border ${
+                    activeIceStepIndex >= 4
+                      ? 'border-[#16A6A0] ring-2 ring-[#16A6A0]/15 shadow-sm'
+                      : 'border-[#E6EBF2] opacity-90'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
                     <KickerLabel
-                      index="STEPS 5–6"
-                      label="FROZEN LAKES & AQUATIC LIFE"
+                      index="Steps 05–06"
+                      label="Frozen Lakes & Real-World Impact"
                       tone="secondary"
                     />
-                    <span className="font-mono text-xs text-[#16A6A0]">
+                    <span className="font-mono text-xs text-[#16A6A0] font-semibold">
                       Ecological Insulation
                     </span>
                   </div>
 
                   <ImageContainer
                     src={PLATFORM_IMAGES.frozenLakeNature}
-                    alt="Surface layer of ice floating on a winter lake with liquid water and sunlight beneath supporting aquatic ecosystems"
+                    alt="Surface layer of ice floating on a winter lake with liquid water beneath supporting aquatic ecosystems"
                     aspectRatio="16:9"
                     rounded="lg"
                   />
 
                   <div className="space-y-1.5">
                     <h4 className="text-sm font-bold text-[#17243B]">
-                      Why Aquatic Life Survives Winter
+                      Why Aquatic Life Survives Winter & Pipes Burst
                     </h4>
                     <p className="text-xs text-[#64748B] leading-relaxed">
                       Because ice floats at the surface, it forms an insulating
-                      thermal shield that prevents deep lakes and rivers from
-                      freezing solid—preserving aquatic life below.
+                      thermal shield that prevents lakes and rivers from
+                      freezing solid—while the same 9% expansion can rupture
+                      uninsulated metal water pipes.
                     </p>
                   </div>
 
-                  <div className="pt-2 border-t border-[#E6EBF2] flex items-center justify-between">
-                    <span className="text-xs text-[#64748B]">
-                      Explore Chemistry & Physics connections
-                    </span>
+                  <div className="pt-3 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-2">
                     <Link
                       href="/learn/chemistry"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9]"
                     >
-                      <span>Open Chemistry</span>
+                      <span>Explore Chemistry Hub</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                    <Link
+                      href="/learn/physics"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#16A6A0] hover:text-[#128984]"
+                    >
+                      <span>Explore Physics Hub</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -722,34 +780,36 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="05"
-              kicker="PRACTICAL METHODOLOGY"
+              kicker="Practical Methodology"
               title="Knowledge Becomes Powerful When You Put It to Work."
               description="We combine four complementary learning methods so concepts are never trapped on a page—they are observed, tested, built, and explored interactively."
             />
 
             {/* Interactive Featured Showcase + 4 Learning Method Selectors */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {/* Left 5 Columns: 4 Method Cards */}
+              {/* Left 5 Columns: 4 Method Selectors */}
               <div className="lg:col-span-5 flex flex-col justify-between gap-3.5">
                 {REAL_WORLD_LEARNING_METHODS.map((method) => {
                   const isSelected = method.id === activeMethod.id;
+                  const meta = METHOD_DESTINATION_MAP[method.id];
                   return (
                     <button
                       key={method.id}
                       type="button"
+                      aria-pressed={isSelected}
                       onClick={() => setActiveMethodId(method.id)}
-                      className={`w-full text-left rounded-xl p-5 transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
+                      className={`w-full text-left rounded-xl p-5 transition-all border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
                         isSelected
-                          ? 'bg-white border-[#315BE8] shadow-sm'
+                          ? 'bg-white border-[#315BE8] shadow-xs'
                           : 'bg-white/75 border-[#E6EBF2] hover:bg-white hover:border-[#315BE8]/40'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="font-mono text-xs font-semibold text-[#315BE8]">
-                          METHOD {method.index}
+                        <span className="font-mono tabular-nums text-xs font-semibold text-[#315BE8]">
+                          Method {method.index}
                         </span>
                         <span className="text-xs text-[#16A6A0] font-medium">
-                          {isSelected ? 'Selected View' : 'Click to Preview'}
+                          {meta?.stageConnection}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold text-[#17243B]">
@@ -768,11 +828,11 @@ export default function HomePage() {
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <KickerLabel
-                      index={`METHOD ${activeMethod.index}`}
-                      label={activeMethod.title.toUpperCase()}
+                      index={`Method ${activeMethod.index}`}
+                      label={activeMethod.title}
                       tone="primary"
                     />
-                    <span className="text-xs text-[#64748B]">
+                    <span className="text-xs font-medium text-[#16A6A0]">
                       {activeMethod.exampleConnection}
                     </span>
                   </div>
@@ -795,15 +855,16 @@ export default function HomePage() {
 
                 <div className="pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-4">
                   <div className="text-xs text-[#17243B] font-medium">
-                    Exemplar Domain: {activeMethod.exampleConnection}
+                    <span className="text-[#64748B]">Exemplar Focus: </span>
+                    {activeMethod.exampleConnection}
                   </div>
                   <Button
                     variant="subtle"
                     size="sm"
-                    onClick={() => router.push('/learn/engineering')}
+                    onClick={() => router.push(activeMethodRoute.href)}
                     rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                   >
-                    Explore Practical Projects
+                    {activeMethodRoute.actionLabel}
                   </Button>
                 </div>
               </div>
@@ -821,12 +882,12 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="06"
-              kicker="LIFELONG CAPABILITIES"
+              kicker="Lifelong Capabilities"
               title="Build the Skills That Matter Beyond the Classroom."
               description="When you learn by questioning, experimenting, and applying concepts, you develop enduring intellectual habits that serve you in any career or discipline."
             />
 
-            {/* Editorial Hairline Matrix Grid (Distinct from standard cards) */}
+            {/* Editorial Hairline Matrix Grid (Zero repetitive decorative icons) */}
             <div className="rounded-2xl border border-[#E6EBF2] bg-[#F6F9FF] overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2]">
               {BEYOND_CLASSROOM_SKILLS.map((skill, idx) => (
                 <div
@@ -837,15 +898,9 @@ export default function HomePage() {
                     idx >= 3 ? 'lg:!border-t lg:!border-[#E6EBF2]' : ''
                   }`}
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-semibold text-[#315BE8]">
-                        SKILL {skill.index}
-                      </span>
-                      <Layers
-                        className="w-4 h-4 text-[#16A6A0]"
-                        aria-hidden="true"
-                      />
+                  <div className="space-y-2.5">
+                    <div className="font-mono tabular-nums text-xs font-semibold text-[#315BE8]">
+                      Capability {skill.index}
                     </div>
 
                     <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
@@ -857,8 +912,8 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-[#E6EBF2] text-xs text-[#17243B]/85">
-                    <span className="font-semibold text-[#315BE8]">
+                  <div className="pt-3.5 border-t border-[#E6EBF2] text-xs text-[#17243B]/85 leading-relaxed">
+                    <span className="font-semibold text-[#16A6A0]">
                       In Practice:{' '}
                     </span>
                     {skill.practiceContext}
@@ -882,17 +937,20 @@ export default function HomePage() {
           />
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="surface-card rounded-2xl p-7 sm:p-10 lg:p-12 bg-white">
+            <div className="surface-card rounded-2xl p-6 sm:p-10 lg:p-12 bg-white">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                 <div className="lg:col-span-6 space-y-5">
                   <MetadataRow
                     items={[
-                      {label: '07 · OUR VISION FOR BANGLADESH', tone: 'primary'},
-                      {label: 'Accessible · Practical · English-First', tone: 'secondary'},
+                      {label: '07 · Our Vision for Bangladesh', tone: 'primary'},
+                      {
+                        label: 'Accessible · Practical · English-First',
+                        tone: 'secondary',
+                      },
                     ]}
                   />
 
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#17243B] tracking-tight leading-[1.18]">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#17243B] tracking-tight leading-[1.15] text-balance">
                     A Better Learning Future Starts Here.
                   </h2>
 
@@ -915,25 +973,43 @@ export default function HomePage() {
                     shaping—the world around them.
                   </p>
 
-                  <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
+                  {/* Clean Hairline Pillars instead of nested boxes */}
+                  <div className="pt-4 border-t border-[#E6EBF2] grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-1">
                       <div className="text-xs font-bold text-[#17243B]">
-                        Concept Clarity First
+                        01. Concept Clarity First
                       </div>
                       <p className="text-xs text-[#64748B] leading-relaxed">
                         Bridging classroom syllabi with clear explanations of
                         why principles matter and how they work.
                       </p>
                     </div>
-                    <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
+                    <div className="space-y-1">
                       <div className="text-xs font-bold text-[#17243B]">
-                        Practical & Accessible Inquiry
+                        02. Practical & Accessible Inquiry
                       </div>
                       <p className="text-xs text-[#64748B] leading-relaxed">
                         Focusing on real observations, logical reasoning, and
                         achievable hands-on experiments.
                       </p>
                     </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-semibold text-[#315BE8]">
+                    <Link
+                      href="/about"
+                      className="inline-flex items-center gap-1 hover:underline"
+                    >
+                      <span>Read Our Story & Mission (/about)</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                    <Link
+                      href="/for-parents-and-educators"
+                      className="inline-flex items-center gap-1 text-[#16A6A0] hover:underline"
+                    >
+                      <span>For Parents & Educators</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 </div>
 
@@ -958,7 +1034,7 @@ export default function HomePage() {
         <section className="py-16 sm:py-24 bg-[#FFFFFF]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CTASection
-              kicker="START YOUR JOURNEY"
+              kicker="Start Your Journey"
               title="Your Learning Journey Should Go Beyond the Classroom."
               description="Start asking better questions, understanding deeper concepts, and discovering what you can do with what you learn."
               primaryActionLabel="Start Exploring"

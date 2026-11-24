@@ -36,15 +36,15 @@ export function SectionHeading({
         className
       )}
     >
-      <div className={cn('space-y-2.5', isCentered ? 'max-w-2xl' : 'max-w-2xl')}>
+      <div className={cn('space-y-3', isCentered ? 'max-w-3xl' : 'max-w-3xl')}>
         {kicker && (
           <KickerLabel index={index} label={kicker} tone={kickerTone} />
         )}
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#17243B] leading-[1.22]">
+        <h2 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-extrabold tracking-tight text-[#17243B] leading-[1.15] text-balance">
           {title}
         </h2>
         {description && (
-          <p className="text-[15px] sm:text-base text-[#64748B] leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#64748B] leading-relaxed max-w-2xl">
             {description}
           </p>
         )}

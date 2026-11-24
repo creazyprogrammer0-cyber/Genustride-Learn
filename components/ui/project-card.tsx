@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {ArrowRight, FlaskConical} from 'lucide-react';
+import {ArrowRight} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {ImageContainer} from './image-container';
 import {MetadataRow} from './badge-label';
@@ -116,25 +116,28 @@ export function ProjectCard({
           </p>
         </div>
 
-        <div className="p-3.5 rounded-lg bg-[#F6F9FF] border border-[#E6EBF2] space-y-2">
-          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
+        {/* Clean Hairline Ledger (No nested "card within a card" box) */}
+        <div className="pt-3.5 border-t border-[#E6EBF2] space-y-2 text-xs">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
             <span className="font-semibold text-[#17243B]">
-              Core Mechanism
+              Governing Principle
             </span>
-            <span className="font-mono text-[#315BE8] break-all sm:break-normal">
+            <span className="font-mono text-[#315BE8] font-medium">
               {scientificPrinciple}
             </span>
           </div>
-          <p className="text-xs text-[#64748B] leading-relaxed">
-            <strong className="text-[#17243B] font-medium">
-              What Learners Create:{' '}
+
+          <p className="text-[#64748B] leading-relaxed">
+            <strong className="text-[#17243B] font-semibold">
+              What Learners Build:{' '}
             </strong>
             {whatYouCreate}
           </p>
+
           {materialsPreview && materialsPreview.length > 0 && (
-            <p className="text-xs text-[#64748B] leading-relaxed pt-1 border-t border-[#E6EBF2]">
-              <strong className="text-[#17243B] font-medium">
-                Key Materials:{' '}
+            <p className="text-[#64748B] leading-relaxed pt-1">
+              <strong className="text-[#17243B] font-semibold">
+                Apparatus:{' '}
               </strong>
               {materialsPreview.join(' · ')}
             </p>
@@ -142,10 +145,9 @@ export function ProjectCard({
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-        <span className="inline-flex items-center gap-1.5 text-xs text-[#16A6A0] font-medium">
-          <FlaskConical className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-          <span>Hands-on Observation & Build</span>
+      <div className="mt-5 pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <span className="text-xs text-[#16A6A0] font-medium">
+          Hands-On Experiment
         </span>
 
         {href ? (

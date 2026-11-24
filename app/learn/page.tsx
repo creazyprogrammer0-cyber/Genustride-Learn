@@ -1,17 +1,9 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {
-  ArrowRight,
-  Compass,
-  FlaskConical,
-  BookOpen,
-  Lightbulb,
-  Layers,
-  X,
-} from 'lucide-react';
+import {ArrowRight} from 'lucide-react';
 import {
   Navbar,
   Footer,
@@ -33,27 +25,14 @@ import {
   EXPLORE_FEATURED_TOPICS,
   SUGGESTED_LEARNING_PATHS,
   PLATFORM_IMAGES,
-  SubjectRelatedProject,
 } from '@/lib/content-data';
+import {PROJECTS_DATA} from '@/lib/projects-data';
 
 export default function ExploreLearningPage() {
   const router = useRouter();
   const [topicFilter, setTopicFilter] = useState<'all' | SubjectCategorySlug>(
     'all'
   );
-  const [activeProjectModal, setActiveProjectModal] =
-    useState<SubjectRelatedProject | null>(null);
-
-  useEffect(() => {
-    if (!activeProjectModal) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveProjectModal(null);
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [activeProjectModal]);
 
   const subjectsList = [
     SUBJECTS_DATA.mathematics,
@@ -109,31 +88,30 @@ export default function ExploreLearningPage() {
     {
       subject: 'Physics',
       slug: 'physics' as SubjectCategorySlug,
+      projectHref: '/projects/build-a-simple-electric-circuit',
       ...SUBJECTS_DATA.physics.experimentsAndActivities[0],
     },
     {
       subject: 'Chemistry',
       slug: 'chemistry' as SubjectCategorySlug,
+      projectHref: '/projects/explore-water-filtration',
       ...SUBJECTS_DATA.chemistry.experimentsAndActivities[0],
     },
     {
       subject: 'Biology',
       slug: 'biology' as SubjectCategorySlug,
+      projectHref: '/projects/observe-plant-stomata-and-osmosis',
       ...SUBJECTS_DATA.biology.experimentsAndActivities[0],
     },
     {
       subject: 'Engineering',
       slug: 'engineering' as SubjectCategorySlug,
+      projectHref: '/projects/load-test-a-structural-truss-bridge',
       ...SUBJECTS_DATA.engineering.experimentsAndActivities[0],
     },
   ];
 
-  const projectsHighlight: SubjectRelatedProject[] = [
-    SUBJECTS_DATA.engineering.relatedProjects[0],
-    SUBJECTS_DATA.engineering.relatedProjects[1],
-    SUBJECTS_DATA.physics.relatedProjects[1],
-    SUBJECTS_DATA.technology.relatedProjects[0],
-  ];
+  const projectsHighlight = PROJECTS_DATA.slice(0, 4);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -190,18 +168,18 @@ export default function ExploreLearningPage() {
             className="pointer-events-none absolute top-16 right-10 w-[28rem] h-[28rem] rounded-full ambient-glow-teal"
           />
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
               <div className="lg:col-span-7 space-y-6">
                 <MetadataRow
                   items={[
-                    {label: 'EXPLORE LEARNING HUB', tone: 'primary'},
+                    {label: 'Explore Learning Hub', tone: 'primary'},
                     {label: '6 Core Fields of Knowledge', tone: 'secondary'},
                     {label: 'School · College · University', tone: 'neutral'},
                   ]}
                 />
 
-                <h1 className="text-3xl sm:text-5xl font-extrabold text-[#17243B] tracking-tight leading-[1.12]">
+                <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold text-[#17243B] tracking-tight leading-[1.1] text-balance">
                   Explore Ideas. Understand the World.
                 </h1>
 
@@ -230,11 +208,12 @@ export default function ExploreLearningPage() {
                 </div>
               </div>
 
+              {/* Clean Hairline Ledger Card (No nested 2x2 sub-boxes) */}
               <div className="lg:col-span-5">
                 <div className="surface-card rounded-2xl p-6 sm:p-7 bg-white space-y-4">
                   <KickerLabel
                     index="01"
-                    label="LEARNING INTRODUCTION"
+                    label="Learning Introduction"
                     tone="primary"
                   />
                   <h2 className="text-xl font-bold text-[#17243B]">
@@ -243,29 +222,30 @@ export default function ExploreLearningPage() {
                   <p className="text-sm text-[#64748B] leading-relaxed">
                     Whether you are studying for school or college classes,
                     preparing for university engineering and science, or simply
-                    curious about how the world works, every subject here
-                    follows a clear four-step progression:
+                    curious about how the world works, every subject follows our
+                    four-step progression:
                   </p>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <ul className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
                     {LEARNING_STAGES.map((stage) => (
-                      <div
+                      <li
                         key={stage.id}
-                        className="p-3.5 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1"
+                        className="py-3 flex items-baseline justify-between gap-4 text-xs"
                       >
-                        <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#315BE8]">
-                          <span>{stage.step}</span>
-                          <span>·</span>
-                          <span className="font-sans text-[#17243B]">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-mono tabular-nums font-bold text-[#315BE8]">
+                            {stage.step}
+                          </span>
+                          <span className="font-bold text-[#17243B] text-sm">
                             {stage.label}
                           </span>
                         </div>
-                        <p className="text-xs text-[#64748B]">
+                        <span className="text-[#64748B] text-right">
                           {stage.question}
-                        </p>
-                      </div>
+                        </span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -282,7 +262,7 @@ export default function ExploreLearningPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="02"
-              kicker="SIX SUBJECT CATEGORIES"
+              kicker="Six Subject Categories"
               title="Choose a Field of Knowledge to Explore"
               description="Each subject landing page includes its core topic categories, real-world connections, practical examples, hands-on experiments, and build projects."
             />
@@ -318,7 +298,7 @@ export default function ExploreLearningPage() {
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <SectionHeading
                 index="03"
-                kicker="FEATURED CONCEPT TOPICS"
+                kicker="Featured Concept Topics"
                 title="High-Impact Topics Across Disciplines"
                 description="Start with a foundational question that connects textbook theory directly to real-world systems."
               />
@@ -343,7 +323,7 @@ export default function ExploreLearningPage() {
                 <Link
                   key={topic.id}
                   href={`/learn/${topic.subjectSlug}`}
-                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5 group"
+                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
                 >
                   <div className="space-y-3">
                     <MetadataRow
@@ -365,13 +345,16 @@ export default function ExploreLearningPage() {
                   <div className="pt-4 border-t border-[#E6EBF2] space-y-2">
                     <div className="text-xs text-[#17243B] font-medium">
                       <span className="text-[#315BE8] font-semibold">
-                        Question:{' '}
+                        Guiding Question:{' '}
                       </span>
                       {topic.coreQuestion}
                     </div>
                     <div className="flex items-center justify-between text-xs font-semibold text-[#315BE8] pt-1">
                       <span>Open in {topic.subjectName}</span>
-                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                      <ArrowRight
+                        className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
                     </div>
                   </div>
                 </Link>
@@ -390,7 +373,7 @@ export default function ExploreLearningPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="04"
-              kicker="REAL-WORLD LEARNING EXAMPLES"
+              kicker="Real-World Learning Examples"
               kickerTone="secondary"
               title="See How Academic Concepts Explain Everyday Reality"
               description="When you look closely at a spinning electric motor, a river bridge truss, or a growing crop field, you see physics, mathematics, chemistry, and biology working together."
@@ -400,15 +383,23 @@ export default function ExploreLearningPage() {
               {realWorldExamplesHighlight.map((item) => (
                 <article
                   key={item.title}
-                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5"
+                  className="group surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5"
                 >
                   <div className="space-y-4">
-                    <ImageContainer
-                      src={item.imageSrc}
-                      alt={item.imageAlt}
-                      aspectRatio="4:3"
-                      rounded="lg"
-                    />
+                    <Link
+                      href={`/learn/${item.slug}`}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="block rounded-lg overflow-hidden"
+                    >
+                      <ImageContainer
+                        src={item.imageSrc}
+                        alt={item.imageAlt}
+                        aspectRatio="4:3"
+                        rounded="lg"
+                        imageClassName="group-hover:scale-[1.02] transition-transform duration-300 ease-out"
+                      />
+                    </Link>
 
                     <MetadataRow
                       items={[
@@ -418,7 +409,12 @@ export default function ExploreLearningPage() {
                     />
 
                     <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
-                      {item.title}
+                      <Link
+                        href={`/learn/${item.slug}`}
+                        className="group-hover:text-[#315BE8] transition-colors"
+                      >
+                        {item.title}
+                      </Link>
                     </h3>
 
                     <p className="text-sm text-[#64748B] leading-relaxed">
@@ -435,7 +431,10 @@ export default function ExploreLearningPage() {
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9]"
                     >
                       <span>Explore Subject</span>
-                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                      <ArrowRight
+                        className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
                     </Link>
                   </div>
                 </article>
@@ -454,7 +453,7 @@ export default function ExploreLearningPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="05"
-              kicker="PRACTICAL EXPERIMENTS & OBSERVATIONS"
+              kicker="Practical Experiments & Observations"
               title="Verify Principles With Your Own Hands and Eyes"
               description="Every subject includes structured experiments using straightforward apparatus so you can test predictions and observe mechanisms directly."
             />
@@ -466,19 +465,13 @@ export default function ExploreLearningPage() {
                   className="surface-card rounded-2xl p-6 sm:p-7 bg-white flex flex-col justify-between space-y-5"
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <MetadataRow
-                        items={[
-                          {label: exp.subject, tone: 'primary'},
-                          {label: exp.topic, tone: 'secondary'},
-                          {label: exp.duration, tone: 'neutral', mono: true},
-                        ]}
-                      />
-                      <FlaskConical
-                        className="w-4 h-4 text-[#16A6A0] shrink-0"
-                        aria-hidden="true"
-                      />
-                    </div>
+                    <MetadataRow
+                      items={[
+                        {label: exp.subject, tone: 'primary'},
+                        {label: exp.topic, tone: 'secondary'},
+                        {label: exp.duration, tone: 'neutral', mono: true},
+                      ]}
+                    />
 
                     <h3 className="text-lg sm:text-xl font-bold text-[#17243B]">
                       {exp.title}
@@ -488,21 +481,23 @@ export default function ExploreLearningPage() {
                       {exp.procedure}
                     </p>
 
-                    <div className="p-3.5 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] text-xs text-[#64748B]">
-                      <strong className="text-[#17243B]">Apparatus: </strong>
+                    <div className="pt-3 border-t border-[#E6EBF2] text-xs text-[#64748B] leading-relaxed">
+                      <strong className="text-[#17243B] font-semibold">
+                        Apparatus:{' '}
+                      </strong>
                       {exp.materials}
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-[#E6EBF2] flex items-center justify-between gap-3">
-                    <span className="text-xs text-[#16A6A0] font-medium truncate">
+                  <div className="pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-3">
+                    <span className="text-xs text-[#16A6A0] font-medium">
                       Discovery: {exp.whatYouDiscover}
                     </span>
                     <Link
-                      href={`/learn/${exp.slug}#experiments-activities`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] whitespace-nowrap shrink-0"
+                      href={exp.projectHref}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] shrink-0"
                     >
-                      <span>Full Lab Guide</span>
+                      <span>Open 16-Part Lab Guide</span>
                       <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                     </Link>
                   </div>
@@ -513,7 +508,7 @@ export default function ExploreLearningPage() {
         </section>
 
         {/* =====================================================================
-            6. PROJECT-BASED LEARNING
+            6. PROJECT-BASED LEARNING (Direct links to 16-part /projects/[slug])
            ===================================================================== */}
         <section
           id="project-based-learning"
@@ -522,26 +517,36 @@ export default function ExploreLearningPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="06"
-              kicker="PROJECT-BASED LEARNING"
+              kicker="Project-Based Learning"
               kickerTone="accent"
               title="Move From Understanding to Building Real Solutions"
               description="In Stage 04 (Create), learners combine concepts across subjects to prototype instruments, structural models, and environmental sensors."
+              action={
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#315BE8] hover:text-[#2548C9]"
+                >
+                  <span>View All 10 Experiment Guides (/projects)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              }
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {projectsHighlight.map((project) => (
                 <ProjectCard
-                  key={project.id}
+                  key={project.slug}
                   title={project.title}
-                  subject={project.subject}
-                  level={project.level}
-                  duration={project.duration}
+                  subject={project.subjectLabel}
+                  level={project.difficulty}
+                  duration={project.estimatedTime}
                   imageSrc={project.imageSrc}
                   imageAlt={project.imageAlt}
-                  whyItMatters={project.whyItMatters}
-                  scientificPrinciple={project.scientificPrinciple}
-                  whatYouCreate={project.whatYouCreate}
-                  onInspectProject={() => setActiveProjectModal(project)}
+                  whyItMatters={project.subtitle}
+                  scientificPrinciple={project.coreMechanismFormula}
+                  whatYouCreate={project.whatYouCreateSummary}
+                  href={`/projects/${project.slug}`}
+                  actionLabel="Open Full 16-Part Guide"
                 />
               ))}
             </div>
@@ -558,7 +563,7 @@ export default function ExploreLearningPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
               index="07"
-              kicker="SUGGESTED LEARNING PATHS"
+              kicker="Suggested Learning Paths"
               title="Guided Journeys Across Interconnected Subjects"
               description="Not sure where to begin? Follow one of these curated three-stage pathways showing how fundamental science and math lead directly to engineering and real-world creation."
             />
@@ -586,27 +591,28 @@ export default function ExploreLearningPage() {
                     </p>
                   </div>
 
-                  <div className="space-y-3">
+                  {/* Clean Hairline Step Progression instead of nested sub-cards */}
+                  <div className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
                     {path.steps.map((step) => (
                       <Link
                         key={step.step}
                         href={`/learn/${step.slug}`}
-                        className="p-3.5 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] hover:border-[#315BE8]/40 transition-colors flex items-center justify-between gap-4 group"
+                        className="py-3.5 flex items-center justify-between gap-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
                       >
-                        <div className="flex items-start gap-3">
-                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-white text-[#315BE8] border border-[#E6EBF2] shrink-0 mt-0.5">
+                        <div className="flex items-baseline gap-3">
+                          <span className="font-mono tabular-nums text-xs font-bold text-[#315BE8] shrink-0">
                             0{step.step}
                           </span>
                           <div>
-                            <div className="text-xs font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
+                            <div className="text-sm font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
                               {step.subject}
                             </div>
-                            <p className="text-xs text-[#64748B]">
+                            <p className="text-xs text-[#64748B] mt-0.5">
                               {step.topic}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-[#315BE8] shrink-0" />
+                        <ArrowRight className="w-4 h-4 text-[#315BE8] shrink-0 transition-transform duration-150 group-hover:translate-x-0.5" />
                       </Link>
                     ))}
                   </div>
@@ -616,7 +622,7 @@ export default function ExploreLearningPage() {
 
             <div className="pt-4">
               <CTASection
-                kicker="START WITH ANY SUBJECT"
+                kicker="Start With Any Subject"
                 title="Don't Just Memorize Formulas. Discover How the World Works."
                 description="Pick any of our six core fields of knowledge to begin exploring concepts, experiments, and real-world applications."
                 primaryActionLabel="Start With Physics"
@@ -631,92 +637,6 @@ export default function ExploreLearningPage() {
       </main>
 
       <Footer />
-
-      {/* Project Modal */}
-      {activeProjectModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#17243B]/40 backdrop-blur-xs"
-          onClick={() => setActiveProjectModal(null)}
-        >
-          <div
-            className="w-full max-w-xl rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 shadow-2xl space-y-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 border-b border-[#E6EBF2] pb-4">
-              <div className="space-y-1">
-                <KickerLabel label={activeProjectModal.subject} tone="primary" />
-                <h2 className="text-xl font-bold text-[#17243B]">
-                  {activeProjectModal.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveProjectModal(null)}
-                aria-label="Close project dialog"
-                className="min-h-[40px] min-w-[40px] rounded-lg border border-[#E6EBF2] flex items-center justify-center text-[#64748B] hover:text-[#17243B] hover:bg-[#F6F9FF] transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-sm">
-              <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] space-y-1">
-                <div className="text-xs font-semibold text-[#315BE8]">
-                  01 · Why This Project Matters
-                </div>
-                <p className="text-[#17243B] leading-relaxed">
-                  {activeProjectModal.whyItMatters}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#EAF8F7]/60 border border-[#16A6A0]/25 space-y-1">
-                <div className="text-xs font-semibold text-[#16A6A0]">
-                  02 · Governing Scientific Principle
-                </div>
-                <p className="font-mono text-xs text-[#17243B]">
-                  {activeProjectModal.scientificPrinciple}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#FEF6EB] border border-[#F3A644]/35 space-y-1">
-                <div className="text-xs font-semibold text-[#C87A19]">
-                  03 · What Learners Create
-                </div>
-                <p className="text-[#17243B] leading-relaxed">
-                  {activeProjectModal.whatYouCreate}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E6EBF2]">
-              <span className="text-xs text-[#64748B]">
-                {activeProjectModal.level} · {activeProjectModal.duration}
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setActiveProjectModal(null)}
-                >
-                  Close
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => {
-                    setActiveProjectModal(null);
-                    router.push('/projects');
-                  }}
-                >
-                  Explore Full Project Guides
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

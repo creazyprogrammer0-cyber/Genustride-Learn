@@ -20,7 +20,7 @@ export interface CTASectionProps {
 }
 
 export function CTASection({
-  kicker = 'CONCEPT-DRIVEN LEARNING',
+  kicker = 'Concept-Driven Learning',
   title,
   description,
   primaryActionLabel,
@@ -34,30 +34,22 @@ export function CTASection({
   return (
     <section
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-[#E6EBF2] p-8 sm:p-12 lg:p-14',
+        'relative overflow-hidden rounded-2xl border border-[#E6EBF2] p-7 sm:p-10 lg:p-12',
         surface === 'soft-blue' ? 'bg-[#F6F9FF]' : 'bg-white',
         className
       )}
     >
-      {/* Subtle Ambient Radial Glows (Diffuse & Restrained) */}
+      {/* Single Restrained Ambient Radial Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-28 -left-24 w-96 h-96 rounded-full ambient-glow-blue"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-28 -right-20 w-96 h-96 rounded-full ambient-glow-teal"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-1/4 -translate-y-1/2 w-64 h-64 rounded-full ambient-glow-amber"
+        className="pointer-events-none absolute -top-28 -right-24 w-96 h-96 rounded-full ambient-glow-blue"
       />
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-8 space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="lg:col-span-8 space-y-3.5">
+          <div className="flex flex-wrap items-center gap-2.5">
             <KickerLabel label={kicker} tone="primary" />
-            <span aria-hidden="true" className="text-xs text-[#64748B]/50">
+            <span aria-hidden="true" className="text-xs text-[#64748B]/40">
               ·
             </span>
             <span className="text-xs font-medium text-[#16A6A0]">
@@ -65,7 +57,7 @@ export function CTASection({
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#17243B] tracking-tight leading-[1.18]">
+          <h2 className="text-2xl sm:text-3xl lg:text-[2.15rem] font-extrabold text-[#17243B] tracking-tight leading-[1.16] text-balance">
             {title}
           </h2>
 

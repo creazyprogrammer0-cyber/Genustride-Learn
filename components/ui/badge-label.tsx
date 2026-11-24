@@ -20,8 +20,70 @@ const toneTextClasses: Record<SemanticTone, string> = {
 };
 
 /**
- * Unboxed editorial kicker label with optional numerical index (e.g., "01 · CORE CONCEPT").
- * Adheres to Zero-Pill metadata discipline—clean typography with middle-dot separator.
+ * Formats ALL-CAPS strings into natural Editorial Title Case while preserving
+ * short acronyms (STEM, DC, LED, FAQ, H₂O, BD) and Roman/numeric prefixes.
+ */
+function formatEditorialLabel(raw: string): string {
+  if (!raw) return raw;
+  const upperCount = (raw.match(/[A-Z]/g) || []).length;
+  const alphaCount = (raw.match(/[A-Za-z]/g) || []).length;
+  if (alphaCount === 0 || upperCount / alphaCount < 0.75) {
+    return raw;
+  }
+
+  const preserveUpper = new Set([
+    'STEM',
+    'DC',
+    'AC',
+    'LED',
+    'FAQ',
+    'FAQS',
+    'BD',
+    'II',
+    'III',
+    'IV',
+    'SI',
+    'PH',
+  ]);
+  const minorWords = new Set([
+    'a',
+    'an',
+    'and',
+    'as',
+    'at',
+    'by',
+    'for',
+    'from',
+    'in',
+    'into',
+    'of',
+    'on',
+    'or',
+    'the',
+    'to',
+    'vs',
+    'with',
+  ]);
+
+  return raw
+    .split(/(\s+|·|—|\/|-)/)
+    .map((token, idx) => {
+      if (!/^[A-Za-z0-9]+$/.test(token)) return token;
+      if (preserveUpper.has(token.toUpperCase())) {
+        return token.toUpperCase();
+      }
+      const lower = token.toLowerCase();
+      if (idx > 0 && minorWords.has(lower)) {
+        return lower;
+      }
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join('');
+}
+
+/**
+ * Unboxed editorial kicker label with optional numerical index (e.g., "01 · Core Concept").
+ * Uses natural editorial title case rather than all-caps shouting.
  */
 export function KickerLabel({
   index,
@@ -29,23 +91,27 @@ export function KickerLabel({
   tone = 'primary',
   className,
 }: KickerLabelProps) {
+  const displayLabel = formatEditorialLabel(label);
+
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-2 text-xs font-semibold tracking-wide',
+        'inline-flex flex-wrap items-center gap-2 text-xs sm:text-[13px] font-semibold tracking-normal',
         toneTextClasses[tone],
         className
       )}
     >
       {index && (
         <>
-          <span className="font-mono tabular-nums">{index}</span>
-          <span aria-hidden="true" className="text-[#64748B]/60">
-            ·
+          <span className="font-mono tabular-nums text-xs font-semibold">
+            {formatEditorialLabel(index)}
+          </span>
+          <span aria-hidden="true" className="text-[#64748B]/50">
+            —
           </span>
         </>
       )}
-      <span>{label}</span>
+      <span>{displayLabel}</span>
     </div>
   );
 }
@@ -79,18 +145,18 @@ export function MetadataRow({
       {items.map((item, idx) => (
         <React.Fragment key={`${item.label}-${idx}`}>
           {idx > 0 && (
-            <span aria-hidden="true" className="text-[#64748B]/50 select-none">
+            <span aria-hidden="true" className="text-[#64748B]/45 select-none">
               {separator}
             </span>
           )}
           <span
             className={cn(
               item.tone ? toneTextClasses[item.tone] : 'text-[#64748B]',
-              item.tone && item.tone !== 'neutral' && 'font-medium',
+              item.tone && item.tone !== 'neutral' && 'font-semibold',
               item.mono && 'font-mono tabular-nums'
             )}
           >
-            {item.label}
+            {formatEditorialLabel(item.label)}
           </span>
         </React.Fragment>
       ))}
@@ -220,7 +286,7 @@ export function SegmentedFilter<T extends string>({
             onClick={() => onChange(opt.value)}
             aria-pressed={isSelected}
             className={cn(
-              'min-h-[36px] px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap shrink-0',
+              'min-h-[36px] px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]',
               isSelected
                 ? 'bg-white text-[#17243B] shadow-xs border border-[#E6EBF2]'

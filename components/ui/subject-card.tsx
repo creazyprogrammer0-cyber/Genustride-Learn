@@ -110,16 +110,14 @@ export function SubjectCard({
         </div>
 
         {(coreFocus || (exemplarTopics && exemplarTopics.length > 0)) && (
-          <div className="pt-3 border-t border-[#E6EBF2] space-y-2">
+          <div className="pt-3.5 border-t border-[#E6EBF2] space-y-2">
             {coreFocus && (
-              <>
-                <p className="text-xs font-medium text-[#17243B]">
-                  Real-World Concept Focus:
-                </p>
-                <p className="text-xs text-[#64748B] leading-relaxed">
-                  {coreFocus}
-                </p>
-              </>
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                <strong className="font-semibold text-[#17243B]">
+                  Real-World Lens:{' '}
+                </strong>
+                {coreFocus}
+              </p>
             )}
 
             {exemplarTopics && exemplarTopics.length > 0 && (
@@ -131,7 +129,9 @@ export function SubjectCard({
                         ·
                       </span>
                     )}
-                    <span className="text-xs text-[#17243B]/90">{topic}</span>
+                    <span className="text-xs font-medium text-[#17243B]/85">
+                      {topic}
+                    </span>
                   </React.Fragment>
                 ))}
               </div>
@@ -140,9 +140,11 @@ export function SubjectCard({
         )}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-        <span className="text-[11px] sm:text-xs text-[#64748B]">
-          Understand → Explore → Apply → Create
+      <div className="mt-5 pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <span className="text-xs text-[#64748B]">
+          {exemplarTopics && exemplarTopics.length > 0
+            ? `${exemplarTopics.length} Core Topic Areas`
+            : 'Concepts & Experiments'}
         </span>
         {href ? (
           <Link
