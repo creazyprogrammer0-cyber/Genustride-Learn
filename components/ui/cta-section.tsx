@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import {ArrowRight} from 'lucide-react';
 import {cn} from '@/lib/utils';
@@ -11,8 +9,10 @@ export interface CTASectionProps {
   title: string;
   description: string;
   primaryActionLabel: string;
+  primaryActionHref?: string;
   onPrimaryAction?: () => void;
   secondaryActionLabel?: string;
+  secondaryActionHref?: string;
   onSecondaryAction?: () => void;
   principleSummary?: string;
   surface?: 'soft-blue' | 'white';
@@ -24,8 +24,10 @@ export function CTASection({
   title,
   description,
   primaryActionLabel,
+  primaryActionHref,
   onPrimaryAction,
   secondaryActionLabel,
+  secondaryActionHref,
   onSecondaryAction,
   principleSummary = 'Understand → Explore → Apply → Create',
   surface = 'soft-blue',
@@ -70,6 +72,7 @@ export function CTASection({
           <Button
             variant="primary"
             size="lg"
+            href={primaryActionHref}
             onClick={onPrimaryAction}
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
@@ -80,6 +83,7 @@ export function CTASection({
             <Button
               variant="outline"
               size="lg"
+              href={secondaryActionHref}
               onClick={onSecondaryAction}
             >
               {secondaryActionLabel}

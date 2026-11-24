@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import {ChevronRight} from 'lucide-react';
@@ -62,14 +60,19 @@ export function Breadcrumbs({items, onNavigate, className}: BreadcrumbsProps) {
                 >
                   {item.label}
                 </span>
-              ) : resolvedHref ? (
+              ) : resolvedHref && !onNavigate ? (
+                <Link
+                  href={resolvedHref}
+                  className="py-0.5 text-[#64748B] hover:text-[#315BE8] hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
+                >
+                  {item.label}
+                </Link>
+              ) : resolvedHref && onNavigate ? (
                 <Link
                   href={resolvedHref}
                   onClick={(e) => {
-                    if (onNavigate) {
-                      e.preventDefault();
-                      onNavigate(item);
-                    }
+                    e.preventDefault();
+                    onNavigate(item);
                   }}
                   className="py-0.5 text-[#64748B] hover:text-[#315BE8] hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-xs"
                 >

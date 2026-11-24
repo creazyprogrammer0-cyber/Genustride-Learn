@@ -1,8 +1,5 @@
-'use client';
-
-import React, {useState} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
 import {ArrowRight} from 'lucide-react';
 import {
   Navbar,
@@ -16,7 +13,6 @@ import {
   ProjectCard,
   ImageContainer,
   CTASection,
-  SegmentedFilter,
   LEARNING_STAGES,
   SubjectCategorySlug,
 } from '@/components/design-system';
@@ -27,110 +23,89 @@ import {
   PLATFORM_IMAGES,
 } from '@/lib/content-data';
 import {PROJECTS_DATA} from '@/lib/projects-data';
+import {ExploreFeaturedTopicsFilter} from '@/components/subject/explore-featured-topics-filter';
+
+const SUBJECTS_LIST = [
+  SUBJECTS_DATA.mathematics,
+  SUBJECTS_DATA.physics,
+  SUBJECTS_DATA.chemistry,
+  SUBJECTS_DATA.biology,
+  SUBJECTS_DATA.technology,
+  SUBJECTS_DATA.engineering,
+];
+
+const REAL_WORLD_EXAMPLES_HIGHLIGHT = [
+  {
+    subject: 'Physics',
+    slug: 'physics' as SubjectCategorySlug,
+    topic: 'Magnetism & Electricity',
+    title: 'How Electric Motors & Household Power Grids Work',
+    explanation:
+      'See how the Lorentz force spins copper coils inside fans, water pumps, and electric vehicles—and how transformers deliver 220V power across transmission lines.',
+    imageSrc: PLATFORM_IMAGES.learnRealWorldElectronics,
+    imageAlt:
+      'Electrical engineer testing an oscilloscope and circuit bench to analyze alternating current waveforms and motor power electronics',
+  },
+  {
+    subject: 'Engineering & Mathematics',
+    slug: 'engineering' as SubjectCategorySlug,
+    topic: 'Civil Engineering & Trigonometry',
+    title: 'How Bridges Carry Heavy Loads Across Turbulent Rivers',
+    explanation:
+      'Discover why triangular Warren and Pratt trusses distribute downward weight into balanced tension and compression members without buckling.',
+    imageSrc: PLATFORM_IMAGES.learnRealWorldBridge,
+    imageAlt:
+      'Long-span triangulated steel truss bridge structure crossing a wide river channel under real traffic loads',
+  },
+  {
+    subject: 'Biology & Chemistry',
+    slug: 'biology' as SubjectCategorySlug,
+    topic: 'Cells, Microorganisms & Agriculture',
+    title: 'How Soil Microbes, Osmosis & Stomata Sustain Crops',
+    explanation:
+      'Trace how nitrogen-fixing root bacteria and leaf guard-cell turgor pressure enable plants to grow and adapt to seasonal water and salinity shifts.',
+    imageSrc: PLATFORM_IMAGES.learnRealWorldAgriculture,
+    imageAlt:
+      'Close-up photograph of green crop seedlings growing in nutrient soil inside an agricultural research greenhouse',
+  },
+];
+
+const PRACTICAL_EXPERIMENTS_HIGHLIGHT = [
+  {
+    subject: 'Physics',
+    slug: 'physics' as SubjectCategorySlug,
+    projectHref: '/projects/build-a-simple-electric-circuit',
+    ...SUBJECTS_DATA.physics.experimentsAndActivities[0],
+  },
+  {
+    subject: 'Chemistry',
+    slug: 'chemistry' as SubjectCategorySlug,
+    projectHref: '/projects/explore-water-filtration',
+    ...SUBJECTS_DATA.chemistry.experimentsAndActivities[0],
+  },
+  {
+    subject: 'Biology',
+    slug: 'biology' as SubjectCategorySlug,
+    projectHref: '/projects/observe-plant-stomata-and-osmosis',
+    ...SUBJECTS_DATA.biology.experimentsAndActivities[0],
+  },
+  {
+    subject: 'Engineering',
+    slug: 'engineering' as SubjectCategorySlug,
+    projectHref: '/projects/load-test-a-structural-truss-bridge',
+    ...SUBJECTS_DATA.engineering.experimentsAndActivities[0],
+  },
+];
+
+const PROJECTS_HIGHLIGHT = PROJECTS_DATA.slice(0, 4);
 
 export default function ExploreLearningPage() {
-  const router = useRouter();
-  const [topicFilter, setTopicFilter] = useState<'all' | SubjectCategorySlug>(
-    'all'
-  );
-
-  const subjectsList = [
-    SUBJECTS_DATA.mathematics,
-    SUBJECTS_DATA.physics,
-    SUBJECTS_DATA.chemistry,
-    SUBJECTS_DATA.biology,
-    SUBJECTS_DATA.technology,
-    SUBJECTS_DATA.engineering,
-  ];
-
-  const filteredFeaturedTopics =
-    topicFilter === 'all'
-      ? EXPLORE_FEATURED_TOPICS
-      : EXPLORE_FEATURED_TOPICS.filter((t) => t.subjectSlug === topicFilter);
-
-  const realWorldExamplesHighlight = [
-    {
-      subject: 'Physics',
-      slug: 'physics' as SubjectCategorySlug,
-      topic: 'Magnetism & Electricity',
-      title: 'How Electric Motors & Household Power Grids Work',
-      explanation:
-        'See how the Lorentz force spins copper coils inside fans, water pumps, and electric vehicles—and how transformers deliver 220V power across transmission lines.',
-      imageSrc: PLATFORM_IMAGES.learnRealWorldElectronics,
-      imageAlt:
-        'Electrical engineer testing an oscilloscope and circuit bench to analyze alternating current waveforms and motor power electronics',
-    },
-    {
-      subject: 'Engineering & Mathematics',
-      slug: 'engineering' as SubjectCategorySlug,
-      topic: 'Civil Engineering & Trigonometry',
-      title: 'How Bridges Carry Heavy Loads Across Turbulent Rivers',
-      explanation:
-        'Discover why triangular Warren and Pratt trusses distribute downward weight into balanced tension and compression members without buckling.',
-      imageSrc: PLATFORM_IMAGES.learnRealWorldBridge,
-      imageAlt:
-        'Long-span triangulated steel truss bridge structure crossing a wide river channel under real traffic loads',
-    },
-    {
-      subject: 'Biology & Chemistry',
-      slug: 'biology' as SubjectCategorySlug,
-      topic: 'Cells, Microorganisms & Agriculture',
-      title: 'How Soil Microbes, Osmosis & Stomata Sustain Crops',
-      explanation:
-        'Trace how nitrogen-fixing root bacteria and leaf guard-cell turgor pressure enable plants to grow and adapt to seasonal water and salinity shifts.',
-      imageSrc: PLATFORM_IMAGES.learnRealWorldAgriculture,
-      imageAlt:
-        'Close-up photograph of green crop seedlings growing in nutrient soil inside an agricultural research greenhouse',
-    },
-  ];
-
-  const practicalExperimentsHighlight = [
-    {
-      subject: 'Physics',
-      slug: 'physics' as SubjectCategorySlug,
-      projectHref: '/projects/build-a-simple-electric-circuit',
-      ...SUBJECTS_DATA.physics.experimentsAndActivities[0],
-    },
-    {
-      subject: 'Chemistry',
-      slug: 'chemistry' as SubjectCategorySlug,
-      projectHref: '/projects/explore-water-filtration',
-      ...SUBJECTS_DATA.chemistry.experimentsAndActivities[0],
-    },
-    {
-      subject: 'Biology',
-      slug: 'biology' as SubjectCategorySlug,
-      projectHref: '/projects/observe-plant-stomata-and-osmosis',
-      ...SUBJECTS_DATA.biology.experimentsAndActivities[0],
-    },
-    {
-      subject: 'Engineering',
-      slug: 'engineering' as SubjectCategorySlug,
-      projectHref: '/projects/load-test-a-structural-truss-bridge',
-      ...SUBJECTS_DATA.engineering.experimentsAndActivities[0],
-    },
-  ];
-
-  const projectsHighlight = PROJECTS_DATA.slice(0, 4);
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const prefersReducedMotion =
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      el.scrollIntoView({
-        behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      });
-    }
-  };
-
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
       <Navbar
         activeSection="learn"
         primaryCtaLabel="Browse 6 Subjects"
-        onPrimaryCta={() => scrollToSection('subject-categories')}
+        primaryCtaHref="#subject-categories"
       />
 
       {/* Breadcrumbs Bar */}
@@ -138,14 +113,9 @@ export default function ExploreLearningPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <Breadcrumbs
             items={[
-              {id: 'home', label: 'Home'},
+              {id: 'home', label: 'Home', href: '/'},
               {id: 'learn', label: 'Explore Learning', current: true},
             ]}
-            onNavigate={(item) => {
-              if (item.id === 'home') {
-                router.push('/');
-              }
-            }}
           />
 
           <div className="text-xs text-[#64748B]">
@@ -193,7 +163,7 @@ export default function ExploreLearningPage() {
                   <Button
                     variant="primary"
                     size="lg"
-                    onClick={() => scrollToSection('subject-categories')}
+                    href="#subject-categories"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
                     Choose a Subject Area
@@ -201,7 +171,7 @@ export default function ExploreLearningPage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    onClick={() => scrollToSection('learning-paths')}
+                    href="#learning-paths"
                   >
                     View Suggested Learning Paths
                   </Button>
@@ -268,7 +238,7 @@ export default function ExploreLearningPage() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-              {subjectsList.map((subject) => (
+              {SUBJECTS_LIST.map((subject) => (
                 <SubjectCard
                   key={subject.slug}
                   title={subject.title}
@@ -288,79 +258,13 @@ export default function ExploreLearningPage() {
         </section>
 
         {/* =====================================================================
-            3. FEATURED TOPICS
+            3. FEATURED TOPICS (Interactive Leaf Client Component)
            ===================================================================== */}
         <section
           id="featured-topics"
           className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#E6EBF2]"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-              <SectionHeading
-                index="03"
-                kicker="Featured Concept Topics"
-                title="High-Impact Topics Across Disciplines"
-                description="Start with a foundational question that connects textbook theory directly to real-world systems."
-              />
-
-              <SegmentedFilter
-                ariaLabel="Filter featured topics by subject"
-                value={topicFilter}
-                onChange={setTopicFilter}
-                options={[
-                  {value: 'all', label: 'All Subjects'},
-                  {value: 'physics', label: 'Physics'},
-                  {value: 'mathematics', label: 'Mathematics'},
-                  {value: 'chemistry', label: 'Chemistry'},
-                  {value: 'biology', label: 'Biology'},
-                  {value: 'technology', label: 'Technology'},
-                ]}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredFeaturedTopics.map((topic) => (
-                <Link
-                  key={topic.id}
-                  href={`/learn/${topic.subjectSlug}`}
-                  className="surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
-                >
-                  <div className="space-y-3">
-                    <MetadataRow
-                      items={[
-                        {label: topic.subjectName, tone: 'primary'},
-                        {label: topic.topicCategory, tone: 'secondary'},
-                      ]}
-                    />
-
-                    <h3 className="text-lg font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
-                      {topic.title}
-                    </h3>
-
-                    <p className="text-sm text-[#64748B] leading-relaxed">
-                      {topic.whyItMatters}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-[#E6EBF2] space-y-2">
-                    <div className="text-xs text-[#17243B] font-medium">
-                      <span className="text-[#315BE8] font-semibold">
-                        Guiding Question:{' '}
-                      </span>
-                      {topic.coreQuestion}
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-semibold text-[#315BE8] pt-1">
-                      <span>Open in {topic.subjectName}</span>
-                      <ArrowRight
-                        className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <ExploreFeaturedTopicsFilter topics={EXPLORE_FEATURED_TOPICS} />
         </section>
 
         {/* =====================================================================
@@ -380,7 +284,7 @@ export default function ExploreLearningPage() {
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-7">
-              {realWorldExamplesHighlight.map((item) => (
+              {REAL_WORLD_EXAMPLES_HIGHLIGHT.map((item) => (
                 <article
                   key={item.title}
                   className="group surface-card surface-card-interactive rounded-xl p-6 bg-white flex flex-col justify-between space-y-5"
@@ -459,7 +363,7 @@ export default function ExploreLearningPage() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {practicalExperimentsHighlight.map((exp) => (
+              {PRACTICAL_EXPERIMENTS_HIGHLIGHT.map((exp) => (
                 <div
                   key={exp.id}
                   className="surface-card rounded-2xl p-6 sm:p-7 bg-white flex flex-col justify-between space-y-5"
@@ -533,7 +437,7 @@ export default function ExploreLearningPage() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {projectsHighlight.map((project) => (
+              {PROJECTS_HIGHLIGHT.map((project) => (
                 <ProjectCard
                   key={project.slug}
                   title={project.title}
@@ -626,9 +530,9 @@ export default function ExploreLearningPage() {
                 title="Don't Just Memorize Formulas. Discover How the World Works."
                 description="Pick any of our six core fields of knowledge to begin exploring concepts, experiments, and real-world applications."
                 primaryActionLabel="Start With Physics"
-                onPrimaryAction={() => router.push('/learn/physics')}
+                primaryActionHref="/learn/physics"
                 secondaryActionLabel="Start With Mathematics"
-                onSecondaryAction={() => router.push('/learn/mathematics')}
+                secondaryActionHref="/learn/mathematics"
                 surface="soft-blue"
               />
             </div>

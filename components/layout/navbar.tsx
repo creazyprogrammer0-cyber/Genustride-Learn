@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
 import {Menu, X, ChevronDown, ArrowRight} from 'lucide-react';
@@ -13,6 +13,7 @@ export interface NavbarProps {
   activeSection?: string;
   onNavigate?: (targetId: string, label?: string) => void;
   primaryCtaLabel?: string;
+  primaryCtaHref?: string;
   onPrimaryCta?: () => void;
   className?: string;
 }
@@ -20,6 +21,7 @@ export interface NavbarProps {
 export function Navbar({
   activeSection,
   primaryCtaLabel = 'Explore Learning',
+  primaryCtaHref = '/learn',
   onPrimaryCta,
   className,
 }: NavbarProps) {
@@ -59,36 +61,37 @@ export function Navbar({
 
   // Close mobile drawer on Escape key
   useEffect(() => {
+    if (!mobileMenuOpen) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && mobileMenuOpen) {
+      if (e.key === 'Escape') {
         setMobileMenuOpen(false);
       }
     }
-    if (mobileMenuOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [mobileMenuOpen]);
 
-  const subjectDropdownItems: DropdownMenuItem[] = SUBJECT_CATEGORIES.map(
-    (subject) => ({
-      id: subject.slug,
-      label: subject.name,
-      meta: subject.shortName,
-      description: subject.tagline,
-      onSelect: () => {
-        setMobileMenuOpen(false);
-        router.push(subject.route);
-      },
-    })
+  const subjectDropdownItems: DropdownMenuItem[] = useMemo(
+    () =>
+      SUBJECT_CATEGORIES.map((subject) => ({
+        id: subject.slug,
+        label: subject.name,
+        meta: subject.shortName,
+        description: subject.tagline,
+        onSelect: () => {
+          setMobileMenuOpen(false);
+          router.push(subject.route);
+        },
+      })),
+    [router]
   );
 
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#E6EBF2]',
+        'sticky top-0 z-40 w-full bg-white/98 sm:bg-white/95 sm:backdrop-blur-md border-b border-[#E6EBF2]',
         className
       )}
     >
@@ -185,13 +188,14 @@ export function Navbar({
             <Button
               variant="primary"
               size="sm"
-              onClick={() => {
-                if (onPrimaryCta) {
-                  onPrimaryCta();
-                } else {
-                  router.push('/learn');
-                }
-              }}
+              href={onPrimaryCta ? undefined : primaryCtaHref}
+              onClick={
+                onPrimaryCta
+                  ? () => {
+                      onPrimaryCta();
+                    }
+                  : undefined
+              }
             >
               {primaryCtaLabel}
             </Button>

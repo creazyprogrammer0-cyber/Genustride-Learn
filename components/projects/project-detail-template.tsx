@@ -31,11 +31,20 @@ import {
   ProjectCard,
   CTASection,
 } from '@/components/design-system';
-import {
-  ProjectDetailData,
-  PROJECTS_DATA,
-  getProjectBySlug,
-} from '@/lib/projects-data';
+import type {ProjectDetailData} from '@/lib/projects-data';
+
+export interface RelatedProjectSummary {
+  slug: string;
+  title: string;
+  subjectLabel: string;
+  difficulty: ProjectDetailData['difficulty'];
+  estimatedTime: string;
+  imageSrc: string;
+  imageAlt: string;
+  subtitle: string;
+  whatYouCreateSummary: string;
+  coreMechanismFormula: string;
+}
 
 function ProjectScientificDiagram({
   diagramType,
@@ -311,7 +320,13 @@ function ProjectScientificDiagram({
   );
 }
 
-export function ProjectDetailTemplate({project}: {project: ProjectDetailData}) {
+export function ProjectDetailTemplate({
+  project,
+  relatedProjects,
+}: {
+  project: ProjectDetailData;
+  relatedProjects: RelatedProjectSummary[];
+}) {
   const router = useRouter();
 
   // Interactive checklist state for Required Materials
@@ -335,15 +350,6 @@ export function ProjectDetailTemplate({project}: {project: ProjectDetailData}) {
   const [revealedHints, setRevealedHints] = useState<Record<number, boolean>>(
     {}
   );
-
-  const relatedProjects = project.relatedProjectSlugs
-    .map((slug) => getProjectBySlug(slug))
-    .filter((p): p is ProjectDetailData => Boolean(p));
-
-  const fallbackRelated =
-    relatedProjects.length > 0
-      ? relatedProjects
-      : PROJECTS_DATA.filter((p) => p.slug !== project.slug).slice(0, 3);
 
   const completedStepsCount =
     Object.values(completedSteps).filter(Boolean).length;
@@ -1208,7 +1214,7 @@ export function ProjectDetailTemplate({project}: {project: ProjectDetailData}) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-              {fallbackRelated.map((rel) => (
+              {relatedProjects.map((rel) => (
                 <ProjectCard
                   key={rel.slug}
                   title={rel.title}

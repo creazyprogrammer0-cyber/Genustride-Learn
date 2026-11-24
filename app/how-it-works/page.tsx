@@ -506,6 +506,7 @@ export default function HowItWorksPage() {
                     alt="Students collaborating around a laboratory workbench with physical models, electronic measurement tools, and handwritten notebooks"
                     aspectRatio="4:3"
                     rounded="xl"
+                    priority
                     caption="Moving from passive textbook recall to active conceptual inquiry and practical reasoning."
                     creditOrContext="Methodology · Active Inquiry"
                   />

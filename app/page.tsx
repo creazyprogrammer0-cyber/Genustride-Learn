@@ -1,8 +1,5 @@
-'use client';
-
-import React, {useState} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
 import {ArrowRight, CheckCircle2} from 'lucide-react';
 import {
   Navbar,
@@ -22,73 +19,18 @@ import {
   REAL_WORLD_LEARNING_METHODS,
   BEYOND_CLASSROOM_SKILLS,
 } from '@/lib/content-data';
+import {IceFloatingWalkthrough} from '@/components/home/ice-floating-walkthrough';
+import {RealWorldMethodsExplorer} from '@/components/home/real-world-methods-explorer';
 
-const METHOD_DESTINATION_MAP: Record<
-  string,
-  {href: string; actionLabel: string; stageConnection: string}
-> = {
-  'real-world-examples': {
-    href: '/resources',
-    actionLabel: 'Explore Concept Articles (/resources)',
-    stageConnection: 'Stage 01–02 · Understand & Explore',
-  },
-  'visual-explanations': {
-    href: '/how-it-works',
-    actionLabel: 'Inspect Our 4-Step Framework (/how-it-works)',
-    stageConnection: 'Stage 02 · Mechanism & Intuition',
-  },
-  'practical-projects': {
-    href: '/projects',
-    actionLabel: 'Open 16-Part Experiment Guides (/projects)',
-    stageConnection: 'Stage 03–04 · Apply & Create',
-  },
-  'interactive-exploration': {
-    href: '/learn',
-    actionLabel: 'Explore All 6 Subject Hubs (/learn)',
-    stageConnection: 'All Stages · Cross-Disciplinary Inquiry',
-  },
-};
+const SUBJECTS_LIST = Object.values(SUBJECTS_DATA);
 
 export default function HomePage() {
-  const router = useRouter();
-  const [activeNavSection, setActiveNavSection] = useState<string>('');
-  const [activeIceStepIndex, setActiveIceStepIndex] = useState<number>(0);
-  const [activeMethodId, setActiveMethodId] = useState<string>(
-    REAL_WORLD_LEARNING_METHODS[0].id
-  );
-
-  const scrollToSection = (sectionId: string) => {
-    setActiveNavSection(sectionId);
-    const el = document.getElementById(sectionId);
-    if (el) {
-      const prefersReducedMotion =
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      el.scrollIntoView({
-        behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      });
-    }
-  };
-
-  const subjectsList = Object.values(SUBJECTS_DATA);
-  const activeMethod =
-    REAL_WORLD_LEARNING_METHODS.find((m) => m.id === activeMethodId) ||
-    REAL_WORLD_LEARNING_METHODS[0];
-  const activeMethodRoute =
-    METHOD_DESTINATION_MAP[activeMethod.id] ||
-    METHOD_DESTINATION_MAP['real-world-examples'];
-  const activeIceStep =
-    ICE_FLOATING_JOURNEY_STEPS[activeIceStepIndex] ||
-    ICE_FLOATING_JOURNEY_STEPS[0];
-
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* Global Navigation Bar & Mobile Navigation */}
       <Navbar
-        activeSection={activeNavSection}
-        onNavigate={(sectionId) => scrollToSection(sectionId)}
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">
@@ -140,7 +82,7 @@ export default function HomePage() {
                   <Button
                     variant="primary"
                     size="lg"
-                    onClick={() => router.push('/learn')}
+                    href="/learn"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
                     Explore Learning
@@ -149,7 +91,7 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    onClick={() => router.push('/how-it-works')}
+                    href="/how-it-works"
                   >
                     Discover Our Approach
                   </Button>
@@ -163,11 +105,10 @@ export default function HomePage() {
                     {step: '03', label: 'Apply', note: 'Real-world use'},
                     {step: '04', label: 'Create', note: 'Build & solve'},
                   ].map((item) => (
-                    <button
+                    <a
                       key={item.step}
-                      type="button"
-                      onClick={() => scrollToSection('our-philosophy')}
-                      className="text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-md"
+                      href="#our-philosophy"
+                      className="text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] rounded-md"
                     >
                       <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#315BE8]">
                         <span>{item.step}</span>
@@ -181,7 +122,7 @@ export default function HomePage() {
                       <p className="text-xs text-[#64748B] mt-0.5">
                         {item.note}
                       </p>
-                    </button>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -419,7 +360,7 @@ export default function HomePage() {
               description="Every topic on Genustride Learn follows a connected four-stage progression—guiding learners from initial comprehension to independent creation."
             />
 
-            {/* Architectural 4-Stage Connected Hairline Matrix (Replaces generic SaaS icon cards) */}
+            {/* Architectural 4-Stage Connected Hairline Matrix */}
             <div className="rounded-2xl border border-[#E6EBF2] bg-white overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2] shadow-2xs">
               {[
                 {
@@ -538,7 +479,7 @@ export default function HomePage() {
 
             {/* Six Subject Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-              {subjectsList.map((subject) => (
+              {SUBJECTS_LIST.map((subject) => (
                 <SubjectCard
                   key={subject.slug}
                   title={subject.title}
@@ -558,7 +499,7 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS
+            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS (Leaf Client Component)
            ===================================================================== */}
         <section
           id="how-learning-happens"
@@ -589,189 +530,16 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Asymmetric Visual Progression & Interactive 6-Step Walkthrough */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-              {/* Left Column: 6-Step Interactive Progression List */}
-              <div className="lg:col-span-7 space-y-3">
-                {ICE_FLOATING_JOURNEY_STEPS.map((item, idx) => {
-                  const isActive = idx === activeIceStepIndex;
-                  return (
-                    <button
-                      key={item.stepNumber}
-                      type="button"
-                      aria-pressed={isActive}
-                      onClick={() => setActiveIceStepIndex(idx)}
-                      className={`w-full text-left rounded-xl p-5 transition-all border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
-                        isActive
-                          ? 'bg-[#F6F9FF] border-[#315BE8] shadow-xs'
-                          : 'bg-white border-[#E6EBF2] hover:border-[#315BE8]/40 hover:bg-[#F6F9FF]/50'
-                      }`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <span
-                          className={`font-mono tabular-nums text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5 ${
-                            isActive
-                              ? 'bg-[#315BE8] text-white'
-                              : 'bg-[#F6F9FF] text-[#315BE8] border border-[#E6EBF2]'
-                          }`}
-                        >
-                          0{idx + 1}
-                        </span>
-
-                        <div className="space-y-1.5 flex-1">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h3 className="text-base sm:text-lg font-bold text-[#17243B]">
-                              {item.title}
-                            </h3>
-                            <span className="text-xs font-mono text-[#16A6A0] font-semibold">
-                              Stage: {item.stageTag}
-                            </span>
-                          </div>
-
-                          <div className="text-xs font-semibold text-[#315BE8]">
-                            {item.subtitle}
-                          </div>
-
-                          <p className="text-sm text-[#64748B] leading-relaxed">
-                            {item.description}
-                          </p>
-
-                          {isActive && (
-                            <div className="pt-2.5 mt-2.5 border-t border-[#E6EBF2] text-xs text-[#17243B] font-medium">
-                              <strong className="text-[#315BE8]">
-                                Scientific Mechanism:{' '}
-                              </strong>
-                              {item.scientificNote}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Right Column: Dual Real Scientific Photography dynamically linked to active step */}
-              <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-                {/* Active Step Status Banner */}
-                <div className="p-4 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-xs font-mono font-semibold text-[#315BE8]">
-                      Inspecting Step 0{activeIceStepIndex + 1} of 06 ·{' '}
-                      {activeIceStep.stageTag}
-                    </div>
-                    <div className="text-sm font-bold text-[#17243B] mt-0.5">
-                      {activeIceStep.title}: {activeIceStep.subtitle}
-                    </div>
-                  </div>
-                  <Link
-                    href="/how-it-works#real-learning-example"
-                    className="text-xs font-semibold text-[#315BE8] hover:underline shrink-0"
-                  >
-                    Interactive Sim →
-                  </Link>
-                </div>
-
-                {/* Card 1: Molecular & Density Regime (Highlighted during Steps 1–4) */}
-                <div
-                  className={`rounded-2xl p-5 bg-white transition-all space-y-4 border ${
-                    activeIceStepIndex < 4
-                      ? 'border-[#315BE8] ring-2 ring-[#315BE8]/15 shadow-sm'
-                      : 'border-[#E6EBF2] opacity-90'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <KickerLabel
-                      index="Steps 01–04"
-                      label="Density & Molecular Structure"
-                      tone="primary"
-                    />
-                    <span className="font-mono text-xs text-[#315BE8] font-semibold">
-                      ρ(ice) = 0.917 g/cm³
-                    </span>
-                  </div>
-
-                  <ImageContainer
-                    src={PLATFORM_IMAGES.iceFloatingMolecular}
-                    alt="Crystalline ice floating at the top of liquid water demonstrating lower solid density than liquid water"
-                    aspectRatio="16:9"
-                    rounded="lg"
-                  />
-
-                  <div className="space-y-1.5">
-                    <h4 className="text-sm font-bold text-[#17243B]">
-                      Hexagonal Hydrogen-Bonded Lattice vs. Liquid Water
-                    </h4>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      In solid ice, hydrogen bonds lock H₂O molecules into an
-                      open hexagonal crystal structure, increasing volume by ~9%
-                      so ice floats above denser 4°C liquid water (1.000 g/cm³).
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card 2: Ecological & Engineering Regime (Highlighted during Steps 5–6) */}
-                <div
-                  className={`rounded-2xl p-5 bg-white transition-all space-y-4 border ${
-                    activeIceStepIndex >= 4
-                      ? 'border-[#16A6A0] ring-2 ring-[#16A6A0]/15 shadow-sm'
-                      : 'border-[#E6EBF2] opacity-90'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <KickerLabel
-                      index="Steps 05–06"
-                      label="Frozen Lakes & Real-World Impact"
-                      tone="secondary"
-                    />
-                    <span className="font-mono text-xs text-[#16A6A0] font-semibold">
-                      Ecological Insulation
-                    </span>
-                  </div>
-
-                  <ImageContainer
-                    src={PLATFORM_IMAGES.frozenLakeNature}
-                    alt="Surface layer of ice floating on a winter lake with liquid water beneath supporting aquatic ecosystems"
-                    aspectRatio="16:9"
-                    rounded="lg"
-                  />
-
-                  <div className="space-y-1.5">
-                    <h4 className="text-sm font-bold text-[#17243B]">
-                      Why Aquatic Life Survives Winter & Pipes Burst
-                    </h4>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      Because ice floats at the surface, it forms an insulating
-                      thermal shield that prevents lakes and rivers from
-                      freezing solid—while the same 9% expansion can rupture
-                      uninsulated metal water pipes.
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-2">
-                    <Link
-                      href="/learn/chemistry"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9]"
-                    >
-                      <span>Explore Chemistry Hub</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                    <Link
-                      href="/learn/physics"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#16A6A0] hover:text-[#128984]"
-                    >
-                      <span>Explore Physics Hub</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <IceFloatingWalkthrough
+              steps={ICE_FLOATING_JOURNEY_STEPS}
+              iceMolecularImageSrc={PLATFORM_IMAGES.iceFloatingMolecular}
+              frozenLakeImageSrc={PLATFORM_IMAGES.frozenLakeNature}
+            />
           </div>
         </section>
 
         {/* =====================================================================
-            SECTION 6 — REAL-WORLD LEARNING
+            SECTION 6 — REAL-WORLD LEARNING (Leaf Client Component)
            ===================================================================== */}
         <section
           id="real-world-learning"
@@ -785,90 +553,7 @@ export default function HomePage() {
               description="We combine four complementary learning methods so concepts are never trapped on a page—they are observed, tested, built, and explored interactively."
             />
 
-            {/* Interactive Featured Showcase + 4 Learning Method Selectors */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {/* Left 5 Columns: 4 Method Selectors */}
-              <div className="lg:col-span-5 flex flex-col justify-between gap-3.5">
-                {REAL_WORLD_LEARNING_METHODS.map((method) => {
-                  const isSelected = method.id === activeMethod.id;
-                  const meta = METHOD_DESTINATION_MAP[method.id];
-                  return (
-                    <button
-                      key={method.id}
-                      type="button"
-                      aria-pressed={isSelected}
-                      onClick={() => setActiveMethodId(method.id)}
-                      className={`w-full text-left rounded-xl p-5 transition-all border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8] ${
-                        isSelected
-                          ? 'bg-white border-[#315BE8] shadow-xs'
-                          : 'bg-white/75 border-[#E6EBF2] hover:bg-white hover:border-[#315BE8]/40'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="font-mono tabular-nums text-xs font-semibold text-[#315BE8]">
-                          Method {method.index}
-                        </span>
-                        <span className="text-xs text-[#16A6A0] font-medium">
-                          {meta?.stageConnection}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-[#17243B]">
-                        {method.title}
-                      </h3>
-                      <p className="mt-1 text-xs text-[#64748B] leading-relaxed">
-                        {method.description}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Right 7 Columns: Featured Authentic Photography & Context */}
-              <div className="lg:col-span-7 surface-card rounded-2xl p-6 sm:p-8 bg-white flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <KickerLabel
-                      index={`Method ${activeMethod.index}`}
-                      label={activeMethod.title}
-                      tone="primary"
-                    />
-                    <span className="text-xs font-medium text-[#16A6A0]">
-                      {activeMethod.exampleConnection}
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-[#17243B] tracking-tight">
-                    {activeMethod.subtitle}
-                  </h3>
-
-                  <ImageContainer
-                    src={activeMethod.imageSrc}
-                    alt={activeMethod.imageAlt}
-                    aspectRatio="16:9"
-                    rounded="xl"
-                  />
-
-                  <p className="text-[15px] text-[#64748B] leading-relaxed pt-1">
-                    {activeMethod.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-4">
-                  <div className="text-xs text-[#17243B] font-medium">
-                    <span className="text-[#64748B]">Exemplar Focus: </span>
-                    {activeMethod.exampleConnection}
-                  </div>
-                  <Button
-                    variant="subtle"
-                    size="sm"
-                    onClick={() => router.push(activeMethodRoute.href)}
-                    rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-                  >
-                    {activeMethodRoute.actionLabel}
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <RealWorldMethodsExplorer methods={REAL_WORLD_LEARNING_METHODS} />
           </div>
         </section>
 
@@ -887,7 +572,7 @@ export default function HomePage() {
               description="When you learn by questioning, experimenting, and applying concepts, you develop enduring intellectual habits that serve you in any career or discipline."
             />
 
-            {/* Editorial Hairline Matrix Grid (Zero repetitive decorative icons) */}
+            {/* Editorial Hairline Matrix Grid */}
             <div className="rounded-2xl border border-[#E6EBF2] bg-[#F6F9FF] overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2]">
               {BEYOND_CLASSROOM_SKILLS.map((skill, idx) => (
                 <div
@@ -1038,9 +723,9 @@ export default function HomePage() {
               title="Your Learning Journey Should Go Beyond the Classroom."
               description="Start asking better questions, understanding deeper concepts, and discovering what you can do with what you learn."
               primaryActionLabel="Start Exploring"
-              onPrimaryAction={() => router.push('/learn')}
+              primaryActionHref="/learn"
               secondaryActionLabel="How Our Methodology Works"
-              onSecondaryAction={() => router.push('/how-it-works')}
+              secondaryActionHref="/how-it-works"
               surface="soft-blue"
             />
           </div>
@@ -1050,7 +735,7 @@ export default function HomePage() {
       {/* =====================================================================
           SECTION 10 — FOOTER
          ===================================================================== */}
-      <Footer onSelectSection={(sectionId) => scrollToSection(sectionId)} />
+      <Footer />
     </div>
   );
 }

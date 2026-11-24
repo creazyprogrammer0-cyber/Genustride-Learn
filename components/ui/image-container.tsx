@@ -1,6 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
+import Image from 'next/image';
 import {Compass} from 'lucide-react';
 import {cn} from '@/lib/utils';
 
@@ -58,40 +59,7 @@ const roundedClasses = {
   xl: 'rounded-xl',
 };
 
-/**
- * Generates responsive srcSet strings for Unsplash and Pexels URLs
- * so mobile viewports download appropriately scaled 480w/800w assets
- * rather than full-resolution 1200w desktop photographs.
- */
-function buildResponsiveSrcSet(src: string): string | undefined {
-  if (!src) return undefined;
-
-  if (src.includes('images.unsplash.com')) {
-    const base = src.replace(/([?&])w=\d+/, '$1w=__WIDTH__');
-    if (base.includes('__WIDTH__')) {
-      return [
-        `${base.replace('__WIDTH__', '480')} 480w`,
-        `${base.replace('__WIDTH__', '800')} 800w`,
-        `${base.replace('__WIDTH__', '1200')} 1200w`,
-      ].join(', ');
-    }
-  }
-
-  if (src.includes('images.pexels.com')) {
-    const base = src.replace(/([?&])w=\d+/, '$1w=__WIDTH__');
-    if (base.includes('__WIDTH__')) {
-      return [
-        `${base.replace('__WIDTH__', '480')} 480w`,
-        `${base.replace('__WIDTH__', '800')} 800w`,
-        `${base.replace('__WIDTH__', '1200')} 1200w`,
-      ].join(', ');
-    }
-  }
-
-  return undefined;
-}
-
-export function ImageContainer({
+function ImageContainerBase({
   src,
   alt,
   aspectRatio = '4:3',
@@ -107,12 +75,11 @@ export function ImageContainer({
   const [hasError, setHasError] = useState(false);
 
   const dims = intrinsicDimensions[aspectRatio];
-  const responsiveSrcSet = buildResponsiveSrcSet(src);
   const resolvedSizes =
     sizes ||
     (priority
       ? '(max-width: 640px) 94vw, (max-width: 1024px) 52vw, 680px'
-      : '(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 440px');
+      : '(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 420px');
 
   return (
     <figure className={cn('w-full', className)}>
@@ -124,17 +91,15 @@ export function ImageContainer({
         )}
       >
         {!hasError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={src}
-            srcSet={responsiveSrcSet}
-            sizes={responsiveSrcSet ? resolvedSizes : undefined}
             alt={alt}
             width={dims.width}
             height={dims.height}
-            loading={priority ? 'eager' : 'lazy'}
-            fetchPriority={priority ? 'high' : 'auto'}
-            decoding={priority ? 'sync' : 'async'}
+            sizes={resolvedSizes}
+            priority={priority}
+            loading={priority ? undefined : 'lazy'}
+            quality={80}
             referrerPolicy="no-referrer"
             onError={() => setHasError(true)}
             className={cn(
@@ -168,3 +133,6 @@ export function ImageContainer({
     </figure>
   );
 }
+
+export const ImageContainer = React.memo(ImageContainerBase);
+ImageContainer.displayName = 'ImageContainer';

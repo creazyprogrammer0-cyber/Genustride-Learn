@@ -4,6 +4,8 @@ import {SUBJECTS_DATA} from '@/lib/content-data';
 import {PROJECTS_DATA} from '@/lib/projects-data';
 import {RESOURCE_ARTICLES} from '@/lib/resources-data';
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = getSiteUrl();
   const lastModified = new Date();

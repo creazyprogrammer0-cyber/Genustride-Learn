@@ -1,8 +1,4 @@
-'use client';
-
-import React, {useState} from 'react';
-import Link from 'next/link';
-import {useRouter} from 'next/navigation';
+import React from 'react';
 import {
   ArrowRight,
   BookOpen,
@@ -11,8 +7,6 @@ import {
   Sparkles,
   ShieldCheck,
   CheckCircle2,
-  ChevronDown,
-  HelpCircle,
   Compass,
 } from 'lucide-react';
 import {
@@ -27,6 +21,7 @@ import {
 } from '@/components/design-system';
 import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
 import {buildParentsFaqJsonLd} from '@/lib/seo';
+import {ParentsFaqAccordion} from '@/components/resources/parents-faq-accordion';
 
 const FAQ_ITEMS = [
   {
@@ -62,8 +57,6 @@ const FAQ_ITEMS = [
 ];
 
 export default function ParentsAndEducatorsPage() {
-  const router = useRouter();
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const faqJsonLd = buildParentsFaqJsonLd(FAQ_ITEMS);
 
   return (
@@ -75,7 +68,7 @@ export default function ParentsAndEducatorsPage() {
       <Navbar
         activeSection="for-parents-and-educators"
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">
@@ -100,9 +93,6 @@ export default function ParentsAndEducatorsPage() {
                     current: true,
                   },
                 ]}
-                onNavigate={(item) => {
-                  if (item.href) router.push(item.href);
-                }}
               />
             </div>
 
@@ -127,15 +117,15 @@ export default function ParentsAndEducatorsPage() {
                   <Button
                     variant="primary"
                     size="lg"
+                    href="/how-it-works"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
-                    onClick={() => router.push('/how-it-works')}
                   >
                     See Our 4-Step Framework
                   </Button>
                   <Button
                     variant="outline"
                     size="lg"
-                    onClick={() => router.push('/projects')}
+                    href="/projects"
                   >
                     Browse Classroom & Home Experiments
                   </Button>
@@ -351,42 +341,7 @@ export default function ParentsAndEducatorsPage() {
               description="Clear, honest answers about how Genustride Learn supports students at home and in school."
             />
 
-            <div className="space-y-3.5">
-              {FAQ_ITEMS.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-                return (
-                  <div
-                    key={idx}
-                    className="rounded-2xl bg-white border border-[#E6EBF2] overflow-hidden"
-                  >
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setOpenFaqIndex(isOpen ? null : idx)
-                      }
-                      aria-expanded={isOpen}
-                      className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 hover:bg-[#F6F9FF]/60 transition-colors cursor-pointer"
-                    >
-                      <span className="text-base font-bold text-[#17243B] flex items-start gap-3">
-                        <HelpCircle className="w-5 h-5 text-[#315BE8] shrink-0 mt-0.5" />
-                        <span>{item.question}</span>
-                      </span>
-                      <ChevronDown
-                        className={`w-5 h-5 text-[#64748B] shrink-0 transition-transform ${
-                          isOpen ? 'rotate-180 text-[#315BE8]' : ''
-                        }`}
-                      />
-                    </button>
-
-                    {isOpen && (
-                      <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-1 border-t border-[#E6EBF2] text-sm sm:text-[15px] text-[#64748B] leading-relaxed">
-                        {item.answer}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <ParentsFaqAccordion items={FAQ_ITEMS} />
           </div>
         </section>
 
@@ -400,9 +355,9 @@ export default function ParentsAndEducatorsPage() {
               title="Explore a Starter Project With Your Learner or Classroom."
               description="Browse our beginner-friendly experiments or reach out to share curriculum ideas and educational feedback."
               primaryActionLabel="Explore Beginner Projects (/projects)"
-              onPrimaryAction={() => router.push('/projects')}
+              primaryActionHref="/projects"
               secondaryActionLabel="Contact Our Team (/contact)"
-              onSecondaryAction={() => router.push('/contact')}
+              secondaryActionHref="/contact"
             />
           </div>
         </section>

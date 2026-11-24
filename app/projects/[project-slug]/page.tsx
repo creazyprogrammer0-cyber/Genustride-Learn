@@ -53,13 +53,38 @@ export default async function ProjectDetailPage({
 
   const howToJsonLd = buildProjectHowToJsonLd(project);
 
+  const resolvedRelated = project.relatedProjectSlugs
+    .map((slug) => getProjectBySlug(slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+  const relatedSource =
+    resolvedRelated.length > 0
+      ? resolvedRelated
+      : PROJECTS_DATA.filter((p) => p.slug !== project.slug).slice(0, 3);
+
+  const relatedProjects = relatedSource.map((rel) => ({
+    slug: rel.slug,
+    title: rel.title,
+    subjectLabel: rel.subjectLabel,
+    difficulty: rel.difficulty,
+    estimatedTime: rel.estimatedTime,
+    imageSrc: rel.imageSrc,
+    imageAlt: rel.imageAlt,
+    subtitle: rel.subtitle,
+    whatYouCreateSummary: rel.whatYouCreateSummary,
+    coreMechanismFormula: rel.coreMechanismFormula,
+  }));
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(howToJsonLd)}}
       />
-      <ProjectDetailTemplate project={project} />
+      <ProjectDetailTemplate
+        project={project}
+        relatedProjects={relatedProjects}
+      />
     </>
   );
 }

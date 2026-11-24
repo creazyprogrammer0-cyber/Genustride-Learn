@@ -1,25 +1,17 @@
-'use client';
-
-import React, {useState} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
-  Clock,
   BookOpen,
-  Lightbulb,
   Globe2,
   FlaskConical,
-  HelpCircle,
   CheckCircle2,
-  ChevronDown,
 } from 'lucide-react';
 import {
   Navbar,
   Footer,
   Button,
-  KickerLabel,
   MetadataRow,
   Breadcrumbs,
   SectionHeading,
@@ -33,15 +25,13 @@ import {
   getResourceArticleBySlug,
 } from '@/lib/resources-data';
 import {getProjectBySlug} from '@/lib/projects-data';
+import {ArticleReasoningChallenge} from '@/components/resources/article-reasoning-challenge';
 
 export function ArticleDetailTemplate({
   article,
 }: {
   article: ResourceArticleData;
 }) {
-  const router = useRouter();
-  const [showReasoningGuide, setShowReasoningGuide] = useState(false);
-
   const companionProject = getProjectBySlug(article.relatedProjectSlug);
   const relatedArticles = article.relatedArticleSlugs
     .map((slug) => getResourceArticleBySlug(slug))
@@ -57,7 +47,7 @@ export function ArticleDetailTemplate({
       <Navbar
         activeSection="resources"
         primaryCtaLabel="All Resources"
-        onPrimaryCta={() => router.push('/resources')}
+        primaryCtaHref="/resources"
       />
 
       <main id="main-content" className="flex-1">
@@ -82,9 +72,6 @@ export function ArticleDetailTemplate({
                   },
                   {id: article.slug, label: article.title, current: true},
                 ]}
-                onNavigate={(item) => {
-                  if (item.href) router.push(item.href);
-                }}
               />
 
               <Link
@@ -229,41 +216,11 @@ export function ArticleDetailTemplate({
               </div>
             </div>
 
-            {/* Interactive Critical Thinking Check */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#FEF6EC] border border-[#F3A644]/50 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#B86E14] uppercase">
-                <HelpCircle className="w-4 h-4" />
-                <span>Interactive Reasoning Challenge</span>
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold text-[#17243B]">
-                {article.thinkingChallenge.prompt}
-              </h3>
-
-              <button
-                type="button"
-                onClick={() => setShowReasoningGuide((prev) => !prev)}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] cursor-pointer"
-              >
-                <Lightbulb className="w-3.5 h-3.5" />
-                <span>
-                  {showReasoningGuide
-                    ? 'Hide First-Principles Reasoning Guide'
-                    : 'Reveal First-Principles Reasoning Guide'}
-                </span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform ${
-                    showReasoningGuide ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {showReasoningGuide && (
-                <div className="p-4 rounded-xl bg-white border border-[#F3A644]/40 text-xs sm:text-sm text-[#17243B] leading-relaxed">
-                  <strong>First-Principles Guide: </strong>
-                  {article.thinkingChallenge.reasoningGuide}
-                </div>
-              )}
-            </div>
+            {/* Interactive Critical Thinking Check (Leaf Client Component) */}
+            <ArticleReasoningChallenge
+              prompt={article.thinkingChallenge.prompt}
+              reasoningGuide={article.thinkingChallenge.reasoningGuide}
+            />
 
             {/* Companion Hands-On Experiment Banner */}
             {companionProject && (
@@ -284,10 +241,8 @@ export function ArticleDetailTemplate({
                 <Button
                   variant="primary"
                   size="md"
+                  href={`/projects/${companionProject.slug}`}
                   rightIcon={<ArrowRight className="w-4 h-4" />}
-                  onClick={() =>
-                    router.push(`/projects/${companionProject.slug}`)
-                  }
                 >
                   Open Experiment Guide
                 </Button>
@@ -345,11 +300,9 @@ export function ArticleDetailTemplate({
               title="Explore the Subject Behind This Article."
               description={`Dive deeper into ${article.subjectLabel} or browse all seven categories in our Learning Resources hub.`}
               primaryActionLabel={`Explore ${article.subjectLabel}`}
-              onPrimaryAction={() =>
-                router.push(`/learn/${article.subjectSlug}`)
-              }
+              primaryActionHref={`/learn/${article.subjectSlug}`}
               secondaryActionLabel="Back to All Resources"
-              onSecondaryAction={() => router.push('/resources')}
+              secondaryActionHref="/resources"
             />
           </div>
         </section>

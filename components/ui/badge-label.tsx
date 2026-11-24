@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import {cn} from '@/lib/utils';
 
@@ -19,66 +17,80 @@ const toneTextClasses: Record<SemanticTone, string> = {
   neutral: 'text-[#64748B]',
 };
 
+const PRESERVE_UPPER_SET = new Set([
+  'STEM',
+  'DC',
+  'AC',
+  'LED',
+  'FAQ',
+  'FAQS',
+  'BD',
+  'II',
+  'III',
+  'IV',
+  'SI',
+  'PH',
+]);
+
+const MINOR_WORDS_SET = new Set([
+  'a',
+  'an',
+  'and',
+  'as',
+  'at',
+  'by',
+  'for',
+  'from',
+  'in',
+  'into',
+  'of',
+  'on',
+  'or',
+  'the',
+  'to',
+  'vs',
+  'with',
+]);
+
+const LABEL_FORMAT_CACHE = new Map<string, string>();
+
 /**
  * Formats ALL-CAPS strings into natural Editorial Title Case while preserving
  * short acronyms (STEM, DC, LED, FAQ, H₂O, BD) and Roman/numeric prefixes.
+ * Memoized at module level to avoid repeated string tokenization during renders.
  */
 function formatEditorialLabel(raw: string): string {
   if (!raw) return raw;
+  const cached = LABEL_FORMAT_CACHE.get(raw);
+  if (cached !== undefined) {
+    return cached;
+  }
+
   const upperCount = (raw.match(/[A-Z]/g) || []).length;
   const alphaCount = (raw.match(/[A-Za-z]/g) || []).length;
   if (alphaCount === 0 || upperCount / alphaCount < 0.75) {
+    LABEL_FORMAT_CACHE.set(raw, raw);
     return raw;
   }
 
-  const preserveUpper = new Set([
-    'STEM',
-    'DC',
-    'AC',
-    'LED',
-    'FAQ',
-    'FAQS',
-    'BD',
-    'II',
-    'III',
-    'IV',
-    'SI',
-    'PH',
-  ]);
-  const minorWords = new Set([
-    'a',
-    'an',
-    'and',
-    'as',
-    'at',
-    'by',
-    'for',
-    'from',
-    'in',
-    'into',
-    'of',
-    'on',
-    'or',
-    'the',
-    'to',
-    'vs',
-    'with',
-  ]);
-
-  return raw
+  const formatted = raw
     .split(/(\s+|·|—|\/|-)/)
     .map((token, idx) => {
       if (!/^[A-Za-z0-9]+$/.test(token)) return token;
-      if (preserveUpper.has(token.toUpperCase())) {
-        return token.toUpperCase();
+      const upper = token.toUpperCase();
+      if (PRESERVE_UPPER_SET.has(upper)) {
+        return upper;
       }
       const lower = token.toLowerCase();
-      if (idx > 0 && minorWords.has(lower)) {
+      if (idx > 0 && MINOR_WORDS_SET.has(lower)) {
         return lower;
       }
       return lower.charAt(0).toUpperCase() + lower.slice(1);
     })
     .join('');
+
+  LABEL_FORMAT_CACHE.set(raw, formatted);
+  return formatted;
 }
 
 /**

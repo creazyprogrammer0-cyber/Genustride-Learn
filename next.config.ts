@@ -8,8 +8,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow access to remote image placeholder.
+  // Enable modern AVIF/WebP formats, custom CDN loader, and mobile-first responsive breakpoints
   images: {
+    loader: 'custom',
+    loaderFile: './lib/image-loader.ts',
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [320, 384, 430, 640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 604800,
     remotePatterns: [
       {
         protocol: 'https',
@@ -37,7 +43,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  output: 'standalone',
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
+  output: 'export',
   transpilePackages: ['motion'],
   webpack: (config, {dev}) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.

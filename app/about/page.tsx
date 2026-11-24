@@ -1,8 +1,5 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
 import {
   ArrowRight,
   Compass,
@@ -84,14 +81,12 @@ const CORE_VALUES = [
 ];
 
 export default function AboutPage() {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
       <Navbar
         activeSection="about"
         primaryCtaLabel="Explore Learning"
-        onPrimaryCta={() => router.push('/learn')}
+        primaryCtaHref="/learn"
       />
 
       <main id="main-content" className="flex-1">
@@ -112,9 +107,6 @@ export default function AboutPage() {
                   {id: 'home', label: 'Home', href: '/'},
                   {id: 'about', label: 'About Genustride Learn', current: true},
                 ]}
-                onNavigate={(item) => {
-                  if (item.href) router.push(item.href);
-                }}
               />
             </div>
 
@@ -155,15 +147,15 @@ export default function AboutPage() {
                   <Button
                     variant="primary"
                     size="lg"
+                    href="/how-it-works"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
-                    onClick={() => router.push('/how-it-works')}
                   >
                     Discover How It Works
                   </Button>
                   <Button
                     variant="outline"
                     size="lg"
-                    onClick={() => router.push('/learn')}
+                    href="/learn"
                   >
                     Explore Learning Areas
                   </Button>
@@ -499,9 +491,9 @@ export default function AboutPage() {
               title="Explore Concepts, Try an Experiment, or Share Your Ideas."
               description="Whether you are a student, an independent learner, a parent, or an educator, we invite you to explore how concept-driven learning works."
               primaryActionLabel="Explore Learning Hub (/learn)"
-              onPrimaryAction={() => router.push('/learn')}
+              primaryActionHref="/learn"
               secondaryActionLabel="Contact Genustride Learn"
-              onSecondaryAction={() => router.push('/contact')}
+              secondaryActionHref="/contact"
             />
           </div>
         </section>

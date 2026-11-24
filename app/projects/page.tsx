@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {
@@ -38,6 +38,30 @@ import {
 } from '@/lib/projects-data';
 import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
 
+const FEATURED_PROJECTS = PROJECTS_DATA.filter((p) => p.isFeatured);
+const ENGINEERING_PROJECTS = PROJECTS_DATA.filter(
+  (p) => p.category === 'engineering'
+);
+const SCIENCE_PROJECTS = PROJECTS_DATA.filter((p) => p.category === 'science');
+const TECHNOLOGY_PROJECTS = PROJECTS_DATA.filter(
+  (p) => p.category === 'technology'
+);
+const MATHEMATICS_PROJECTS = PROJECTS_DATA.filter(
+  (p) => p.category === 'mathematics'
+);
+const BEGINNER_PROJECTS = PROJECTS_DATA.filter((p) => p.isBeginnerFriendly);
+
+const CATEGORY_PROJECT_COUNTS: Record<string, number> =
+  PROJECT_CATEGORY_DEFINITIONS.reduce(
+    (acc, cat) => {
+      acc[cat.slug] = PROJECTS_DATA.filter(
+        (p) => p.category === cat.slug
+      ).length;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+
 export default function ProjectsPage() {
   const router = useRouter();
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<
@@ -48,35 +72,24 @@ export default function ProjectsPage() {
   >('all');
   const [projectSearchQuery, setProjectSearchQuery] = useState('');
 
-  const featuredProjects = PROJECTS_DATA.filter((p) => p.isFeatured);
-  const engineeringProjects = PROJECTS_DATA.filter(
-    (p) => p.category === 'engineering'
-  );
-  const scienceProjects = PROJECTS_DATA.filter((p) => p.category === 'science');
-  const technologyProjects = PROJECTS_DATA.filter(
-    (p) => p.category === 'technology'
-  );
-  const mathematicsProjects = PROJECTS_DATA.filter(
-    (p) => p.category === 'mathematics'
-  );
-  const beginnerProjects = PROJECTS_DATA.filter((p) => p.isBeginnerFriendly);
-
-  const filteredCategoryProjects = PROJECTS_DATA.filter((project) => {
-    const matchesCategory =
-      selectedCategoryFilter === 'all' ||
-      project.category === selectedCategoryFilter;
-    const matchesDifficulty =
-      selectedDifficultyFilter === 'all' ||
-      project.difficulty === selectedDifficultyFilter;
+  const filteredCategoryProjects = useMemo(() => {
     const query = projectSearchQuery.trim().toLowerCase();
-    const matchesSearch =
-      !query ||
-      project.title.toLowerCase().includes(query) ||
-      project.subtitle.toLowerCase().includes(query) ||
-      project.subjectLabel.toLowerCase().includes(query) ||
-      project.coreMechanismFormula.toLowerCase().includes(query);
-    return matchesCategory && matchesDifficulty && matchesSearch;
-  });
+    return PROJECTS_DATA.filter((project) => {
+      const matchesCategory =
+        selectedCategoryFilter === 'all' ||
+        project.category === selectedCategoryFilter;
+      const matchesDifficulty =
+        selectedDifficultyFilter === 'all' ||
+        project.difficulty === selectedDifficultyFilter;
+      const matchesSearch =
+        !query ||
+        project.title.toLowerCase().includes(query) ||
+        project.subtitle.toLowerCase().includes(query) ||
+        project.subjectLabel.toLowerCase().includes(query) ||
+        project.coreMechanismFormula.toLowerCase().includes(query);
+      return matchesCategory && matchesDifficulty && matchesSearch;
+    });
+  }, [selectedCategoryFilter, selectedDifficultyFilter, projectSearchQuery]);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -286,7 +299,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-              {featuredProjects.map((project) => (
+              {FEATURED_PROJECTS.map((project) => (
                 <ProjectCard
                   key={project.slug}
                   title={project.title}
@@ -334,7 +347,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-              {engineeringProjects.map((project) => (
+              {ENGINEERING_PROJECTS.map((project) => (
                 <ProjectCard
                   key={project.slug}
                   title={project.title}
@@ -388,7 +401,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-              {scienceProjects.map((project) => (
+              {SCIENCE_PROJECTS.map((project) => (
                 <ProjectCard
                   key={project.slug}
                   title={project.title}
@@ -433,7 +446,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-              {technologyProjects.map((project) => (
+              {TECHNOLOGY_PROJECTS.map((project) => (
                 <ProjectCard
                   key={project.slug}
                   title={project.title}
@@ -483,7 +496,7 @@ export default function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {mathematicsProjects.map((project) => (
+              {MATHEMATICS_PROJECTS.map((project) => (
                 <div key={project.slug} className="lg:col-span-7">
                   <ProjectCard
                     title={project.title}
@@ -593,7 +606,7 @@ export default function ProjectsPage() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {beginnerProjects.map((project, index) => (
+              {BEGINNER_PROJECTS.map((project, index) => (
                 <Link
                   key={project.slug}
                   href={`/projects/${project.slug}`}
@@ -662,9 +675,7 @@ export default function ProjectsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {PROJECT_CATEGORY_DEFINITIONS.map((cat) => {
                 const isSelected = selectedCategoryFilter === cat.slug;
-                const count = PROJECTS_DATA.filter(
-                  (p) => p.category === cat.slug
-                ).length;
+                const count = CATEGORY_PROJECT_COUNTS[cat.slug] ?? 0;
 
                 return (
                   <button

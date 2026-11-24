@@ -1,6 +1,5 @@
-'use client';
-
 import React from 'react';
+import Link from 'next/link';
 import {cn} from '@/lib/utils';
 
 export type ButtonVariant =
@@ -20,6 +19,7 @@ export interface ButtonProps
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
+  href?: string;
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -52,6 +52,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       leftIcon,
       rightIcon,
       fullWidth = false,
+      href,
       children,
       disabled,
       type = 'button',
@@ -59,22 +60,34 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const sharedClasses = cn(
+      'inline-flex items-center justify-center font-semibold text-center leading-snug select-none cursor-pointer max-w-full',
+      'whitespace-normal sm:whitespace-nowrap',
+      'transition-all duration-150 ease-out active:scale-[0.98]',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+      'disabled:opacity-50 disabled:pointer-events-none',
+      variantClasses[variant],
+      sizeClasses[size],
+      fullWidth && 'w-full',
+      className
+    );
+
+    if (href && !disabled) {
+      return (
+        <Link href={href} className={sharedClasses}>
+          {leftIcon && <span className="shrink-0">{leftIcon}</span>}
+          <span>{children}</span>
+          {rightIcon && <span className="shrink-0">{rightIcon}</span>}
+        </Link>
+      );
+    }
+
     return (
       <button
         ref={ref}
         type={type}
         disabled={disabled}
-        className={cn(
-          'inline-flex items-center justify-center font-semibold text-center leading-snug select-none cursor-pointer max-w-full',
-          'whitespace-normal sm:whitespace-nowrap',
-          'transition-all duration-150 ease-out active:scale-[0.98]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-          'disabled:opacity-50 disabled:pointer-events-none',
-          variantClasses[variant],
-          sizeClasses[size],
-          fullWidth && 'w-full',
-          className
-        )}
+        className={sharedClasses}
         {...props}
       >
         {leftIcon && <span className="shrink-0">{leftIcon}</span>}

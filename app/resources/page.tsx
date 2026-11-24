@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {
@@ -40,18 +40,20 @@ export default function ResourcesPage() {
 
   const spotlightArticle = RESOURCE_ARTICLES[0];
 
-  const filteredArticles = RESOURCE_ARTICLES.filter((article) => {
-    const matchesCategory =
-      selectedCategory === 'All' || article.category === selectedCategory;
+  const filteredArticles = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    const matchesSearch =
-      !query ||
-      article.title.toLowerCase().includes(query) ||
-      article.subtitle.toLowerCase().includes(query) ||
-      article.category.toLowerCase().includes(query) ||
-      article.subjectLabel.toLowerCase().includes(query);
-    return matchesCategory && matchesSearch;
-  });
+    return RESOURCE_ARTICLES.filter((article) => {
+      const matchesCategory =
+        selectedCategory === 'All' || article.category === selectedCategory;
+      const matchesSearch =
+        !query ||
+        article.title.toLowerCase().includes(query) ||
+        article.subtitle.toLowerCase().includes(query) ||
+        article.category.toLowerCase().includes(query) ||
+        article.subjectLabel.toLowerCase().includes(query);
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchQuery]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#17243B]">
@@ -151,6 +153,7 @@ export default function ResourcesPage() {
                       alt={spotlightArticle.imageAlt}
                       aspectRatio="16:9"
                       rounded="xl"
+                      priority
                     />
                   </Link>
 
