@@ -341,11 +341,16 @@ export function InteractiveBackground() {
             width * 0.8,
           ];
 
+          const isMotionDisabled =
+            prefersReducedMotion ||
+            root.getAttribute('data-pause-animations') === 'true' ||
+            root.getAttribute('data-reduce-motion') === 'true';
+
           // Update node positions
           for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
 
-            if (!prefersReducedMotion) {
+            if (!isMotionDisabled) {
               node.baseXRatio += node.vx / Math.max(width, 800);
               node.baseYRatio += node.vy / Math.max(height, 600);
 
@@ -366,7 +371,7 @@ export function InteractiveBackground() {
             const dyMouse = heroLocalMouseY - targetY;
             const distMouse = Math.hypot(dxMouse, dyMouse);
 
-            if (distMouse < 180 && distMouse > 1 && !prefersReducedMotion) {
+            if (distMouse < 180 && distMouse > 1 && !isMotionDisabled) {
               const pull = (1 - distMouse / 180) * 22;
               targetX += (dxMouse / distMouse) * pull;
               targetY += (dyMouse / distMouse) * pull;

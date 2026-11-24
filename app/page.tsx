@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import {ArrowRight, CheckCircle2} from 'lucide-react';
+import {ArrowRight} from 'lucide-react';
 import {
   Navbar,
   Footer,
@@ -19,10 +19,40 @@ import {
   REAL_WORLD_LEARNING_METHODS,
   BEYOND_CLASSROOM_SKILLS,
 } from '@/lib/content-data';
-import {IceFloatingWalkthrough} from '@/components/home/ice-floating-walkthrough';
+import {
+  HeroHeadlineReveal,
+  HeroFloatingStemBadges,
+} from '@/components/home/hero-concept-field';
+import {RethinkingLearningComparison} from '@/components/home/rethinking-learning-comparison';
+import {FourStageMethodology} from '@/components/home/four-stage-methodology';
+import {IceFloatLab} from '@/components/IceFloatLab';
 import {RealWorldMethodsExplorer} from '@/components/home/real-world-methods-explorer';
+import {
+  FadeUp,
+  MagneticButton,
+  Marquee,
+  CountUpMetric,
+} from '@/components/motion';
 
 const SUBJECTS_LIST = Object.values(SUBJECTS_DATA);
+
+const CURIOSITY_LAUNCHPAD_QUESTIONS = [
+  {
+    question: 'Why does voltage act like water pressure?',
+    discipline: 'Physics · Circuits',
+    href: '/resources/why-voltage-is-pressure-not-flow',
+  },
+  {
+    question: 'How do triangles hold up heavy bridges?',
+    discipline: 'Engineering · Geometry',
+    href: '/projects/load-test-a-structural-truss-bridge',
+  },
+  {
+    question: 'How do algorithms & binary logic sort chaos?',
+    discipline: 'Technology & Computing',
+    href: '/learn/technology',
+  },
+] as const;
 
 export default function HomePage() {
   return (
@@ -35,10 +65,10 @@ export default function HomePage() {
 
       <main id="main-content" className="flex-1">
         {/* =====================================================================
-            SECTION 1 — HERO ("Directional Stride Constellation" Canvas Backdrop)
+            SECTION 1 — HERO ("Directional Stride Constellation" & Interactive Concept Field)
            ===================================================================== */}
-        <section className="relative overflow-hidden bg-[#FAF9F6]/65 border-b border-[#E6EBF2] pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-28">
-          {/* Subtle Blue and Teal Ambient Radial Glows on White Background */}
+        <section className="relative overflow-hidden bg-[#FAF9F6]/65 border-b border-[#E6EBF2] pt-12 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
+          {/* Subtle Blue and Teal Ambient Radial Glows */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -top-28 left-1/4 w-[36rem] h-[36rem] rounded-full ambient-glow-blue"
@@ -47,6 +77,9 @@ export default function HomePage() {
             aria-hidden="true"
             className="pointer-events-none absolute top-16 right-8 w-[30rem] h-[30rem] rounded-full ambient-glow-teal"
           />
+
+          {/* Interactive Floating STEM Formula Badges in Outer Hero Margins */}
+          <HeroFloatingStemBadges />
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -63,9 +96,7 @@ export default function HomePage() {
                 />
 
                 <div className="space-y-3.5">
-                  <h1 className="text-3xl sm:text-5xl lg:text-[3.35rem] font-extrabold text-[#17243B] tracking-tight leading-[1.1] text-balance">
-                    Don&apos;t Just Learn What It Is. Understand Why It Matters.
-                  </h1>
+                  <HeroHeadlineReveal text="Don't Just Learn What It Is. Understand Why It Matters." />
 
                   <p className="text-xl sm:text-2xl font-semibold text-[#315BE8] tracking-tight leading-snug">
                     Discover how knowledge works in the real world.
@@ -79,22 +110,26 @@ export default function HomePage() {
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    href="/learn"
-                    rightIcon={<ArrowRight className="w-4 h-4" />}
-                  >
-                    Explore Learning
-                  </Button>
+                  <MagneticButton strength={6}>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      href="/learn"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
+                      Explore Learning
+                    </Button>
+                  </MagneticButton>
 
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    href="/how-it-works"
-                  >
-                    Discover Our Approach
-                  </Button>
+                  <MagneticButton strength={5}>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      href="/how-it-works"
+                    >
+                      Discover Our Approach
+                    </Button>
+                  </MagneticButton>
                 </div>
 
                 {/* Editorial 4-Stage Pedagogical Spine */}
@@ -159,14 +194,14 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 2 — THE PROBLEM WITH TRADITIONAL LEARNING
+            SECTION 2 — THE PROBLEM WITH TRADITIONAL LEARNING (Interactive Mode Switcher)
            ===================================================================== */}
         <section
           id="traditional-vs-concept"
           className="py-16 sm:py-24 bg-[#F6F9FF]/80 border-b border-[#E6EBF2]"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="max-w-3xl space-y-3.5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <FadeUp className="max-w-3xl space-y-3.5">
               <KickerLabel
                 index="01"
                 label="Rethinking How We Learn"
@@ -183,332 +218,75 @@ export default function HomePage() {
                 exists, how its mechanism works, and how different subjects
                 connect in the real world.
               </p>
-            </div>
+            </FadeUp>
 
-            {/* Side-by-Side Editorial Ledger Comparison (Zero nested boxes within cards) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-              {/* Traditional Approach */}
-              <div className="lg:col-span-5 rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <div className="text-xs font-semibold text-[#64748B]">
-                      Conventional Habit
-                    </div>
-                    <h3 className="text-xl font-bold text-[#17243B]">
-                      Traditional Approach
-                    </h3>
-                  </div>
-
-                  <p className="text-sm text-[#64748B] leading-relaxed">
-                    Focuses primarily on recalling information in the exact form
-                    it was presented, often leaving learners unsure how to use
-                    that knowledge outside a test paper.
-                  </p>
-
-                  <ul className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
-                    {[
-                      {
-                        title: 'Memorize definitions.',
-                        detail:
-                          'Retaining terminology without visualizing the underlying physical or logical process.',
-                      },
-                      {
-                        title: 'Follow fixed answers.',
-                        detail:
-                          'Repeating prescribed steps rather than exploring alternative ways to reason through a problem.',
-                      },
-                      {
-                        title: 'Study mainly for examinations.',
-                        detail:
-                          'Treating chapters as temporary hurdles rather than tools for lifelong thinking.',
-                      },
-                      {
-                        title: 'Learn isolated subjects.',
-                        detail:
-                          'Keeping mathematics, physics, chemistry, and biology in separate boxes without seeing how they interact.',
-                      },
-                    ].map((point, idx) => (
-                      <li
-                        key={point.title}
-                        className="py-3.5 flex items-start gap-3 text-sm"
-                      >
-                        <span className="font-mono tabular-nums text-xs text-[#64748B] mt-0.5 shrink-0">
-                          0{idx + 1}
-                        </span>
-                        <div>
-                          <span className="font-semibold text-[#17243B]">
-                            {point.title}{' '}
-                          </span>
-                          <span className="text-[#64748B]">{point.detail}</span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="pt-4 border-t border-[#E6EBF2] text-xs text-[#64748B]">
-                  Outcome: Information is remembered briefly for an exam, then
-                  quickly forgotten.
-                </div>
-              </div>
-
-              {/* Genustride Learn Concept-Driven Approach */}
-              <div className="lg:col-span-7 relative overflow-hidden rounded-2xl bg-white border border-[#315BE8]/35 p-6 sm:p-8 shadow-[0_8px_28px_-6px_rgba(49,91,232,0.08)] flex flex-col justify-between space-y-6">
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full ambient-glow-blue"
-                />
-
-                <div className="relative z-10 space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <KickerLabel
-                      label="Genustride Learn Approach"
-                      tone="primary"
-                    />
-                    <span className="text-xs font-medium text-[#16A6A0]">
-                      Concept-Driven & Practical
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#17243B]">
-                    Our Approach: Deep Conceptual Understanding
-                  </h3>
-
-                  <p className="text-sm sm:text-[15px] text-[#64748B] leading-relaxed">
-                    Builds on academic foundations by asking why each idea
-                    matters, observing how it behaves in nature and technology,
-                    and putting it to work on real questions.
-                  </p>
-
-                  {/* Clean Hairline Ledger instead of nested boxes */}
-                  <ul className="divide-y divide-[#E6EBF2] border-t border-[#E6EBF2]">
-                    {[
-                      {
-                        title: 'Understand concepts.',
-                        detail:
-                          'Grasp the core principle, physical cause, and intuition behind every law or equation before memorizing symbols.',
-                        tone: 'text-[#315BE8]',
-                      },
-                      {
-                        title: 'Ask questions and reason.',
-                        detail:
-                          'Investigate cause and effect step by step instead of accepting formulas on authority alone.',
-                        tone: 'text-[#16A6A0]',
-                      },
-                      {
-                        title: 'Apply knowledge.',
-                        detail:
-                          'Test understanding through hands-on observations, controlled experiments, and practical scenarios.',
-                        tone: 'text-[#315BE8]',
-                      },
-                      {
-                        title: 'Connect ideas with reality.',
-                        detail:
-                          'Bridge mathematics, physics, chemistry, biology, and computing to see how complete real-world systems operate.',
-                        tone: 'text-[#16A6A0]',
-                      },
-                    ].map((point) => (
-                      <li
-                        key={point.title}
-                        className="py-3.5 flex items-start gap-3 text-sm"
-                      >
-                        <CheckCircle2
-                          className={`w-4 h-4 shrink-0 mt-0.5 ${point.tone}`}
-                          aria-hidden="true"
-                        />
-                        <div>
-                          <span className="font-bold text-[#17243B]">
-                            {point.title}{' '}
-                          </span>
-                          <span className="text-[#64748B]">{point.detail}</span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="relative z-10 pt-4 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-xs font-medium text-[#17243B]">
-                    Outcome: Durable understanding that empowers learners to
-                    solve unfamiliar problems.
-                  </span>
-                  <Link
-                    href="/how-it-works"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315BE8] hover:text-[#2548C9] transition-colors"
-                  >
-                    <span>Explore Our 4-Step Framework</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <RethinkingLearningComparison />
           </div>
         </section>
 
         {/* =====================================================================
-            SECTION 3 — OUR LEARNING PHILOSOPHY (4-Stage Progress Thread & Tint Shift)
+            SECTION 3 — OUR LEARNING PHILOSOPHY (4-Stage Methodology & Stride Dot)
            ===================================================================== */}
         <section
           id="our-philosophy"
           className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF9F6]/70 border-b border-[#E6EBF2]"
         >
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <SectionHeading
-              index="02"
-              kicker="Our Learning Philosophy"
-              title="Learning Should Go Beyond Knowing."
-              description="Every topic on Genustride Learn follows a connected four-stage progression—guiding learners from initial comprehension to independent creation."
-            />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <FadeUp>
+              <SectionHeading
+                index="02"
+                kicker="Our Learning Philosophy"
+                title="Learning Should Go Beyond Knowing."
+                description="Every topic on Genustride Learn follows a connected four-stage progression—guiding learners from initial comprehension to independent creation."
+              />
+            </FadeUp>
 
-            {/* Architectural 4-Stage Connected Hairline Matrix with Stage-Specific Ambient Tint Shift */}
-            <div className="rounded-2xl border border-[#E6EBF2] bg-white/95 overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2] shadow-2xs">
-              {[
-                {
-                  number: '01',
-                  title: 'Understand',
-                  description:
-                    'Discover what something is, why it exists, and why it matters.',
-                  guidingPrompt: 'What is it & why does it matter?',
-                  exampleNote:
-                    'Before memorizing Ohm’s Law (V = I·R), first understand why voltage acts like water pressure pushing charge through a wire.',
-                  topBarClass: 'bg-[#0284C7]',
-                  numberColor: 'text-[#0284C7]',
-                  ambientHoverBg: 'hover:bg-[#E0F2FE]/35',
-                  footerTintBg: 'bg-[#E0F2FE]/45',
-                },
-                {
-                  number: '02',
-                  title: 'Explore',
-                  description:
-                    'Understand how it works and connect different concepts.',
-                  guidingPrompt: 'How does the mechanism work?',
-                  exampleNote:
-                    'Trace how changing resistance alters current flow, and see how mathematics models that inverse proportionality.',
-                  topBarClass: 'bg-[#4F46E5]',
-                  numberColor: 'text-[#4F46E5]',
-                  ambientHoverBg: 'hover:bg-[#EDE9FE]/40',
-                  footerTintBg: 'bg-[#EDE9FE]/50',
-                },
-                {
-                  number: '03',
-                  title: 'Apply',
-                  description:
-                    'Use knowledge through practical examples, experiments, and challenges.',
-                  guidingPrompt: 'Where is it used & how can we test it?',
-                  exampleNote:
-                    'Wire a 3V battery pack, 220Ω resistor, and LED on a breadboard to measure voltage drops and verify the law firsthand.',
-                  topBarClass: 'bg-[#059669]',
-                  numberColor: 'text-[#059669]',
-                  ambientHoverBg: 'hover:bg-[#DCFCE7]/40',
-                  footerTintBg: 'bg-[#DCFCE7]/50',
-                },
-                {
-                  number: '04',
-                  title: 'Create',
-                  description:
-                    'Build, innovate, and solve meaningful problems.',
-                  guidingPrompt: 'What can you build or improve with it?',
-                  exampleNote:
-                    'Combine circuits with solar panels or environmental sensors to build a working weather logger or water probe.',
-                  topBarClass: 'bg-[#D97706]',
-                  numberColor: 'text-[#D97706]',
-                  ambientHoverBg: 'hover:bg-[#FEF3C7]/45',
-                  footerTintBg: 'bg-[#FEF3C7]/55',
-                },
-              ].map((step, idx) => (
-                <article
-                  key={step.number}
-                  data-stage-index={idx}
-                  className={`flex flex-col justify-between bg-white/90 transition-colors duration-300 ${step.ambientHoverBg} ${
-                    idx >= 2 ? 'md:border-t md:border-[#E6EBF2] lg:border-t-0' : ''
-                  }`}
-                >
-                  <div>
-                    <div className={`h-1.5 w-full ${step.topBarClass}`} />
-                    <div className="p-6 sm:p-7 space-y-4">
-                      <div className="flex items-baseline justify-between">
-                        <span
-                          className={`font-mono tabular-nums text-2xl font-extrabold ${step.numberColor}`}
-                        >
-                          {step.number}
-                        </span>
-                        <span className="text-xs font-mono text-[#64748B]">
-                          Stage {step.number} of 04
-                        </span>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-bold text-[#17243B] tracking-tight">
-                          {step.title}
-                        </h3>
-                        <p className="text-[15px] text-[#17243B]/90 font-medium leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
-
-                      <div className="pt-3 border-t border-[#E6EBF2] space-y-1">
-                        <div className="text-xs font-semibold text-[#17243B]">
-                          In Practice:
-                        </div>
-                        <p className="text-xs text-[#64748B] leading-relaxed">
-                          {step.exampleNote}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={`px-6 sm:px-7 py-4 ${step.footerTintBg} border-t border-[#E6EBF2]`}>
-                    <div className="text-[11px] font-medium text-[#64748B]">
-                      Guiding Question
-                    </div>
-                    <div className="text-xs font-bold text-[#17243B] mt-0.5">
-                      &ldquo;{step.guidingPrompt}&rdquo;
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <FourStageMethodology />
           </div>
         </section>
 
         {/* =====================================================================
-            SECTION 4 — EXPLORE LEARNING AREAS (Cursor-Reactive Blueprint Spotlight)
+            SECTION 4 — EXPLORE LEARNING AREAS (3D Tilt, Blueprint Spotlight & Mini-Probes)
            ===================================================================== */}
         <section
           id="learning-areas"
           className="py-16 sm:py-24 bg-[#F6F9FF]/75 border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <SectionHeading
-              index="03"
-              kicker="Explore Learning Areas"
-              title="Explore the World Through Different Fields of Knowledge."
-              description="Select any discipline below to open its dedicated subject landing page—complete with real-world concept breakdowns, experiments, and creative challenges."
-            />
+            <FadeUp>
+              <SectionHeading
+                index="03"
+                kicker="Explore Learning Areas"
+                title="Explore the World Through Different Fields of Knowledge."
+                description="Select any discipline below to open its dedicated subject landing page—or test the interactive micro-probe inside each card to see a core principle in action."
+              />
+            </FadeUp>
 
             {/* Six Subject Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-              {SUBJECTS_LIST.map((subject) => (
-                <SubjectCard
-                  key={subject.slug}
-                  title={subject.title}
-                  disciplineCode={subject.disciplineCode}
-                  levelScope={subject.levelScope}
-                  description={subject.shortDescription}
-                  coreFocus={subject.coreFocus}
-                  exemplarTopics={subject.exemplarTopics}
-                  imageSrc={subject.imageSrc}
-                  imageAlt={subject.imageAlt}
-                  accentColor={subject.accentColor}
-                  href={subject.route}
-                />
+              {SUBJECTS_LIST.map((subject, idx) => (
+                <FadeUp key={subject.slug} delayMs={idx * 70}>
+                  <SubjectCard
+                    title={subject.title}
+                    disciplineCode={subject.disciplineCode}
+                    levelScope={subject.levelScope}
+                    description={subject.shortDescription}
+                    coreFocus={subject.coreFocus}
+                    exemplarTopics={subject.exemplarTopics}
+                    imageSrc={subject.imageSrc}
+                    imageAlt={subject.imageAlt}
+                    accentColor={subject.accentColor}
+                    href={subject.route}
+                    className="h-full"
+                  />
+                </FadeUp>
               ))}
             </div>
           </div>
         </section>
 
         {/* =====================================================================
-            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS (Scroll-Scrubbed Hexagonal Lattice Watermark)
+            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS (Interactive <IceFloatLab /> Simulation)
            ===================================================================== */}
         <section
           id="how-learning-happens"
@@ -526,12 +304,12 @@ export default function HomePage() {
                 kicker="How Learning Actually Happens"
                 kickerTone="secondary"
                 title="From a Simple Question to Real Understanding."
-                description="See how a single everyday observation unfolds across chemistry, physics, ecology, and engineering when you follow a concept from start to finish."
+                description="See how a single everyday observation unfolds across chemistry, physics, ecology, and engineering—and test the live buoyancy & molecular lattice lab yourself."
               />
 
-              <div className="px-4 py-3 rounded-xl bg-[#F6F9FF] border border-[#E6EBF2] shrink-0 space-y-0.5">
+              <div className="px-4 py-3 rounded-xl bg-white border border-[#E6EBF2] shrink-0 space-y-0.5">
                 <div className="text-[11px] font-semibold text-[#315BE8]">
-                  Exemplar Inquiry Walkthrough
+                  Interactive Simulation & Walkthrough
                 </div>
                 <div className="text-sm sm:text-base font-bold text-[#17243B]">
                   &ldquo;Why Does Ice Float on Water?&rdquo;
@@ -539,7 +317,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <IceFloatingWalkthrough
+            <IceFloatLab
               steps={ICE_FLOATING_JOURNEY_STEPS}
               iceMolecularImageSrc={PLATFORM_IMAGES.iceFloatingMolecular}
               frozenLakeImageSrc={PLATFORM_IMAGES.frozenLakeNature}
@@ -548,19 +326,58 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
+            INFINITE KINETIC MARQUEE & ANIMATED COUNT-UP METRICS STRIP
+           ===================================================================== */}
+        <Marquee />
+
+        <section
+          aria-label="Platform scope and learning methodology metrics"
+          className="py-12 bg-white border-b border-[#E6EBF2]"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2]">
+              <div className="pt-4 md:pt-0">
+                <CountUpMetric
+                  target={120}
+                  suffix="+"
+                  label="Practical Concept & Experiment Guides"
+                  sublabel="Step-by-step physical mechanisms, household apparatus procedures, and empirical logbooks."
+                />
+              </div>
+              <div className="pt-6 md:pt-0 md:pl-8">
+                <CountUpMetric
+                  target={6}
+                  label="Core Interconnected STEM Disciplines"
+                  sublabel="Mathematics, Physics, Chemistry, Biology, Technology & Computing, and Engineering."
+                />
+              </div>
+              <div className="pt-6 md:pt-0 md:pl-8">
+                <CountUpMetric
+                  target={4}
+                  label="Progressive Learning Stages"
+                  sublabel="Every topic moves methodically through Understand → Explore → Apply → Create."
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================================
             SECTION 6 — REAL-WORLD LEARNING (Leaf Client Component)
            ===================================================================== */}
         <section
           id="real-world-learning"
-          className="py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
+          className="py-16 sm:py-24 bg-[#F6F9FF]/75 border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <SectionHeading
-              index="05"
-              kicker="Practical Methodology"
-              title="Knowledge Becomes Powerful When You Put It to Work."
-              description="We combine four complementary learning methods so concepts are never trapped on a page—they are observed, tested, built, and explored interactively."
-            />
+            <FadeUp>
+              <SectionHeading
+                index="05"
+                kicker="Practical Methodology"
+                title="Knowledge Becomes Powerful When You Put It to Work."
+                description="We combine four complementary learning methods so concepts are never trapped on a page—they are observed, tested, built, and explored interactively."
+              />
+            </FadeUp>
 
             <RealWorldMethodsExplorer methods={REAL_WORLD_LEARNING_METHODS} />
           </div>
@@ -571,15 +388,17 @@ export default function HomePage() {
            ===================================================================== */}
         <section
           id="skills-beyond"
-          className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#E6EBF2]"
+          className="py-16 sm:py-24 bg-[#FAF9F6]/75 border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <SectionHeading
-              index="06"
-              kicker="Lifelong Capabilities"
-              title="Build the Skills That Matter Beyond the Classroom."
-              description="When you learn by questioning, experimenting, and applying concepts, you develop enduring intellectual habits that serve you in any career or discipline."
-            />
+            <FadeUp>
+              <SectionHeading
+                index="06"
+                kicker="Lifelong Capabilities"
+                title="Build the Skills That Matter Beyond the Classroom."
+                description="When you learn by questioning, experimenting, and applying concepts, you develop enduring intellectual habits that serve you in any career or discipline."
+              />
+            </FadeUp>
 
             {/* Editorial Hairline Matrix Grid */}
             <div className="rounded-2xl border border-[#E6EBF2] bg-[#F6F9FF] overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2]">
@@ -623,7 +442,7 @@ export default function HomePage() {
            ===================================================================== */}
         <section
           id="vision-bangladesh"
-          className="relative overflow-hidden py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
+          className="relative overflow-hidden py-16 sm:py-24 bg-[#F6F9FF]/75 border-b border-[#E6EBF2]"
         >
           <div
             aria-hidden="true"
@@ -667,7 +486,6 @@ export default function HomePage() {
                     shaping—the world around them.
                   </p>
 
-                  {/* Clean Hairline Pillars instead of nested boxes */}
                   <div className="pt-4 border-t border-[#E6EBF2] grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-1">
                       <div className="text-xs font-bold text-[#17243B]">
@@ -723,10 +541,57 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 9 — FINAL CTA
+            SECTION 9 — INTERACTIVE "PICK YOUR FIRST QUESTION" LAUNCHPAD & FINAL CTA
            ===================================================================== */}
-        <section className="py-16 sm:py-24 bg-[#FFFFFF]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 sm:py-24 bg-[#FAF9F6]/85">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            {/* Interactive "Pick Your First Question" Launchpad */}
+            <div className="rounded-2xl bg-white border border-[#E6EBF2] p-6 sm:p-8 space-y-5 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <KickerLabel
+                    label="Interactive Curiosity Launchpad"
+                    tone="primary"
+                  />
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#17243B]">
+                    Pick Your First Question to Start Exploring Right Now
+                  </h2>
+                </div>
+                <span className="text-xs text-[#64748B]">
+                  Select any question to jump directly into the concept or experiment guide
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {CURIOSITY_LAUNCHPAD_QUESTIONS.map((item, idx) => (
+                  <Link
+                    key={item.question}
+                    href={item.href}
+                    className="group rounded-xl bg-[#F6F9FF] hover:bg-[#EEF3FF] border border-[#E6EBF2] hover:border-[#315BE8]/45 p-4 flex flex-col justify-between space-y-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315BE8]"
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-mono font-bold text-[#315BE8]">
+                          INQUIRY 0{idx + 1}
+                        </span>
+                        <span className="text-[#16A6A0] font-medium">
+                          {item.discipline}
+                        </span>
+                      </div>
+                      <h3 className="text-sm sm:text-base font-bold text-[#17243B] group-hover:text-[#315BE8] transition-colors">
+                        &ldquo;{item.question}&rdquo;
+                      </h3>
+                    </div>
+
+                    <div className="pt-2 border-t border-[#E6EBF2] flex items-center justify-between text-xs font-semibold text-[#315BE8]">
+                      <span>Investigate Answer</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <CTASection
               kicker="Start Your Journey"
               title="Your Learning Journey Should Go Beyond the Classroom."

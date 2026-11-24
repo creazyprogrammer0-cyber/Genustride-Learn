@@ -4,6 +4,7 @@ import './globals.css';
 import {buildPageMetadata, buildWebsiteJsonLd, getSiteUrl} from '@/lib/seo';
 import {VERIFIED_PHOTOGRAPHY_INVENTORY} from '@/lib/photography-inventory';
 import {InteractiveBackground} from '@/components/layout/interactive-background';
+import {MotionProvider, MotionControls} from '@/components/motion';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -51,12 +52,15 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         suppressHydrationWarning
         className="relative min-h-screen bg-transparent text-[#17243B] antialiased selection:bg-[#315BE8]/15 selection:text-[#17243B]"
       >
-        <InteractiveBackground />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{__html: JSON.stringify(websiteJsonLd)}}
-        />
-        {children}
+        <MotionProvider>
+          <InteractiveBackground />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{__html: JSON.stringify(websiteJsonLd)}}
+          />
+          <MotionControls />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );

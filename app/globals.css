@@ -310,18 +310,79 @@
   }
 }
 
+@keyframes wordClipReveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes kineticMarqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-25%, 0, 0);
+  }
+}
+
+.subject-card-shimmer {
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.72) var(--shimmer-pct, 50%),
+    transparent 80%
+  );
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .animate-reveal {
     animation: fadeSlideUp 320ms var(--ease-out-smooth) both;
+    animation-play-state: var(--animation-play-state, running);
+  }
+
+  .hero-word-clip-reveal {
+    animation: wordClipReveal 520ms var(--ease-out-smooth) both;
+    animation-play-state: var(--animation-play-state, running);
+  }
+
+  .kinetic-marquee-track {
+    animation: kineticMarqueeScroll 28s linear infinite;
+    animation-play-state: var(--animation-play-state, running);
+  }
+
+  .group:hover .kinetic-marquee-track {
+    animation-play-state: paused;
   }
 
   .aurora-margin-orb-left {
     animation: auroraDriftLeft 22s ease-in-out infinite;
+    animation-play-state: var(--animation-play-state, running);
   }
 
   .aurora-margin-orb-right {
     animation: auroraDriftRight 26s ease-in-out infinite;
+    animation-play-state: var(--animation-play-state, running);
   }
+}
+
+html[data-pause-animations="true"] *,
+html[data-pause-animations="true"] *::before,
+html[data-pause-animations="true"] *::after {
+  animation-play-state: paused !important;
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
