@@ -26,7 +26,7 @@ const SUBJECTS_LIST = Object.values(SUBJECTS_DATA);
 
 export default function HomePage() {
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
+    <div id="top" className="min-h-screen flex flex-col bg-transparent">
       {/* Global Navigation Bar & Mobile Navigation */}
       <Navbar
         primaryCtaLabel="Explore Learning"
@@ -35,9 +35,9 @@ export default function HomePage() {
 
       <main id="main-content" className="flex-1">
         {/* =====================================================================
-            SECTION 1 — HERO
+            SECTION 1 — HERO ("Directional Stride Constellation" Canvas Backdrop)
            ===================================================================== */}
-        <section className="relative overflow-hidden bg-[#FFFFFF] border-b border-[#E6EBF2] pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-28">
+        <section className="relative overflow-hidden bg-[#FAF9F6]/65 border-b border-[#E6EBF2] pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-28">
           {/* Subtle Blue and Teal Ambient Radial Glows on White Background */}
           <div
             aria-hidden="true"
@@ -163,7 +163,7 @@ export default function HomePage() {
            ===================================================================== */}
         <section
           id="traditional-vs-concept"
-          className="py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
+          className="py-16 sm:py-24 bg-[#F6F9FF]/80 border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="max-w-3xl space-y-3.5">
@@ -346,11 +346,11 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 3 — OUR LEARNING PHILOSOPHY
+            SECTION 3 — OUR LEARNING PHILOSOPHY (4-Stage Progress Thread & Tint Shift)
            ===================================================================== */}
         <section
           id="our-philosophy"
-          className="relative overflow-hidden py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#E6EBF2]"
+          className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF9F6]/70 border-b border-[#E6EBF2]"
         >
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
@@ -360,8 +360,8 @@ export default function HomePage() {
               description="Every topic on Genustride Learn follows a connected four-stage progression—guiding learners from initial comprehension to independent creation."
             />
 
-            {/* Architectural 4-Stage Connected Hairline Matrix */}
-            <div className="rounded-2xl border border-[#E6EBF2] bg-white overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2] shadow-2xs">
+            {/* Architectural 4-Stage Connected Hairline Matrix with Stage-Specific Ambient Tint Shift */}
+            <div className="rounded-2xl border border-[#E6EBF2] bg-white/95 overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6EBF2] shadow-2xs">
               {[
                 {
                   number: '01',
@@ -371,8 +371,10 @@ export default function HomePage() {
                   guidingPrompt: 'What is it & why does it matter?',
                   exampleNote:
                     'Before memorizing Ohm’s Law (V = I·R), first understand why voltage acts like water pressure pushing charge through a wire.',
-                  topBarClass: 'bg-[#315BE8]',
-                  numberColor: 'text-[#315BE8]',
+                  topBarClass: 'bg-[#0284C7]',
+                  numberColor: 'text-[#0284C7]',
+                  ambientHoverBg: 'hover:bg-[#E0F2FE]/35',
+                  footerTintBg: 'bg-[#E0F2FE]/45',
                 },
                 {
                   number: '02',
@@ -382,8 +384,10 @@ export default function HomePage() {
                   guidingPrompt: 'How does the mechanism work?',
                   exampleNote:
                     'Trace how changing resistance alters current flow, and see how mathematics models that inverse proportionality.',
-                  topBarClass: 'bg-[#16A6A0]',
-                  numberColor: 'text-[#16A6A0]',
+                  topBarClass: 'bg-[#4F46E5]',
+                  numberColor: 'text-[#4F46E5]',
+                  ambientHoverBg: 'hover:bg-[#EDE9FE]/40',
+                  footerTintBg: 'bg-[#EDE9FE]/50',
                 },
                 {
                   number: '03',
@@ -393,8 +397,10 @@ export default function HomePage() {
                   guidingPrompt: 'Where is it used & how can we test it?',
                   exampleNote:
                     'Wire a 3V battery pack, 220Ω resistor, and LED on a breadboard to measure voltage drops and verify the law firsthand.',
-                  topBarClass: 'bg-[#315BE8]',
-                  numberColor: 'text-[#315BE8]',
+                  topBarClass: 'bg-[#059669]',
+                  numberColor: 'text-[#059669]',
+                  ambientHoverBg: 'hover:bg-[#DCFCE7]/40',
+                  footerTintBg: 'bg-[#DCFCE7]/50',
                 },
                 {
                   number: '04',
@@ -404,13 +410,16 @@ export default function HomePage() {
                   guidingPrompt: 'What can you build or improve with it?',
                   exampleNote:
                     'Combine circuits with solar panels or environmental sensors to build a working weather logger or water probe.',
-                  topBarClass: 'bg-[#F3A644]',
-                  numberColor: 'text-[#C87A19]',
+                  topBarClass: 'bg-[#D97706]',
+                  numberColor: 'text-[#D97706]',
+                  ambientHoverBg: 'hover:bg-[#FEF3C7]/45',
+                  footerTintBg: 'bg-[#FEF3C7]/55',
                 },
               ].map((step, idx) => (
                 <article
                   key={step.number}
-                  className={`flex flex-col justify-between bg-white ${
+                  data-stage-index={idx}
+                  className={`flex flex-col justify-between bg-white/90 transition-colors duration-300 ${step.ambientHoverBg} ${
                     idx >= 2 ? 'md:border-t md:border-[#E6EBF2] lg:border-t-0' : ''
                   }`}
                 >
@@ -448,7 +457,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <div className="px-6 sm:px-7 py-4 bg-[#F6F9FF] border-t border-[#E6EBF2]">
+                  <div className={`px-6 sm:px-7 py-4 ${step.footerTintBg} border-t border-[#E6EBF2]`}>
                     <div className="text-[11px] font-medium text-[#64748B]">
                       Guiding Question
                     </div>
@@ -463,11 +472,11 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 4 — EXPLORE LEARNING AREAS
+            SECTION 4 — EXPLORE LEARNING AREAS (Cursor-Reactive Blueprint Spotlight)
            ===================================================================== */}
         <section
           id="learning-areas"
-          className="py-16 sm:py-24 bg-[#F6F9FF] border-b border-[#E6EBF2]"
+          className="py-16 sm:py-24 bg-[#F6F9FF]/75 border-b border-[#E6EBF2]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <SectionHeading
@@ -499,11 +508,11 @@ export default function HomePage() {
         </section>
 
         {/* =====================================================================
-            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS (Leaf Client Component)
+            SECTION 5 — HOW LEARNING ACTUALLY HAPPENS (Scroll-Scrubbed Hexagonal Lattice Watermark)
            ===================================================================== */}
         <section
           id="how-learning-happens"
-          className="relative overflow-hidden py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#E6EBF2]"
+          className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF9F6]/80 border-b border-[#E6EBF2]"
         >
           <div
             aria-hidden="true"

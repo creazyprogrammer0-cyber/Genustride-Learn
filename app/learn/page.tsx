@@ -101,7 +101,7 @@ const PROJECTS_HIGHLIGHT = PROJECTS_DATA.slice(0, 4);
 
 export default function ExploreLearningPage() {
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-[#FFFFFF]">
+    <div id="top" className="min-h-screen flex flex-col bg-transparent">
       <Navbar
         activeSection="learn"
         primaryCtaLabel="Browse 6 Subjects"

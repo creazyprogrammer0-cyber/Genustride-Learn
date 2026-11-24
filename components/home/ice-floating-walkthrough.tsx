@@ -25,11 +25,54 @@ export function IceFloatingWalkthrough({
 }) {
   const [activeIceStepIndex, setActiveIceStepIndex] = useState<number>(0);
   const activeIceStep = steps[activeIceStepIndex] || steps[0];
+  const stepRatio = activeIceStepIndex / Math.max(steps.length - 1, 1);
+  const latticeScale = (1 + stepRatio * 0.09).toFixed(3);
+  const latticeRotateDeg = Math.round(stepRatio * 30);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-      {/* Left Column: 6-Step Interactive Progression List */}
-      <div className="lg:col-span-7 space-y-3">
+    <div className="relative">
+      {/* Far-Right Margin Scientific Watermark: Hexagonal H2O Crystal Lattice Wireframe (rotates & expands +9% across Steps 01–06) */}
+      <div
+        aria-hidden="true"
+        style={{
+          transform: `rotate(calc(${latticeRotateDeg}deg + var(--ice-progress, 0) * 18deg)) scale(${latticeScale})`,
+        }}
+        className="pointer-events-none absolute -right-12 top-1/3 -z-10 hidden xl:block opacity-[0.08] transition-transform duration-500 ease-out"
+      >
+        <svg
+          viewBox="0 0 320 320"
+          fill="none"
+          className="w-80 h-80 text-[#0284C7]"
+        >
+          <polygon
+            points="160,20 281,90 281,230 160,300 39,230 39,90"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeDasharray="6 4"
+          />
+          <polygon
+            points="160,72 236,116 236,204 160,248 84,204 84,116"
+            stroke="#16A6A0"
+            strokeWidth="1.5"
+          />
+          <line x1="160" y1="20" x2="160" y2="72" stroke="currentColor" strokeWidth="1.2" />
+          <line x1="281" y1="90" x2="236" y2="116" stroke="currentColor" strokeWidth="1.2" />
+          <line x1="281" y1="230" x2="236" y2="204" stroke="currentColor" strokeWidth="1.2" />
+          <line x1="160" y1="300" x2="160" y2="248" stroke="currentColor" strokeWidth="1.2" />
+          <line x1="39" y1="230" x2="84" y2="204" stroke="currentColor" strokeWidth="1.2" />
+          <line x1="39" y1="90" x2="84" y2="116" stroke="currentColor" strokeWidth="1.2" />
+          <circle cx="160" cy="72" r="5" fill="#315BE8" />
+          <circle cx="236" cy="116" r="5" fill="#16A6A0" />
+          <circle cx="236" cy="204" r="5" fill="#315BE8" />
+          <circle cx="160" cy="248" r="5" fill="#16A6A0" />
+          <circle cx="84" cy="204" r="5" fill="#315BE8" />
+          <circle cx="84" cy="116" r="5" fill="#16A6A0" />
+        </svg>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        {/* Left Column: 6-Step Interactive Progression List */}
+        <div className="lg:col-span-7 space-y-3">
         {steps.map((item, idx) => {
           const isActive = idx === activeIceStepIndex;
           return (
@@ -201,6 +244,7 @@ export function IceFloatingWalkthrough({
             </Link>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

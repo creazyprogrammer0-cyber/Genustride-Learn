@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   /* Typography Families */
@@ -19,12 +20,25 @@
   --color-accent-hover: #DC8E2C;
   --color-accent-subtle: #FEF6EB;
 
-  /* Base & Surface Colors */
+  /* Base & Surface Colors ("Scientific Drafting Canvas") */
+  --color-bg-canvas: #FAF9F6;
   --color-bg-white: #FFFFFF;
   --color-bg-soft: #F6F9FF;
   --color-text-main: #17243B;
   --color-text-secondary: #64748B;
   --color-border: #E6EBF2;
+  --grid-line-color: rgba(23, 36, 59, 0.04);
+
+  /* Interactive Background Custom Properties (60fps rAF updated) */
+  --mouse-x: 50vw;
+  --mouse-y: 35vh;
+  --scroll-progress: 0;
+  --hero-progress: 0;
+  --philosophy-progress: 0;
+  --ice-progress: 0;
+  --stage-tint-rgb: 224, 242, 254;
+  --subject-grid-rgb: 49, 91, 232;
+  --subject-spotlight-opacity: 0.08;
 
   /* Elevation & Shadows */
   --shadow-card: 0 2px 10px -2px rgba(23, 36, 59, 0.04), 0 1px 3px -1px rgba(23, 36, 59, 0.02);
@@ -35,9 +49,19 @@
   --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dark {
+  --color-bg-canvas: #0B0F19;
+  --color-bg-white: #111827;
+  --color-bg-soft: #0F172A;
+  --color-text-main: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-border: #1E293B;
+  --grid-line-color: rgba(248, 250, 252, 0.04);
+}
+
 @layer base {
   html {
-    background-color: var(--color-bg-white);
+    background-color: var(--color-bg-canvas);
     color: var(--color-text-main);
     font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
@@ -48,7 +72,7 @@
   }
 
   body {
-    background-color: var(--color-bg-white);
+    background-color: transparent;
     color: var(--color-text-main);
     line-height: 1.65;
     overflow-x: hidden;
@@ -71,6 +95,148 @@
   section[id], div[id] {
     scroll-margin-top: 5rem;
   }
+}
+
+/* ============================================================================
+   INTERACTIVE BACKGROUND DESIGN SYSTEM ("SCIENTIFIC DRAFTING CANVAS")
+   ============================================================================ */
+
+/* 1. Base Editorial Paper Surface (#FAF9F6) + 1px Blueprint Grid at 48px intervals (0.04 opacity) */
+.scientific-drafting-canvas {
+  background-color: var(--color-bg-canvas);
+  background-image:
+    linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+}
+
+/* 2. Outer-Margin Slow-Drifting Aurora Orbs (0.08 - 0.12 opacity in outer margins only) */
+.aurora-margin-orb {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.aurora-margin-orb-left {
+  top: 6%;
+  left: -14rem;
+  width: 38rem;
+  height: 38rem;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(49, 91, 232, 0.10) 0%,
+    rgba(22, 166, 160, 0.04) 48%,
+    transparent 72%
+  );
+}
+
+.aurora-margin-orb-right {
+  bottom: 8%;
+  right: -14rem;
+  width: 38rem;
+  height: 38rem;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(22, 166, 160, 0.09) 0%,
+    rgba(243, 166, 68, 0.04) 48%,
+    transparent 72%
+  );
+}
+
+@keyframes auroraDriftLeft {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(24px, 36px, 0) scale(1.05);
+  }
+}
+
+@keyframes auroraDriftRight {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-24px, -32px, 0) scale(1.04);
+  }
+}
+
+/* 3. Scroll-Driven 4-Stage Ambient Tint Wash (Understand #E0F2FE -> Explore #EDE9FE -> Apply #DCFCE7 -> Create #FEF3C7) */
+.stage-ambient-wash {
+  background:
+    radial-gradient(
+      65% 55% at 12% 50%,
+      rgba(var(--stage-tint-rgb), 0.36) 0%,
+      transparent 75%
+    ),
+    radial-gradient(
+      65% 55% at 88% 50%,
+      rgba(var(--stage-tint-rgb), 0.32) 0%,
+      transparent 75%
+    );
+}
+
+/* 4. Cursor-Reactive Blueprint Spotlight (Sharp 12px/48px coordinate sub-grid at 0.14 opacity under cursor) */
+.blueprint-subgrid-spotlight {
+  background-image:
+    linear-gradient(to right, rgba(var(--subject-grid-rgb), var(--subject-spotlight-opacity)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--subject-grid-rgb), var(--subject-spotlight-opacity)) 1px, transparent 1px),
+    linear-gradient(to right, rgba(var(--subject-grid-rgb), calc(var(--subject-spotlight-opacity) * 0.5)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--subject-grid-rgb), calc(var(--subject-spotlight-opacity) * 0.5)) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(
+    360px circle at var(--mouse-x) var(--mouse-y),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    360px circle at var(--mouse-x) var(--mouse-y),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    transparent 100%
+  );
+}
+
+/* Subject Card Local Blueprint Coordinate Sub-Grid Spotlight (opacity 0.14 on hover) */
+.subject-card-blueprint-overlay {
+  --card-mouse-x: 50%;
+  --card-mouse-y: 50%;
+  --card-spotlight-rgb: 49, 91, 232;
+  background-image:
+    linear-gradient(to right, rgba(var(--card-spotlight-rgb), 0.14) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--card-spotlight-rgb), 0.14) 1px, transparent 1px),
+    linear-gradient(to right, rgba(var(--card-spotlight-rgb), 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--card-spotlight-rgb), 0.06) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+  -webkit-mask-image: radial-gradient(
+    260px circle at var(--card-mouse-x) var(--card-mouse-y),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.35) 58%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    260px circle at var(--card-mouse-x) var(--card-mouse-y),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.35) 58%,
+    transparent 100%
+  );
+}
+
+/* 5. Scroll-Scrubbed Hexagonal H2O Crystal Lattice Watermark in Far Right Margin */
+.ice-lattice-margin-watermark {
+  position: absolute;
+  right: 2.5%;
+  bottom: 10%;
+  opacity: calc(0.05 + var(--ice-progress) * 0.09);
+  transform:
+    rotate(calc(var(--ice-progress) * 32deg))
+    scale(calc(1 + var(--ice-progress) * 0.09));
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
 
 /* Diffuse Ambient Lighting Utilities (Restrained, Natural Integration) */
@@ -148,6 +314,14 @@
   .animate-reveal {
     animation: fadeSlideUp 320ms var(--ease-out-smooth) both;
   }
+
+  .aurora-margin-orb-left {
+    animation: auroraDriftLeft 22s ease-in-out infinite;
+  }
+
+  .aurora-margin-orb-right {
+    animation: auroraDriftRight 26s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -162,5 +336,8 @@
   }
   .surface-card-interactive:hover {
     transform: none;
+  }
+  .ice-lattice-margin-watermark {
+    transform: none !important;
   }
 }

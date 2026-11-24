@@ -619,6 +619,7 @@ export default function HowItWorksPage() {
                 return (
                   <div
                     key={stage.id}
+                    data-stage-index={idx}
                     onClick={() => setSelectedStageIndex(idx)}
                     role="button"
                     tabIndex={0}

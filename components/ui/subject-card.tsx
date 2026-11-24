@@ -40,14 +40,38 @@ export function SubjectCard({
     amber: 'accent' as const,
   };
 
+  const normalizedTitle = title.toLowerCase();
+  const subjectKey = normalizedTitle.includes('phys')
+    ? 'physics'
+    : normalizedTitle.includes('math')
+      ? 'mathematics'
+      : normalizedTitle.includes('chem')
+        ? 'chemistry'
+        : normalizedTitle.includes('bio')
+          ? 'biology'
+          : normalizedTitle.includes('tech')
+            ? 'technology'
+            : normalizedTitle.includes('eng')
+              ? 'engineering'
+              : accentColor;
+
   return (
     <article
+      data-subject-card="true"
+      data-subject-key={subjectKey}
+      data-subject-accent={accentColor}
       className={cn(
-        'group surface-card surface-card-interactive rounded-xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 bg-white',
+        'group relative surface-card surface-card-interactive rounded-xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 bg-white/95',
         className
       )}
     >
-      <div className="space-y-4">
+      {/* Cursor-Reactive Blueprint Coordinate Sub-Grid Spotlight (opacity: 0.14 on hover, tinted to subject theme color) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 subject-card-blueprint-overlay"
+      />
+
+      <div className="relative z-10 space-y-4">
         {href ? (
           <Link
             href={href}
@@ -138,7 +162,7 @@ export function SubjectCard({
         )}
       </div>
 
-      <div className="mt-5 pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+      <div className="relative z-10 mt-5 pt-3.5 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <span className="text-xs text-[#64748B]">
           {exemplarTopics && exemplarTopics.length > 0
             ? `${exemplarTopics.length} Core Topic Areas`
